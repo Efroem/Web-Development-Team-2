@@ -1,5 +1,7 @@
 GET http://localhost:5097/api/v1/TheatreShows
 ####
+GET http://localhost:5097/api/v1/TheatreShows/1
+####
 
 POST http://localhost:5097/api/v1/TheatreShows
 Content-Type: application/json
@@ -12,6 +14,17 @@ Content-Type: application/json
 }
 ####
 
-DELETE http://localhost:5097/api/v1/TheatreShows?theatreShowId=2
+PUT http://localhost:5097/api/v1/TheatreShows/4
+Content-Type: application/json
+
+{
+    "Title": "Test2",
+    "Description": "test2",
+    "Price": 4.20,
+    "VenueId": 5
+}
+####
+
+DELETE http://localhost:5097/api/v1/TheatreShows/1
 ####
 

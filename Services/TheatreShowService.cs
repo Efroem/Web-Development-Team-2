@@ -13,19 +13,21 @@ public class TheatreShowService : ITheatreShowService
     public async Task<bool> Create(TheatreShow theatreShow)
     {
         var x = await dbContext.TheatreShow.FirstOrDefaultAsync(x => x.TheatreShowId == theatreShow.TheatreShowId);
-        // if (x != null) return false;
-        Venue venue = new Venue{VenueId = 1, Name = "Test", Capacity = 100};
+        if (x != null) return false;
+        Venue venue = new Venue{Name = "Test", Capacity = 100};
         await dbContext.Venue.AddAsync(venue);
+        int m = await dbContext.SaveChangesAsync();
+        theatreShow.VenueId = venue.VenueId;
         await dbContext.TheatreShow.AddAsync(theatreShow);
         int n = await dbContext.SaveChangesAsync();
-        return n > 0;
+        return n > 0 && m > 0;
 
     }
 
     public async Task<bool> Delete(int theatreShowId)
     {
         var x = await dbContext.TheatreShow.FindAsync(theatreShowId);
-        // if (x == null) return false;
+        if (x == null) return false;
         dbContext.TheatreShow.Remove(x);
         int n = dbContext.SaveChanges();
         return n > 0;
@@ -40,14 +42,17 @@ public class TheatreShowService : ITheatreShowService
     public async Task<TheatreShow> GetById(int theatreShowId)
     {
         return await dbContext.TheatreShow.FirstOrDefaultAsync(x => x.TheatreShowId == theatreShowId);
-        throw new NotImplementedException();
+        // throw new NotImplementedException();
     }
 
     public async Task<bool> Update(TheatreShow theatreShow, int theatreShowId)
     {
         TheatreShow x = await dbContext.TheatreShow.FirstOrDefaultAsync(x => x.TheatreShowId == theatreShowId);
         if (x == null) return false;
-        dbContext.Entry(x).CurrentValues.SetValues(theatreShow);
+        dbContext.Entry(x).CurrentValues["Title"] = theatreShow.Title;
+        dbContext.Entry(x).CurrentValues["Description"] = theatreShow.Description;
+        dbContext.Entry(x).CurrentValues["Price"] = theatreShow.Price;
+        dbContext.Entry(x).CurrentValues["VenueId"] = theatreShow.VenueId;
         int n = dbContext.SaveChanges();
         return n>0;
         throw new NotImplementedException();

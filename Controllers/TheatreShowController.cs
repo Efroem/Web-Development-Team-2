@@ -15,13 +15,15 @@ public class TheatreShowController : Controller {
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetTheatreShows([FromQuery]int id = -1) {
-        if (id == -1) {
-            return Ok(theatreShowService.GetAll());
-        }
+    public async Task<IActionResult> GetTheatreShows() {
+        return Ok(await theatreShowService.GetAll());
+    }   
+    
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetTheatreShowById(int id) {
         TheatreShow theatreShow = await theatreShowService.GetById(id);
         if (theatreShow != null) return Ok(theatreShow);
-        return BadRequest("TheatreShow with this ID does not exist");
+        return BadRequest($"TheatreShow with this ID does not exist ({theatreShow})");
     }   
 
     [HttpPost()]
@@ -30,15 +32,15 @@ public class TheatreShowController : Controller {
         return addedToDB == true ? Ok(theatreShow) : BadRequest("Failed to add TheatreShow to DB. Entry already exists");
     }
 
-    [HttpPut()]
-    public async Task<IActionResult> UpdateTheatreShow([FromBody] TheatreShow theatreShow, [FromQuery] int theatreShowId) {
-        if (theatreShowId != theatreShow.TheatreShowId) return BadRequest("The given ID and the id of the TheatreShow does not match");
+    [HttpPut("{theatreShowId}")]
+    public async Task<IActionResult> UpdateTheatreShow([FromBody] TheatreShow theatreShow, int theatreShowId) {
+        // return Ok($"{theatreShowId}");
         bool updatedTheatreShow = await theatreShowService.Update(theatreShow, theatreShowId);
         return updatedTheatreShow == true ? Ok($"Successfully updated") : BadRequest("Failed to update TheatreShow");
     }
 
-    [HttpDelete()]
-    public async Task<IActionResult> DeleteTheatreShow([FromQuery] int id) {
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteTheatreShow(int id) {
         bool removedFromDB = await theatreShowService.Delete(id);
         return removedFromDB == true ? Ok($"TheatreShow with id {id} was successfully removed from db") : BadRequest("Failed to remove TheatreShow to DB. Entry does not exist");
     }
