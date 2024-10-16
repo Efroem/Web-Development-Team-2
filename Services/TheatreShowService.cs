@@ -12,8 +12,10 @@ public class TheatreShowService : ITheatreShowService
 
     public async Task<bool> Create(TheatreShow theatreShow)
     {
-        var x = dbContext.TheatreShow.FirstOrDefaultAsync(x => x.TheatreShowId == theatreShow.TheatreShowId);
-        if (x != null) return false;
+        var x = await dbContext.TheatreShow.FirstOrDefaultAsync(x => x.TheatreShowId == theatreShow.TheatreShowId);
+        // if (x != null) return false;
+        Venue venue = new Venue{VenueId = 1, Name = "Test", Capacity = 100};
+        await dbContext.Venue.AddAsync(venue);
         await dbContext.TheatreShow.AddAsync(theatreShow);
         int n = await dbContext.SaveChangesAsync();
         return n > 0;
@@ -22,8 +24,8 @@ public class TheatreShowService : ITheatreShowService
 
     public async Task<bool> Delete(int theatreShowId)
     {
-        TheatreShow x = await dbContext.TheatreShow.FirstOrDefaultAsync(x => x.TheatreShowId == theatreShowId);
-        if (x == null) return false;
+        var x = await dbContext.TheatreShow.FindAsync(theatreShowId);
+        // if (x == null) return false;
         dbContext.TheatreShow.Remove(x);
         int n = dbContext.SaveChanges();
         return n > 0;
