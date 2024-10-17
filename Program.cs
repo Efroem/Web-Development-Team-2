@@ -21,9 +21,14 @@ namespace StarterKit
                 options.Cookie.IsEssential = true; 
             });
 
+            // Register existing services
             builder.Services.AddScoped<ILoginService, LoginService>();
             builder.Services.AddTransient<ITheatreShowService, TheatreShowService>();
 
+            // Register the ReservationService
+            builder.Services.AddScoped<IReservationService, ReservationService>();  // <--- Add this line
+
+            // Add the database context
             builder.Services.AddDbContext<DatabaseContext>(
                 options => options.UseSqlite(builder.Configuration.GetConnectionString("SqlLiteDb")));
 
@@ -33,7 +38,6 @@ namespace StarterKit
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -51,7 +55,6 @@ namespace StarterKit
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
-
         }
     }
 }

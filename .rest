@@ -28,3 +28,22 @@ Content-Type: application/json
 DELETE http://localhost:5097/api/v1/TheatreShows/1
 ####
 
+POST http://localhost:5097/api/v1/Reservations
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john.doe@example.com",
+  "reservations": [
+    {
+      "showDateId": 1,
+      "ticketCount": 3
+    },
+    {
+      "showDateId": 2,
+      "ticketCount": 2
+    }
+  ]
+}
+###

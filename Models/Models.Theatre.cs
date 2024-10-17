@@ -50,9 +50,9 @@ namespace StarterKit.Models
 
         public double Price { get; set; }
 
-        // public List<TheatreShowDate>? theatreShowDates { get; set; }
+        public List<TheatreShowDate>? theatreShowDates { get; set; }
 
-        // public Venue? Venue { get; set; }
+        public Venue? Venue { get; set; }
         public int VenueId { get; set;}
 
     }
