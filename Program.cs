@@ -26,7 +26,7 @@ namespace StarterKit
             builder.Services.AddTransient<ITheatreShowService, TheatreShowService>();
 
             // Register the ReservationService
-            builder.Services.AddScoped<IReservationService, ReservationService>();  // <--- Add this line
+            builder.Services.AddScoped<IReservationService, ReservationService>();
 
             // Add the database context
             builder.Services.AddDbContext<DatabaseContext>(
