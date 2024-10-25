@@ -10,17 +10,26 @@ public class TheatreShowService : ITheatreShowService
         this.dbContext = dbContext;
     }
 
-    public async Task<bool> Create(TheatreShow theatreShow)
+    public async Task<bool> Create(TheatreShow theatreShow, Venue? venue, List<TheatreShowDate> theatreShowDates)
     {
         var x = await dbContext.TheatreShow.FirstOrDefaultAsync(x => x.TheatreShowId == theatreShow.TheatreShowId);
         if (x != null) return false;
-        Venue venue = new Venue{Name = "Test", Capacity = 100};
-        await dbContext.Venue.AddAsync(venue);
-        int m = await dbContext.SaveChangesAsync();
+        var venueInDB = await dbContext.Venue.FirstOrDefaultAsync(x => x.VenueId == venue.VenueId);
+        int n = 1;
+        if (venueInDB == null) {
+            await dbContext.Venue.AddAsync(venue);
+            n = await dbContext.SaveChangesAsync();
+        }
         theatreShow.VenueId = venue.VenueId;
         await dbContext.TheatreShow.AddAsync(theatreShow);
-        int n = await dbContext.SaveChangesAsync();
-        return n > 0 && m > 0;
+        int n2 = await dbContext.SaveChangesAsync();
+        foreach (TheatreShowDate date in theatreShowDates) {
+            date.TheatreShow = theatreShow;
+            await dbContext.TheatreShowDate.AddAsync(date);
+        }
+
+        int n3 = await dbContext.SaveChangesAsync();
+        return n > 0 & n2 > 0 & n3 > 0;
 
     }
 

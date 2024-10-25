@@ -40,7 +40,23 @@ namespace StarterKit.Models
 
     }
 
-    public class TheatreShow
+    public class TheatreShowCreator
+    {
+        public int TheatreShowId { get; set; }
+
+        public string? Title { get; set; }
+
+        public string? Description { get; set; }
+
+        public double Price { get; set; }
+
+        public List<TheatreShowDate>? TheatreShowDates { get; set; }
+
+        public Venue? Venue { get; set; }
+
+    }
+
+        public class TheatreShow
     {
         public int TheatreShowId { get; set; }
 
