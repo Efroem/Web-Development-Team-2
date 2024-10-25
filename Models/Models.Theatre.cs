@@ -40,7 +40,7 @@ namespace StarterKit.Models
 
     }
 
-    public class TheatreShowCreator
+    public class TheatreShowCollective
     {
         public int TheatreShowId { get; set; }
 

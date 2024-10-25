@@ -26,13 +26,13 @@ public class TheatreShowController : Controller {
         // DateTime date1 = DateTime.ParseExact(dateStr, "MM-dd-yyyy HH:mm", CultureInfo.InvariantCulture);
         // DateTime date = DateTime.Now;
         // return Ok($"{date}  \n{date1}");
-        TheatreShowCreator theatreShow = await theatreShowService.GetById(id);
+        TheatreShowCollective theatreShow = await theatreShowService.GetById(id);
         if (theatreShow != null) return Ok(theatreShow);
         return BadRequest($"TheatreShow with this ID does not exist ({theatreShow})");
     }   
 
     [HttpPost()]
-    public async Task<IActionResult> PostTheatreShow([FromBody] TheatreShowCreator theatreShowCreator) {
+    public async Task<IActionResult> PostTheatreShow([FromBody] TheatreShowCollective theatreShowCreator) {
         TheatreShow theatreShow = new TheatreShow();
         theatreShow.Title = theatreShowCreator.Title;
         theatreShow.Description = theatreShowCreator.Description;

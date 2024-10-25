@@ -42,19 +42,35 @@ public class TheatreShowService : ITheatreShowService
         return n > 0;
     }
 
-    public async Task<IEnumerable<TheatreShow>> GetAll()
+    public async Task<IEnumerable<TheatreShowCollective>> GetAll()
     {
-        return await dbContext.TheatreShow.ToListAsync();
-        // throw new NotImplementedException();
+        List<TheatreShowCollective> theatreShowCollectives = new List<TheatreShowCollective>();
+        List<TheatreShow> theatreShows = await dbContext.TheatreShow.ToListAsync();
+        foreach (TheatreShow show in theatreShows) {
+            List<TheatreShowDate> theatreShowDates = await dbContext.TheatreShowDate.Where(x => x.TheatreShow == show).ToListAsync();
+            Venue? venue = await dbContext.Venue.FirstOrDefaultAsync(x => x.VenueId == show.VenueId);
+            TheatreShowCollective theatreShowCollective= new TheatreShowCollective {
+                TheatreShowId = show.TheatreShowId,
+                Title = show.Title,
+                Description = show.Description,
+                Price = show.Price,
+                TheatreShowDates = theatreShowDates,
+                Venue = venue
+            };      
+            theatreShowCollectives.Add(theatreShowCollective);
+        }
+        
+
+        return theatreShowCollectives;
     }
 
-    public async Task<TheatreShowCreator> GetById(int theatreShowId)
+    public async Task<TheatreShowCollective> GetById(int theatreShowId)
     {
         TheatreShow? theatreShow = await dbContext.TheatreShow.FirstOrDefaultAsync(x => x.TheatreShowId == theatreShowId);
         if (theatreShow == null) return null;
         List<TheatreShowDate> theatreShowDates = await dbContext.TheatreShowDate.Where(x => x.TheatreShow == theatreShow).ToListAsync();
         Venue? venue = await dbContext.Venue.FirstOrDefaultAsync(x => x.VenueId == theatreShow.VenueId);
-        TheatreShowCreator theatreShowCreator= new TheatreShowCreator {
+        TheatreShowCollective theatreShowCollective= new TheatreShowCollective {
             TheatreShowId = theatreShowId,
             Title = theatreShow.Title,
             Description = theatreShow.Description,
@@ -62,7 +78,7 @@ public class TheatreShowService : ITheatreShowService
             TheatreShowDates = theatreShowDates,
             Venue = venue
         };
-        return theatreShowCreator;
+        return theatreShowCollective;
         
         // throw new NotImplementedException();
     }
