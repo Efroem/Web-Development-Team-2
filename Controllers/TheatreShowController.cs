@@ -26,7 +26,7 @@ public class TheatreShowController : Controller {
         // DateTime date1 = DateTime.ParseExact(dateStr, "MM-dd-yyyy HH:mm", CultureInfo.InvariantCulture);
         // DateTime date = DateTime.Now;
         // return Ok($"{date}  \n{date1}");
-        TheatreShow theatreShow = await theatreShowService.GetById(id);
+        TheatreShowCreator theatreShow = await theatreShowService.GetById(id);
         if (theatreShow != null) return Ok(theatreShow);
         return BadRequest($"TheatreShow with this ID does not exist ({theatreShow})");
     }   

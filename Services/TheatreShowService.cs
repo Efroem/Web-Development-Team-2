@@ -15,7 +15,7 @@ public class TheatreShowService : ITheatreShowService
         var x = await dbContext.TheatreShow.FirstOrDefaultAsync(x => x.TheatreShowId == theatreShow.TheatreShowId);
         if (x != null) return false;
         var venueInDB = await dbContext.Venue.FirstOrDefaultAsync(x => x.VenueId == venue.VenueId);
-        int n = 1;
+        int n = 1; // Give a default value to N incate the venue already exists
         if (venueInDB == null) {
             await dbContext.Venue.AddAsync(venue);
             n = await dbContext.SaveChangesAsync();
@@ -48,9 +48,22 @@ public class TheatreShowService : ITheatreShowService
         // throw new NotImplementedException();
     }
 
-    public async Task<TheatreShow> GetById(int theatreShowId)
+    public async Task<TheatreShowCreator> GetById(int theatreShowId)
     {
-        return await dbContext.TheatreShow.FirstOrDefaultAsync(x => x.TheatreShowId == theatreShowId);
+        TheatreShow? theatreShow = await dbContext.TheatreShow.FirstOrDefaultAsync(x => x.TheatreShowId == theatreShowId);
+        if (theatreShow == null) return null;
+        List<TheatreShowDate> theatreShowDates = await dbContext.TheatreShowDate.Where(x => x.TheatreShow == theatreShow).ToListAsync();
+        Venue? venue = await dbContext.Venue.FirstOrDefaultAsync(x => x.VenueId == theatreShow.VenueId);
+        TheatreShowCreator theatreShowCreator= new TheatreShowCreator {
+            TheatreShowId = theatreShowId,
+            Title = theatreShow.Title,
+            Description = theatreShow.Description,
+            Price = theatreShow.Price,
+            TheatreShowDates = theatreShowDates,
+            Venue = venue
+        };
+        return theatreShowCreator;
+        
         // throw new NotImplementedException();
     }
 
