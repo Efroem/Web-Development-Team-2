@@ -1,3 +1,4 @@
+#THEATERSHOWS REQUESTS
 GET http://localhost:5097/api/v1/TheatreShows
 ####
 GET http://localhost:5097/api/v1/TheatreShows/1
@@ -27,4 +28,20 @@ Content-Type: application/json
 
 DELETE http://localhost:5097/api/v1/TheatreShows/1
 ####
+### ADMIN LOGIN
+
+### Check if Admin is Logged In
+GET http://localhost:5097/api/v1/AdminLoginSystem/IsLoggedIn?userName=admin5
+
+###
+POST http://localhost:5097/api/v1/AdminLoginSystem/Login
+Content-Type: application/json
+
+{
+  "UserName": "admin5",
+  "Password": "Whatisapassword?"
+}
+###
+
+
 
