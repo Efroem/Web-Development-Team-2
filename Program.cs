@@ -1,6 +1,5 @@
-using Backend.Interfaces;
-using Backend.Services;
 using Microsoft.EntityFrameworkCore;
+using StarterKit.Interfaces;
 using StarterKit.Models;
 using StarterKit.Services;
 
@@ -18,19 +17,15 @@ namespace StarterKit
 
             builder.Services.AddSession(options => 
             {
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.IdleTimeout = TimeSpan.FromSeconds(30);
                 options.Cookie.HttpOnly = true; 
                 options.Cookie.IsEssential = true; 
             });
 
+            builder.Services.AddHttpContextAccessor();
             // Register existing services
             builder.Services.AddScoped<ILoginService, LoginService>();
-
             builder.Services.AddTransient<ITheatreShowService, TheatreShowService>();
-            builder.Services.AddScoped<IAdminService, AdminService>();
-            builder.Services.AddScoped<ILoginService, LoginService>();
-
-            // Register the ReservationService
             builder.Services.AddScoped<IReservationService, ReservationService>();
 
             // Add the database context

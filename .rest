@@ -1,34 +1,18 @@
 #THEATERSHOWS REQUESTS
 GET http://localhost:5097/api/v1/TheatreShows
 ####
-GET http://localhost:5097/api/v1/TheatreShows/7
+GET http://localhost:5097/api/v1/TheatreShows/1
 ####
 
 POST http://localhost:5097/api/v1/TheatreShows
 Content-Type: application/json
 
 {
-    "TheatreShowId": 1,
     "Title": "Test",
     "Description": "test",
     "Price": 0.1,
-    "TheatreShowDates": [
-        {
-            "DateAndTime": "2024-08-25T09:15:00",
-            "Reservations": []
-        },
-        {
-            "DateAndTime": "2020-10-20T09:15:00",
-            "Reservations": []
-        }
-    ],
-    "Venue": {
-        "VenueId": 1,
-        "Name": "FunnyTest",
-        "Capacity": 250
-    }
+    "VenueId": 1
 }
-
 ####
 
 PUT http://localhost:5097/api/v1/TheatreShows/4
@@ -38,45 +22,29 @@ Content-Type: application/json
     "Title": "Test2",
     "Description": "test2",
     "Price": 4.20,
-    "VenueId": 4
+    "VenueId": 5
 }
 ####
 
 DELETE http://localhost:5097/api/v1/TheatreShows/1
 ####
-### ADMIN LOGIN
-
-### Check if Admin is Logged In
-GET http://localhost:5097/api/v1/AdminLoginSystem/IsLoggedIn?userName=admin5
-
-###
-POST http://localhost:5097/api/v1/AdminLoginSystem/Login
+### ADMIN REST
+### Returned: Succesful login request
+POST http://localhost:5097/api/v1/Adminlogin/login
 Content-Type: application/json
 
 {
-  "UserName": "admin5",
-  "Password": "Whatisapassword?"
+    "UserName": "admin1",
+    "Password": "password"
 }
-###
 
-
-
-POST http://localhost:5097/api/v1/Reservations
+### Session status check after the login
+GET http://localhost:5097/api/v1/Adminlogin/session
 Content-Type: application/json
 
-{
-  "firstName": "John",
-  "lastName": "Doe",
-  "email": "john.doe@example.com",
-  "reservations": [
-    {
-      "showDateId": 1,
-      "ticketCount": 3
-    },
-    {
-      "showDateId": 2,
-      "ticketCount": 2
-    }
-  ]
-}
-###
+
+
+
+
+
+
