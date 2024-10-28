@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
 using StarterKit.Models;
 using StarterKit.Services;
@@ -21,14 +22,23 @@ public class TheatreShowController : Controller {
     
     [HttpGet("{id}")]
     public async Task<IActionResult> GetTheatreShowById(int id) {
-        TheatreShow theatreShow = await theatreShowService.GetById(id);
+        // string dateStr = "08-25-2004 09:15";
+        // DateTime date1 = DateTime.ParseExact(dateStr, "MM-dd-yyyy HH:mm", CultureInfo.InvariantCulture);
+        // DateTime date = DateTime.Now;
+        // return Ok($"{date}  \n{date1}");
+        TheatreShowCollective theatreShow = await theatreShowService.GetById(id);
         if (theatreShow != null) return Ok(theatreShow);
         return BadRequest($"TheatreShow with this ID does not exist ({theatreShow})");
     }   
 
     [HttpPost()]
-    public async Task<IActionResult> PostTheatreShow([FromBody] TheatreShow theatreShow) {
-        bool addedToDB = await theatreShowService.Create(theatreShow);
+    public async Task<IActionResult> PostTheatreShow([FromBody] TheatreShowCollective theatreShowCreator) {
+        TheatreShow theatreShow = new TheatreShow();
+        theatreShow.Title = theatreShowCreator.Title;
+        theatreShow.Description = theatreShowCreator.Description;
+        theatreShow.Price = theatreShowCreator.Price;
+        theatreShow.VenueId = theatreShowCreator.Venue != null ? theatreShowCreator.Venue.VenueId : 0;
+        bool addedToDB = await theatreShowService.Create(theatreShow, theatreShowCreator.Venue, theatreShowCreator.TheatreShowDates);
         return addedToDB == true ? Ok(theatreShow) : BadRequest("Failed to add TheatreShow to DB. Entry already exists");
     }
 
