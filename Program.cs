@@ -1,3 +1,5 @@
+using Backend.Interfaces;
+using Backend.Services;
 using Microsoft.EntityFrameworkCore;
 using StarterKit.Models;
 using StarterKit.Services;
@@ -21,8 +23,9 @@ namespace StarterKit
                 options.Cookie.IsEssential = true; 
             });
 
-            builder.Services.AddScoped<ILoginService, LoginService>();
             builder.Services.AddTransient<ITheatreShowService, TheatreShowService>();
+            builder.Services.AddScoped<IAdminService, AdminService>();
+            builder.Services.AddScoped<ILoginService, LoginService>();
 
             builder.Services.AddDbContext<DatabaseContext>(
                 options => options.UseSqlite(builder.Configuration.GetConnectionString("SqlLiteDb")));

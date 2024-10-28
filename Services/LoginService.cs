@@ -1,25 +1,43 @@
+using Backend.Interfaces;
 using StarterKit.Models;
 using StarterKit.Utils;
 
-namespace StarterKit.Services;
-
-public enum LoginStatus { IncorrectPassword, IncorrectUsername, Success }
-
-public enum ADMIN_SESSION_KEY { adminLoggedIn }
-
-public class LoginService : ILoginService
+namespace Backend.Services
 {
-
-    private readonly DatabaseContext _context;
-
-    public LoginService(DatabaseContext context)
+    public class LoginService : ILoginService
     {
-        _context = context;
-    }
+        private readonly DatabaseContext _dbContext;
 
-    public LoginStatus CheckPassword(string username, string inputPassword)
-    {
-        // TODO: Make this method check the password with what is in the database
-        return LoginStatus.IncorrectPassword;
+        public LoginService(DatabaseContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        public bool Login(string userName, string password, out string errorMessage)
+        {
+            var admin = _dbContext.Admin.FirstOrDefault(e => e.UserName == userName);
+
+            if (admin == null)
+            {
+                errorMessage = "The username for this admin does not exist";
+                return false;
+            }
+
+            var encryptedPassword = EncryptionHelper.EncryptPassword(password);
+            if (admin.Password != encryptedPassword)
+            {
+                errorMessage = "The password is incorrect";
+                return false;
+            }
+
+            // Login successful
+            errorMessage = null;
+            return true;
+        }
+
+        public bool IsAdminLoggedIn(string userName)
+        {
+            return _dbContext.Admin.Any(e => e.UserName == userName);
+        }
     }
 }
