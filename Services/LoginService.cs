@@ -1,43 +1,50 @@
-using Backend.Interfaces;
+using Microsoft.AspNetCore.Http;
+using StarterKit.Interfaces;
 using StarterKit.Models;
 using StarterKit.Utils;
+using System.Linq;
 
-namespace Backend.Services
+namespace StarterKit.Services
 {
     public class LoginService : ILoginService
     {
-        private readonly DatabaseContext _dbContext;
+        private readonly DatabaseContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public LoginService(DatabaseContext dbContext)
+        public LoginService(DatabaseContext context, IHttpContextAccessor httpContextAccessor)
         {
-            _dbContext = dbContext;
+            _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public bool Login(string userName, string password, out string errorMessage)
+        public bool ValidateAdmin(string username, string password)
         {
-            var admin = _dbContext.Admin.FirstOrDefault(e => e.UserName == userName);
+            var admin = _context.Admin.FirstOrDefault(a => a.UserName == username);
 
             if (admin == null)
             {
-                errorMessage = "The username for this admin does not exist";
-                return false;
+                return false; 
             }
 
-            var encryptedPassword = EncryptionHelper.EncryptPassword(password);
-            if (admin.Password != encryptedPassword)
-            {
-                errorMessage = "The password is incorrect";
-                return false;
-            }
+            var hashedPassword = EncryptionHelper.EncryptPassword(password);
 
-            // Login successful
-            errorMessage = null;
-            return true;
+            return hashedPassword == admin.Password;
         }
 
-        public bool IsAdminLoggedIn(string userName)
+
+        public void SetAdminUsername(string username)
         {
-            return _dbContext.Admin.Any(e => e.UserName == userName);
+            _httpContextAccessor.HttpContext.Session.SetString("AdminUsername", username);
+        }
+
+        public bool IsUserLoggedIn()
+        {
+            return _httpContextAccessor.HttpContext.Session.GetString("AdminUsername") != null;
+        }
+
+        public string GetAdminUsername()
+        {
+            return _httpContextAccessor.HttpContext.Session.GetString("AdminUsername");
         }
     }
 }

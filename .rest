@@ -1,14 +1,13 @@
 #THEATERSHOWS REQUESTS
 GET http://localhost:5097/api/v1/TheatreShows
 ####
-GET http://localhost:5097/api/v1/TheatreShows/7
+GET http://localhost:5097/api/v1/TheatreShows/1
 ####
 
 POST http://localhost:5097/api/v1/TheatreShows
 Content-Type: application/json
 
 {
-    "TheatreShowId": 1,
     "Title": "Test",
     "Description": "test",
     "Price": 0.1,
@@ -23,7 +22,6 @@ Content-Type: application/json
         }
     ],
     "Venue": {
-        "VenueId": 1,
         "Name": "FunnyTest",
         "Capacity": 250
     }
@@ -31,33 +29,33 @@ Content-Type: application/json
 
 ####
 
-PUT http://localhost:5097/api/v1/TheatreShows/4
+PUT http://localhost:5097/api/v1/TheatreShows/1
 Content-Type: application/json
 
 {
     "Title": "Test2",
     "Description": "test2",
     "Price": 4.20,
-    "VenueId": 4
+    "VenueId": 1
 }
 ####
 
 DELETE http://localhost:5097/api/v1/TheatreShows/1
 ####
-### ADMIN LOGIN
+# ADMIN REST
 
-### Check if Admin is Logged In
-GET http://localhost:5097/api/v1/AdminLoginSystem/IsLoggedIn?userName=admin5
-
-###
-POST http://localhost:5097/api/v1/AdminLoginSystem/Login
+POST http://localhost:5097/api/v1/Adminlogin/login
 Content-Type: application/json
 
 {
-  "UserName": "admin5",
-  "Password": "Whatisapassword?"
+    "UserName": "admin1",
+    "Password": "password"
 }
 ###
 
+
+GET http://localhost:5097/api/v1/Adminlogin/session
+Content-Type: application/json
+###
 
 

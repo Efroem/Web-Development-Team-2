@@ -37,8 +37,19 @@ public class TheatreShowService : ITheatreShowService
     {
         var x = await dbContext.TheatreShow.FindAsync(theatreShowId);
         if (x == null) return false;
+        // List<TheatreShowDate>? theatreShowDates = await dbContext.TheatreShowDate.Where(x => x.TheatreShowDateId == theatreShowId).ToListAsync();
+        // if (theatreShowDates.Count == 0) return false;
+        // foreach (TheatreShowDate date in theatreShowDates) {
+        //     var reservations = await dbContext.Reservation.Where(x => x.TheatreShowDate.TheatreShowDateId == date.TheatreShowDateId).ToListAsync();
+        //     foreach (var reservation in reservations) {
+        //         dbContext.Reservation.Remove(reservation);
+        //     }
+        //     dbContext.TheatreShowDate.Remove(date);
+        // }
+
         dbContext.TheatreShow.Remove(x);
-        int n = dbContext.SaveChanges();
+        int n = await dbContext.SaveChangesAsync();
+        // return n > 0 && m > 0;
         return n > 0;
     }
 

@@ -1,6 +1,5 @@
-using Backend.Interfaces;
-using Backend.Services;
 using Microsoft.EntityFrameworkCore;
+using StarterKit.Interfaces;
 using StarterKit.Models;
 using StarterKit.Services;
 
@@ -13,20 +12,24 @@ namespace StarterKit
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddControllersWithViews();
+            
+            builder.Services.Configure<Options>(builder.Configuration.GetSection("Admin"));
 
             builder.Services.AddDistributedMemoryCache();
 
             builder.Services.AddSession(options => 
             {
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.IdleTimeout = TimeSpan.FromSeconds(30);
                 options.Cookie.HttpOnly = true; 
                 options.Cookie.IsEssential = true; 
             });
 
-            builder.Services.AddTransient<ITheatreShowService, TheatreShowService>();
-            builder.Services.AddScoped<IAdminService, AdminService>();
+            builder.Services.AddHttpContextAccessor();
+            // Register existing services
             builder.Services.AddScoped<ILoginService, LoginService>();
+            builder.Services.AddTransient<ITheatreShowService, TheatreShowService>();
 
+            // Add the database context
             builder.Services.AddDbContext<DatabaseContext>(
                 options => options.UseSqlite(builder.Configuration.GetConnectionString("SqlLiteDb")));
 
@@ -36,7 +39,6 @@ namespace StarterKit
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -54,7 +56,6 @@ namespace StarterKit
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
-
         }
     }
 }

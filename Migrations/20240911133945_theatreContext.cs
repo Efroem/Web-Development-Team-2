@@ -77,7 +77,8 @@ namespace StarterKit.Migrations
                         name: "FK_TheatreShowDate_TheatreShow_TheatreShowId",
                         column: x => x.TheatreShowId,
                         principalTable: "TheatreShow",
-                        principalColumn: "TheatreShowId");
+                        principalColumn: "TheatreShowId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -103,7 +104,8 @@ namespace StarterKit.Migrations
                         name: "FK_Reservation_TheatreShowDate_TheatreShowDateId",
                         column: x => x.TheatreShowDateId,
                         principalTable: "TheatreShowDate",
-                        principalColumn: "TheatreShowDateId");
+                        principalColumn: "TheatreShowDateId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
