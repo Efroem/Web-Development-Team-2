@@ -1,53 +1,48 @@
 using Microsoft.AspNetCore.Mvc;
-using StarterKit.Interfaces;
+using Backend.Interfaces;
+using Backend.Models;
 
-namespace StarterKit.Controllers
+namespace Backend.Controllers
 {
-    [Route("api/v1/Adminlogin")]
-    public class AdminController : ControllerBase
+    [Route("api/v1/AdminLoginSystem")]
+    [ApiController]
+    public class AdminController : Controller
     {
         private readonly ILoginService _loginService;
+        private readonly IAdminService _adminService;
 
-        public AdminController(ILoginService loginService)
+        public AdminController(ILoginService loginService, IAdminService adminService)
         {
             _loginService = loginService;
+            _adminService = adminService;
         }
 
-    
-        [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginRequest request)
+        [HttpPost("Login")]
+        public IActionResult AdminLogin([FromBody] LoginRequest loginRequest)
         {
-            if (string.IsNullOrEmpty(request.UserName) || string.IsNullOrEmpty(request.Password))
-            {
-                return BadRequest("Username and password cannot be empty.");
-            }
+            if (loginRequest == null)
+                return BadRequest("Invalid login request. Provide a username and password");
 
-            bool isValidAdmin = _loginService.ValidateAdmin(request.UserName, request.Password);
+            var adminLoggedIn = _loginService.Login(loginRequest.UserName, loginRequest.Password, out string errorMessage);
 
-            if (!isValidAdmin)
-            {
-                return Unauthorized("Invalid username or password");
-            }
+            if (!adminLoggedIn)
+                return Unauthorized($"Failed login: {errorMessage}");
 
-            _loginService.SetAdminUsername(request.UserName);
-            return Ok($"Login successful with username: {request.UserName}!");
+            return Ok("Successfully logged in!");
         }
 
-    
-        [HttpGet("session")]
-        public IActionResult SessionStatus()
+        [HttpGet("IsLoggedIn")]
+        public IActionResult IsAdminLoggedIn([FromQuery] string userName)
         {
-            bool isLoggedIn = _loginService.IsUserLoggedIn();
-            string username = _loginService.GetAdminUsername();
+            var loggedIn = _loginService.IsAdminLoggedIn(userName);
 
-            if (isLoggedIn)
-            {
-                return Ok($"User is logged in as {username}.");
-            }
-            else
-            {
-                return Ok("User is not logged in.");
-            }
+            if (!loggedIn)
+                return Unauthorized("No admin is logged in.");
+
+            if (!_adminService.IsAdminUser(userName))
+                return Unauthorized("UserName is not an admin.");
+
+            return Ok($"{userName} is logged in as an admin.");
         }
     }
 }

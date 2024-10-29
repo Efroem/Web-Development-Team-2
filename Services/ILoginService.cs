@@ -1,10 +1,8 @@
-namespace StarterKit.Interfaces
+namespace Backend.Interfaces
 {
     public interface ILoginService
     {
-        bool ValidateAdmin(string username, string password);
-        void SetAdminUsername(string username);
-        bool IsUserLoggedIn();
-        string GetAdminUsername();
+        bool Login(string userName, string password, out string errorMessage);
+        bool IsAdminLoggedIn(string userName);
     }
 }
