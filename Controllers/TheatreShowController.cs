@@ -15,21 +15,77 @@ public class TheatreShowController : Controller {
         this.theatreShowService = theatreShowService;
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetTheatreShows() {
-        return Ok(await theatreShowService.GetAll());
-    }   
+[HttpGet]
+public async Task<IActionResult> GetTheatreShows(
+    int? id = null,
+    string? title = null,
+    string? description = null,
+    string? location = null,
+    DateTime? startDate = null,
+    DateTime? endDate = null,
+    string? sortBy = null,
+    bool ascending = true)
+{
+    // Get all theatre shows
+    var shows = await theatreShowService.GetAll();
+
+    // Filter by optional ID
+    if (id.HasValue)
+    {
+        shows = shows.Where(show => show.TheatreShowId == id.Value).ToList();
+    }
+
+    // Filter by title or description
+    if (!string.IsNullOrEmpty(title))
+    {
+        shows = shows.Where(show => show.Title != null && show.Title.Contains(title, StringComparison.OrdinalIgnoreCase)).ToList();
+    }
+    if (!string.IsNullOrEmpty(description))
+    {
+        shows = shows.Where(show => show.Description != null && show.Description.Contains(description, StringComparison.OrdinalIgnoreCase)).ToList();
+    }
+
+    // Filter by location (assumes location is the Venue's Name)
+    if (!string.IsNullOrEmpty(location))
+    {
+        shows = shows.Where(show => show.Venue != null && show.Venue.Name != null && show.Venue.Name.Contains(location, StringComparison.OrdinalIgnoreCase)).ToList();
+    }
+
+    // Filter by date range
+    if (startDate.HasValue || endDate.HasValue)
+    {
+        shows = shows.Where(show => show.TheatreShowDates != null && show.TheatreShowDates.Any(date =>
+            (!startDate.HasValue || date.DateAndTime >= startDate.Value) &&
+            (!endDate.HasValue || date.DateAndTime <= endDate.Value))).ToList();
+    }
+
+    // Sorting
+    if (!string.IsNullOrEmpty(sortBy))
+    {
+        shows = sortBy.ToLower() switch
+        {
+            "title" => ascending ? shows.OrderBy(show => show.Title).ToList() : shows.OrderByDescending(show => show.Title).ToList(),
+            "price" => ascending ? shows.OrderBy(show => show.Price).ToList() : shows.OrderByDescending(show => show.Price).ToList(),
+            "date" => ascending ? shows.OrderBy(show => show.TheatreShowDates?.FirstOrDefault()?.DateAndTime).ToList() :
+                                  shows.OrderByDescending(show => show.TheatreShowDates?.FirstOrDefault()?.DateAndTime).ToList(),
+            _ => shows
+        };
+    }
+
+    return Ok(shows);
+}
     
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetTheatreShowById(int id) {
-        // string dateStr = "08-25-2004 09:15";
-        // DateTime date1 = DateTime.ParseExact(dateStr, "MM-dd-yyyy HH:mm", CultureInfo.InvariantCulture);
-        // DateTime date = DateTime.Now;
-        // return Ok($"{date}  \n{date1}");
-        TheatreShowCollective theatreShow = await theatreShowService.GetById(id);
-        if (theatreShow != null) return Ok(theatreShow);
-        return BadRequest($"TheatreShow with this ID does not exist ({theatreShow})");
-    }   
+[HttpGet("{id}")]
+public async Task<IActionResult> GetTheatreShowById(int id) {
+    TheatreShowCollective? theatreShow = await theatreShowService.GetById(id);
+
+    if (theatreShow != null) {
+        return Ok(theatreShow);
+    } else {
+        return NotFound($"TheatreShow with ID {id} does not exist.");
+    }
+}
+  
 
     [HttpPost()]
     public async Task<IActionResult> PostTheatreShow([FromBody] TheatreShowCollective theatreShowCreator) {
