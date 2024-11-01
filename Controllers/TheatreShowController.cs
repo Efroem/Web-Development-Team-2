@@ -26,16 +26,13 @@ public async Task<IActionResult> GetTheatreShows(
     string? sortBy = null,
     bool ascending = true)
 {
-    // Get all theatre shows
     var shows = await theatreShowService.GetAll();
 
-    // Filter by optional ID
     if (id.HasValue)
     {
         shows = shows.Where(show => show.TheatreShowId == id.Value).ToList();
     }
 
-    // Filter by title or description
     if (!string.IsNullOrEmpty(title))
     {
         shows = shows.Where(show => show.Title != null && show.Title.Contains(title, StringComparison.OrdinalIgnoreCase)).ToList();
@@ -45,13 +42,11 @@ public async Task<IActionResult> GetTheatreShows(
         shows = shows.Where(show => show.Description != null && show.Description.Contains(description, StringComparison.OrdinalIgnoreCase)).ToList();
     }
 
-    // Filter by location (assumes location is the Venue's Name)
     if (!string.IsNullOrEmpty(location))
     {
         shows = shows.Where(show => show.Venue != null && show.Venue.Name != null && show.Venue.Name.Contains(location, StringComparison.OrdinalIgnoreCase)).ToList();
     }
 
-    // Filter by date range
     if (startDate.HasValue || endDate.HasValue)
     {
         shows = shows.Where(show => show.TheatreShowDates != null && show.TheatreShowDates.Any(date =>
@@ -59,7 +54,6 @@ public async Task<IActionResult> GetTheatreShows(
             (!endDate.HasValue || date.DateAndTime <= endDate.Value))).ToList();
     }
 
-    // Sorting
     if (!string.IsNullOrEmpty(sortBy))
     {
         shows = sortBy.ToLower() switch
