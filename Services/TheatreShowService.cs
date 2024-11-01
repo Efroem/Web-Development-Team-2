@@ -24,7 +24,7 @@ public class TheatreShowService : ITheatreShowService
         await dbContext.TheatreShow.AddAsync(theatreShow);
         int n2 = await dbContext.SaveChangesAsync();
         foreach (TheatreShowDate date in theatreShowDates) {
-            date.TheatreShow = theatreShow;
+            date.TheatreShowId = theatreShow.TheatreShowId;
             await dbContext.TheatreShowDate.AddAsync(date);
         }
 
@@ -58,7 +58,7 @@ public class TheatreShowService : ITheatreShowService
         List<TheatreShowCollective> theatreShowCollectives = new List<TheatreShowCollective>();
         List<TheatreShow> theatreShows = await dbContext.TheatreShow.ToListAsync();
         foreach (TheatreShow show in theatreShows) {
-            List<TheatreShowDate> theatreShowDates = await dbContext.TheatreShowDate.Where(x => x.TheatreShow == show).ToListAsync();
+            List<TheatreShowDate> theatreShowDates = await dbContext.TheatreShowDate.Where(x => x.TheatreShowId == show.TheatreShowId).ToListAsync();
             Venue? venue = await dbContext.Venue.FirstOrDefaultAsync(x => x.VenueId == show.VenueId);
             TheatreShowCollective theatreShowCollective= new TheatreShowCollective {
                 TheatreShowId = show.TheatreShowId,
@@ -79,7 +79,7 @@ public class TheatreShowService : ITheatreShowService
     {
         TheatreShow? theatreShow = await dbContext.TheatreShow.FirstOrDefaultAsync(x => x.TheatreShowId == theatreShowId);
         if (theatreShow == null) return null;
-        List<TheatreShowDate> theatreShowDates = await dbContext.TheatreShowDate.Where(x => x.TheatreShow == theatreShow).ToListAsync();
+        List<TheatreShowDate> theatreShowDates = await dbContext.TheatreShowDate.Where(x => x.TheatreShowId == theatreShow.TheatreShowId).ToListAsync();
         Venue? venue = await dbContext.Venue.FirstOrDefaultAsync(x => x.VenueId == theatreShow.VenueId);
         TheatreShowCollective theatreShowCollective= new TheatreShowCollective {
             TheatreShowId = theatreShowId,
