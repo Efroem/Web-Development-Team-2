@@ -1,5 +1,7 @@
+using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using StarterKit.Interfaces;
+
 
 namespace StarterKit.Controllers
 {
@@ -13,7 +15,7 @@ namespace StarterKit.Controllers
             _loginService = loginService;
         }
 
-    
+
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest request)
         {
@@ -28,14 +30,13 @@ namespace StarterKit.Controllers
             {
                 return Unauthorized("Invalid username or password");
             }
-
             _loginService.SetAdminUsername(request.UserName);
             return Ok($"Login successful with username: {request.UserName}!");
         }
 
-    
+
         [HttpGet("session")]
-        public IActionResult SessionStatus()
+        public IActionResult RegisteredSession()
         {
             bool isLoggedIn = _loginService.IsUserLoggedIn();
             string username = _loginService.GetAdminUsername();

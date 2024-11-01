@@ -12,6 +12,8 @@ namespace StarterKit
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddControllersWithViews();
+            
+            builder.Services.Configure<Options>(builder.Configuration.GetSection("Admin"));
 
             builder.Services.AddDistributedMemoryCache();
 
@@ -26,7 +28,6 @@ namespace StarterKit
             // Register existing services
             builder.Services.AddScoped<ILoginService, LoginService>();
             builder.Services.AddTransient<ITheatreShowService, TheatreShowService>();
-            builder.Services.AddScoped<IReservationService, ReservationService>();
 
             // Add the database context
             builder.Services.AddDbContext<DatabaseContext>(

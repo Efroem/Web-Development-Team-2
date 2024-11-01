@@ -81,6 +81,7 @@ public async Task<IActionResult> GetTheatreShowById(int id) {
 }
   
 
+    [AdminOnly]
     [HttpPost()]
     public async Task<IActionResult> PostTheatreShow([FromBody] TheatreShowCollective theatreShowCreator) {
         TheatreShow theatreShow = new TheatreShow();
@@ -92,13 +93,14 @@ public async Task<IActionResult> GetTheatreShowById(int id) {
         return addedToDB == true ? Ok(theatreShow) : BadRequest("Failed to add TheatreShow to DB. Entry already exists");
     }
 
+    [AdminOnly]
     [HttpPut("{theatreShowId}")]
     public async Task<IActionResult> UpdateTheatreShow([FromBody] TheatreShow theatreShow, int theatreShowId) {
         // return Ok($"{theatreShowId}");
         bool updatedTheatreShow = await theatreShowService.Update(theatreShow, theatreShowId);
         return updatedTheatreShow == true ? Ok($"Successfully updated") : BadRequest("Failed to update TheatreShow");
     }
-
+    [AdminOnly]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTheatreShow(int id) {
         bool removedFromDB = await theatreShowService.Delete(id);
