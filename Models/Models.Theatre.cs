@@ -25,7 +25,7 @@ namespace StarterKit.Models
 
         public Customer? Customer { get; set; }
 
-        public TheatreShowDate? TheatreShowDate { get; set; }
+        public int TheatreShowDateId { get; set; }
     }
 
     public class TheatreShowDate
@@ -36,7 +36,7 @@ namespace StarterKit.Models
 
         public List<Reservation>? Reservations { get; set; }
 
-        public TheatreShow? TheatreShow { get; set; }
+        public int TheatreShowId { get; set; }
 
     }
 
