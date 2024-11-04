@@ -127,3 +127,16 @@ Content-Type: application/json
   ]
 }
 ###
+
+# Filter
+GET http://localhost:5097/api/v1/ReservationManagement?showId=3&date=2024-12-01&email=john.doe@example.com&reservationId=4
+###
+GET http://localhost:5097/api/v1/ReservationManagement?showId=1&dateTime=2024-12-01T19:30:00
+###
+
+# Mark as used
+PATCH http://localhost:5097/api/v1/ReservationManagement/5/mark-as-used
+###
+
+# Delete
+DELETE http://localhost:5097/api/v1/ReservationManagement/5
