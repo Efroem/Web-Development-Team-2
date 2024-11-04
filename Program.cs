@@ -27,6 +27,7 @@ namespace StarterKit
             builder.Services.AddHttpContextAccessor();
             // Register existing services
             builder.Services.AddScoped<ILoginService, LoginService>();
+            builder.Services.AddScoped<IReservationService, ReservationService>();
             builder.Services.AddTransient<ITheatreShowService, TheatreShowService>();
 
             // Add the database context

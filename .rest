@@ -58,4 +58,51 @@ GET http://localhost:5097/api/v1/Adminlogin/session
 Content-Type: application/json
 ###
 
+# Invalid date
+POST http://localhost:5097/api/v1/Reservations
+Content-Type: application/json
 
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john.doe@example.com",
+  "reservations": [
+    {
+      "showDateId": 3,
+      "ticketCount": 3
+    }
+  ]
+}
+
+###
+# Working
+POST http://localhost:5097/api/v1/Reservations
+Content-Type: application/json
+
+{
+  "firstName": "Willem Alexander",
+  "lastName": "van Oranje",
+  "email": "willem@example.com",
+  "reservations": [
+    {
+      "showDateId": 1,
+      "ticketCount": 3
+    }
+  ]
+}
+###
+# Not enough tickets
+POST http://localhost:5097/api/v1/Reservations
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john.doe@example.com",
+  "reservations": [
+    {
+      "showDateId": 4,
+      "ticketCount": 10
+    }
+  ]
+}
