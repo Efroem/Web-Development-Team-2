@@ -1,8 +1,0 @@
-admin username: admin1||| usernames: 
-AdminUsernames is empty or not loaded correctly.
-AdminUsernames is empty or not loaded correctly.admin username: admin1||| usernames: Options
-admin usernames: 
-admin usernames: 
-admin usernames: 
-PUT /api/v1/TheatreShows/4 was requested but user  is not admin!
-POST /api/v1/TheatreShows was requested but user  is not admin!

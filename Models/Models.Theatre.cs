@@ -25,7 +25,7 @@ namespace StarterKit.Models
 
         public Customer? Customer { get; set; }
 
-        public int TheatreShowDateId { get; set; }
+        public TheatreShowDate? TheatreShowDate { get; set; }
     }
 
     public class TheatreShowDate
@@ -36,11 +36,11 @@ namespace StarterKit.Models
 
         public List<Reservation>? Reservations { get; set; }
 
-        public int TheatreShowId { get; set; }
+        public TheatreShow? TheatreShow { get; set; }
 
     }
 
-    public class TheatreShowCollective
+    public class TheatreShow
     {
         public int TheatreShowId { get; set; }
 
@@ -50,25 +50,9 @@ namespace StarterKit.Models
 
         public double Price { get; set; }
 
-        public List<TheatreShowDate>? TheatreShowDates { get; set; }
+        public List<TheatreShowDate>? theatreShowDates { get; set; }
 
         public Venue? Venue { get; set; }
-
-    }
-
-        public class TheatreShow
-    {
-        public int TheatreShowId { get; set; }
-
-        public string? Title { get; set; }
-
-        public string? Description { get; set; }
-
-        public double Price { get; set; }
-
-        // public List<TheatreShowDate>? theatreShowDates { get; set; }
-
-        // public Venue? Venue { get; set; }
         public int VenueId { get; set;}
 
     }
