@@ -7,3 +7,4 @@ webdev.db-wal
 # webdev.sqlite
 webdev.sqlite-shm
 webdev.sqlite-wal
+logs.txt
