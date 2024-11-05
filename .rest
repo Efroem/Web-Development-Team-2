@@ -65,7 +65,7 @@ Content-Type: application/json
 {
   "firstName": "John",
   "lastName": "Doe",
-  "email": "john.doe@example.com",
+  "email": "nolan.zijdemans@gmail.com",
   "reservations": [
     {
       "showDateId": 3,
@@ -80,12 +80,12 @@ POST http://localhost:5097/api/v1/Reservations
 Content-Type: application/json
 
 {
-  "firstName": "Willem Alexander",
-  "lastName": "van Oranje",
-  "email": "willem@example.com",
+  "firstName": "Vincentoo",
+  "lastName": "Stoel",
+  "email": "altijdwerkers@gmail.com",
   "reservations": [
     {
-      "showDateId": 1,
+      "showDateId": 5,
       "ticketCount": 3
     }
   ]

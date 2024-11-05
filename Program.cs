@@ -1,3 +1,4 @@
+using EmailExample;
 using Microsoft.EntityFrameworkCore;
 using StarterKit.Interfaces;
 using StarterKit.Models;
@@ -29,6 +30,8 @@ namespace StarterKit
             builder.Services.AddScoped<ILoginService, LoginService>();
             builder.Services.AddScoped<IReservationService, ReservationService>();
             builder.Services.AddTransient<ITheatreShowService, TheatreShowService>();
+            builder.Services.AddScoped<MailSender>();
+
 
             // Add the database context
             builder.Services.AddDbContext<DatabaseContext>(
