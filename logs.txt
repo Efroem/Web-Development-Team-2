@@ -6,3 +6,10 @@ admin usernames:
 admin usernames: 
 PUT /api/v1/TheatreShows/4 was requested but user  is not admin!
 POST /api/v1/TheatreShows was requested but user  is not admin!
+POST /api/v1/TheatreShows was requested but user  is not admin!
+PUT /api/v1/TheatreShows/1 was requested but user  is not admin!
+POST /api/v1/TheatreShows was requested but user admin1 is not admin!
+POST /api/v1/TheatreShows was requested but user  is not admin!
+POST /api/v1/TheatreShows was requested but user  is not admin!
+GET /api/v1/ReservationManagement was requested but user  is not admin!
+GET /api/v1/ReservationManagement was requested but user  is not admin!

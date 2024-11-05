@@ -6,5 +6,6 @@ namespace StarterKit.Interfaces
         void SetAdminUsername(string username);
         bool IsUserLoggedIn();
         string GetAdminUsername();
+        void Logout();
     }
 }

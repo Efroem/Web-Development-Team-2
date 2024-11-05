@@ -1,3 +1,4 @@
+using EmailExample;
 using Microsoft.EntityFrameworkCore;
 using StarterKit.Interfaces;
 using StarterKit.Models;
@@ -19,7 +20,7 @@ namespace StarterKit
 
             builder.Services.AddSession(options => 
             {
-                options.IdleTimeout = TimeSpan.FromSeconds(30);
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
                 options.Cookie.HttpOnly = true; 
                 options.Cookie.IsEssential = true; 
             });
@@ -27,7 +28,10 @@ namespace StarterKit
             builder.Services.AddHttpContextAccessor();
             // Register existing services
             builder.Services.AddScoped<ILoginService, LoginService>();
+            builder.Services.AddScoped<IReservationService, ReservationService>();
             builder.Services.AddTransient<ITheatreShowService, TheatreShowService>();
+            builder.Services.AddScoped<MailSender>();
+
 
             // Add the database context
             builder.Services.AddDbContext<DatabaseContext>(
