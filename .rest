@@ -8,16 +8,16 @@ POST http://localhost:5097/api/v1/TheatreShows
 Content-Type: application/json
 
 {
-    "Title": "Test",
+    "Title": "TestTest",
     "Description": "test",
     "Price": 0.1,
     "TheatreShowDates": [
         {
-            "DateAndTime": "2024-08-25T09:15:00",
+            "DateAndTime": "2028-08-25T09:15:00",
             "Reservations": []
         },
         {
-            "DateAndTime": "2020-10-20T09:15:00",
+            "DateAndTime": "2034-10-20T09:15:00",
             "Reservations": []
         }
     ],
