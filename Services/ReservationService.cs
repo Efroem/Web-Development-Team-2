@@ -28,14 +28,26 @@ namespace StarterKit.Services
                 await _dbContext.Customer.AddAsync(customer);
             }
 
+            // First Pass: Validation Only
             foreach (var reservationItem in request.Reservations)
             {
                 var showDate = await _dbContext.TheatreShowDate
                     .FirstOrDefaultAsync(sd => sd.TheatreShowDateId == reservationItem.ShowDateId);
 
-                if (showDate == null || showDate.DateAndTime < DateTime.Now)
+                if (showDate == null)
                 {
-                    return new ReservationResponse { Success = false, ErrorMessage = "Invalid or past show date." };
+                    return new ReservationResponse { Success = false, ErrorMessage = $"Show date with ID {reservationItem.ShowDateId} does not exist." };
+                }
+
+                if (showDate.DateAndTime < DateTime.Now)
+                {
+                    var theatreShowPast = await _dbContext.TheatreShow
+                        .FirstOrDefaultAsync(ts => ts.TheatreShowId == showDate.TheatreShowId);
+                    return new ReservationResponse
+                    {
+                        Success = false,
+                        ErrorMessage = $"The show '{theatreShowPast?.Title}' on {showDate.DateAndTime:dd-MM-yyyy HH:mm} is in the past and cannot be reserved."
+                    };
                 }
 
                 var theatreShow = await _dbContext.TheatreShow
@@ -43,7 +55,7 @@ namespace StarterKit.Services
 
                 if (theatreShow == null)
                 {
-                    return new ReservationResponse { Success = false, ErrorMessage = "Associated show not found." };
+                    return new ReservationResponse { Success = false, ErrorMessage = $"Associated show for date ID {reservationItem.ShowDateId} not found." };
                 }
 
                 var venue = await _dbContext.Venue
@@ -51,7 +63,7 @@ namespace StarterKit.Services
 
                 if (venue == null)
                 {
-                    return new ReservationResponse { Success = false, ErrorMessage = "Associated venue not found." };
+                    return new ReservationResponse { Success = false, ErrorMessage = $"Venue for show '{theatreShow.Title}' not found." };
                 }
 
                 var reservedTickets = await _dbContext.Reservation
@@ -65,15 +77,27 @@ namespace StarterKit.Services
                     return new ReservationResponse
                     {
                         Success = false,
-                        ErrorMessage = $"Not enough tickets for {theatreShow.Title} on {showDate.DateAndTime:dd-MM-yyyy HH:mm}."
+                        ErrorMessage = $"Not enough tickets for '{theatreShow.Title}' on {showDate.DateAndTime:dd-MM-yyyy HH:mm}. Only {availableTickets} tickets remaining."
                     };
                 }
 
-                // Calculate total price for the specific reservation item
-                var itemTotalPrice = reservationItem.TicketCount * (decimal)theatreShow.Price;
-                totalPrice += itemTotalPrice;
+                // Accumulate the total price for all reservations
+                totalPrice += reservationItem.TicketCount * (decimal)theatreShow.Price;
+            }
 
-                // Create and save each individual reservation
+            // Second Pass: Save Reservations and Send Emails
+            foreach (var reservationItem in request.Reservations)
+            {
+                var showDate = await _dbContext.TheatreShowDate
+                    .FirstOrDefaultAsync(sd => sd.TheatreShowDateId == reservationItem.ShowDateId);
+                
+                var theatreShow = await _dbContext.TheatreShow
+                    .FirstOrDefaultAsync(ts => ts.TheatreShowId == showDate.TheatreShowId);
+
+                var venue = await _dbContext.Venue
+                    .FirstOrDefaultAsync(v => v.VenueId == theatreShow.VenueId);
+
+                // Create and save the reservation for this specific show
                 var newReservation = new Reservation
                 {
                     Customer = customer,
@@ -83,14 +107,14 @@ namespace StarterKit.Services
 
                 await _dbContext.Reservation.AddAsync(newReservation);
 
-                // Send an email for each show reservation item
+                // Send email for each valid reservation
                 await _mailSender.SendEmailAsync(
                     toEmail: request.Email,
                     customerName: $"{request.FirstName} {request.LastName}",
                     showTitle: theatreShow.Title,
                     venueName: venue.Name,
                     showDate: showDate.DateAndTime,
-                    totalPrice: itemTotalPrice  // Send item-specific total price
+                    totalPrice: reservationItem.TicketCount * (decimal)theatreShow.Price
                 );
             }
 

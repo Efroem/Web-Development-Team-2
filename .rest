@@ -107,7 +107,7 @@ Content-Type: application/json
   ]
 }
 ###
-# Multiple Shows
+# Multiple Shows (1 invalid)
 POST http://localhost:5097/api/v1/Reservations
 Content-Type: application/json
 
@@ -117,7 +117,28 @@ Content-Type: application/json
   "email": "nolan.zijdemans@gmail.com",
   "reservations": [
     {
-      "showDateId": 23,
+      "showDateId": 24,
+      "ticketCount": 3
+    },
+    {
+      "showDateId": 1,
+      "ticketCount": 2
+    }
+  ]
+}
+###
+
+# Multiple Shows (Working)
+POST http://localhost:5097/api/v1/Reservations
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "nolan.zijdemans@gmail.com",
+  "reservations": [
+    {
+      "showDateId": 24,
       "ticketCount": 3
     },
     {
@@ -127,6 +148,7 @@ Content-Type: application/json
   ]
 }
 ###
+
 
 # Filter
 GET http://localhost:5097/api/v1/ReservationManagement?showId=3&date=2024-12-01&email=john.doe@example.com&reservationId=4
