@@ -38,6 +38,18 @@ namespace StarterKit.Controllers
         }
 
 
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            if (!_loginService.IsUserLoggedIn())
+            {
+                return Ok("There is no active session.");
+            }
+            _loginService.Logout();
+            return Ok("User has been logged out.");
+        }
+
+
         [HttpGet("session")]
         public IActionResult RegisteredSession()
         {

@@ -46,5 +46,9 @@ namespace StarterKit.Services
         {
             return _httpContextAccessor.HttpContext.Session.GetString("AdminUsername");
         }
+        public void Logout()
+        {
+            _httpContextAccessor.HttpContext.Session.Clear();
+        }
     }
 }
