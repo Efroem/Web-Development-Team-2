@@ -68,7 +68,7 @@ Content-Type: application/json
   "email": "nolan.zijdemans@gmail.com",
   "reservations": [
     {
-      "showDateId": 3,
+      "showDateId": 10,
       "ticketCount": 3
     }
   ]
@@ -85,7 +85,7 @@ Content-Type: application/json
   "email": "altijdwerkers@gmail.com",
   "reservations": [
     {
-      "showDateId": 5,
+      "showDateId": 21,
       "ticketCount": 3
     }
   ]
