@@ -60,23 +60,8 @@ Content-Type: application/json
 POST http://localhost:5097/api/v1/Adminlogin/logout
 ####
 #------------------------------------------------------------------------------------------
-# Invalid date
-POST http://localhost:5097/api/v1/Reservations
-Content-Type: application/json
 
-{
-  "firstName": "John",
-  "lastName": "Doe",
-  "email": "nolan.zijdemans@gmail.com",
-  "reservations": [
-    {
-      "showDateId": 10,
-      "ticketCount": 3
-    }
-  ]
-}
 
-###------------------------------------------------------------
 # Working
 POST http://localhost:5097/api/v1/Reservations
 Content-Type: application/json
@@ -109,6 +94,41 @@ Content-Type: application/json
     }
   ]
 }
+###
+
+# Invalid date
+POST http://localhost:5097/api/v1/Reservations
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "nolan.zijdemans@gmail.com",
+  "reservations": [
+    {
+      "showDateId": 10,
+      "ticketCount": 3
+    }
+  ]
+}
+###
+
+# Invalid E-mail
+POST http://localhost:5097/api/v1/Reservations
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "yo@",
+  "reservations": [
+    {
+      "showDateId": 10,
+      "ticketCount": 3
+    }
+  ]
+}
+
 ###
 # Multiple Shows (1 invalid)
 POST http://localhost:5097/api/v1/Reservations
