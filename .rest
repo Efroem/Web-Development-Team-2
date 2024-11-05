@@ -8,21 +8,21 @@ POST http://localhost:5097/api/v1/TheatreShows
 Content-Type: application/json
 
 {
-    "Title": "TestTest",
+    "Title": "Hallo",
     "Description": "test",
     "Price": 0.1,
     "TheatreShowDates": [
         {
-            "DateAndTime": "2028-08-25T09:15:00",
+            "DateAndTime": "2030-08-25T09:15:00",
             "Reservations": []
         },
         {
-            "DateAndTime": "2034-10-20T09:15:00",
+            "DateAndTime": "2070-10-20T09:15:00",
             "Reservations": []
         }
     ],
     "Venue": {
-        "Name": "FunnyTest",
+        "Name": "FunnyTest2",
         "Capacity": 250
     }
 }
@@ -85,7 +85,7 @@ Content-Type: application/json
   "email": "altijdwerkers@gmail.com",
   "reservations": [
     {
-      "showDateId": 21,
+      "showDateId": 24,
       "ticketCount": 3
     }
   ]
@@ -101,8 +101,8 @@ Content-Type: application/json
   "email": "john.doe@example.com",
   "reservations": [
     {
-      "showDateId": 4,
-      "ticketCount": 10
+      "showDateId": 24,
+      "ticketCount": 300
     }
   ]
 }
@@ -114,14 +114,14 @@ Content-Type: application/json
 {
   "firstName": "John",
   "lastName": "Doe",
-  "email": "john.doe@example.com",
+  "email": "nolan.zijdemans@gmail.com",
   "reservations": [
     {
-      "showDateId": 1,
+      "showDateId": 23,
       "ticketCount": 3
     },
     {
-      "showDateId": 2,
+      "showDateId": 26,
       "ticketCount": 2
     }
   ]

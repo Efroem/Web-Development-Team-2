@@ -21,13 +21,16 @@ namespace StarterKit.Services
         public async Task<ReservationResponse> MakeReservationAsync(ReservationRequest request)
         {
             decimal totalPrice = 0;
-            TheatreShow theatreShow = null;
-            TheatreShowDate showDate = null;
-            Venue venue = null;
+            var customer = await _dbContext.Customer.FirstOrDefaultAsync(c => c.Email == request.Email);
+            if (customer == null)
+            {
+                customer = new Customer { FirstName = request.FirstName, LastName = request.LastName, Email = request.Email };
+                await _dbContext.Customer.AddAsync(customer);
+            }
 
             foreach (var reservationItem in request.Reservations)
             {
-                showDate = await _dbContext.TheatreShowDate
+                var showDate = await _dbContext.TheatreShowDate
                     .FirstOrDefaultAsync(sd => sd.TheatreShowDateId == reservationItem.ShowDateId);
 
                 if (showDate == null || showDate.DateAndTime < DateTime.Now)
@@ -35,7 +38,7 @@ namespace StarterKit.Services
                     return new ReservationResponse { Success = false, ErrorMessage = "Invalid or past show date." };
                 }
 
-                theatreShow = await _dbContext.TheatreShow
+                var theatreShow = await _dbContext.TheatreShow
                     .FirstOrDefaultAsync(ts => ts.TheatreShowId == showDate.TheatreShowId);
 
                 if (theatreShow == null)
@@ -43,7 +46,7 @@ namespace StarterKit.Services
                     return new ReservationResponse { Success = false, ErrorMessage = "Associated show not found." };
                 }
 
-                venue = await _dbContext.Venue
+                var venue = await _dbContext.Venue
                     .FirstOrDefaultAsync(v => v.VenueId == theatreShow.VenueId);
 
                 if (venue == null)
@@ -66,38 +69,36 @@ namespace StarterKit.Services
                     };
                 }
 
-                totalPrice += reservationItem.TicketCount * (decimal)theatreShow.Price;
+                // Calculate total price for the specific reservation item
+                var itemTotalPrice = reservationItem.TicketCount * (decimal)theatreShow.Price;
+                totalPrice += itemTotalPrice;
+
+                // Create and save each individual reservation
+                var newReservation = new Reservation
+                {
+                    Customer = customer,
+                    AmountOfTickets = reservationItem.TicketCount,
+                    TheatreShowDateId = reservationItem.ShowDateId
+                };
+
+                await _dbContext.Reservation.AddAsync(newReservation);
+
+                // Send an email for each show reservation item
+                await _mailSender.SendEmailAsync(
+                    toEmail: request.Email,
+                    customerName: $"{request.FirstName} {request.LastName}",
+                    showTitle: theatreShow.Title,
+                    venueName: venue.Name,
+                    showDate: showDate.DateAndTime,
+                    totalPrice: itemTotalPrice  // Send item-specific total price
+                );
             }
 
-            var customer = await _dbContext.Customer.FirstOrDefaultAsync(c => c.Email == request.Email);
-            if (customer == null)
-            {
-                customer = new Customer { FirstName = request.FirstName, LastName = request.LastName, Email = request.Email };
-                await _dbContext.Customer.AddAsync(customer);
-            }
-
-            var newReservation = new Reservation
-            {
-                Customer = customer,
-                AmountOfTickets = request.Reservations.Sum(r => r.TicketCount),
-                TheatreShowDateId = request.Reservations[0].ShowDateId
-            };
-
-            await _dbContext.Reservation.AddAsync(newReservation);
             await _dbContext.SaveChangesAsync();
-
-            // Send confirmation email after successful reservation
-            await _mailSender.SendEmailAsync(
-                toEmail: request.Email,
-                customerName: $"{request.FirstName} {request.LastName}",
-                showTitle: theatreShow.Title,
-                venueName: venue.Name,  // Pass venue name here
-                showDate: showDate.DateAndTime,
-                totalPrice: totalPrice
-            );
 
             return new ReservationResponse { Success = true, TotalPrice = totalPrice };
         }
+
 
     }
 }
