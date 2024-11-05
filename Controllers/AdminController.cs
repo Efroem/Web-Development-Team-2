@@ -1,4 +1,5 @@
 using Backend.Models;
+using EmailExample;
 using Microsoft.AspNetCore.Mvc;
 using StarterKit.Interfaces;
 
@@ -8,10 +9,12 @@ namespace StarterKit.Controllers
     [Route("api/v1/Adminlogin")]
     public class AdminController : ControllerBase
     {
+        private readonly MailSender _mailSender;
         private readonly ILoginService _loginService;
 
         public AdminController(ILoginService loginService)
         {
+            _mailSender = new MailSender();
             _loginService = loginService;
         }
 
