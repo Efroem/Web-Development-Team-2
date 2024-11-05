@@ -1,24 +1,17 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 public class AdminOnly : Attribute, IAsyncActionFilter {
-    public async Task OnActionExecutionAsync(ActionExecutingContext actionContext, ActionExecutionDelegate next) {
-        List<string> adminUsernames = ["admin1", "admin2", "admin3", "admin4", "admin5"];
-        var context = actionContext.HttpContext;
+    public async Task OnActionExecutionAsync(ActionExecutingContext actionContext, ActionExecutionDelegate next) {        var context = actionContext.HttpContext;
         var options = context.RequestServices.GetService<IOptions<Options>>()?.Value ??
             new Options() {AdminUsernames = new List<string>()};
 
-        // if (!options.AdminUsernames.Contains(context.Session.GetString("AdminUsername"))) {
-        //     string logs = $"{context.Request.Method} {context.Request.Path} was requested but user {context.Session.GetString("AdminUsername")} is not admin!\n";
-        //     context.Response.StatusCode = 401;
-        //     File.AppendAllText("logs.txt", logs);
-        //     return;
-        // }
-        if (!adminUsernames.Contains(context.Session.GetString("AdminUsername"))) {
+        if (!options.AdminUsernames.Contains(context.Session.GetString("AdminUsername"))) {
             string logs = $"{context.Request.Method} {context.Request.Path} was requested but user {context.Session.GetString("AdminUsername")} is not admin!\n";
             context.Response.StatusCode = 401;
             File.AppendAllText("logs.txt", logs);
             return;
         }
+
         await next();
     }
 }
