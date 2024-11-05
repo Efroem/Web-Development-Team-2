@@ -46,7 +46,6 @@ namespace StarterKit.Controllers
 
             if (isLoggedIn)
             {
-                _mailSender.SendEmail();
                 return Ok($"User is logged in as {username}.");
             }
             else
