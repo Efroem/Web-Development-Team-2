@@ -17,6 +17,7 @@ namespace StarterKit.Controllers
         }
 
         // GET endpoint to retrieve all reservations with filtering
+        [AdminOnly]
         [HttpGet]
         public async Task<IActionResult> GetReservations(int? showId = null, DateTime? dateTime = null, string? email = null, int? reservationId = null)
         {
