@@ -3,11 +3,11 @@ import React from 'react';
 const HeroSection: React.FC = () => {
   return (
     <section className="hero-section">
-      <h1>ALTJD VOLLE BAK THEATER</h1>
-      <p>'Altijd uitverkocht, altijd onvergetelijk'</p>
+      <h1 className="hero-title">ALTIJD VOLLE BAK THEATER</h1>
+      <p className="hero-subtitle">'Altijd uitverkocht, altijd onvergetelijk'</p>
       <div className="buttons">
-        <button>Reserveren</button>
-        <button>Bekijk onze shows</button>
+        <button className="hero-button">Reserveren</button>
+        <button className="hero-button">Bekijk onze shows</button>
       </div>
     </section>
   );

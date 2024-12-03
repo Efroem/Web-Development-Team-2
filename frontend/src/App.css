@@ -32,6 +32,24 @@ a {
 }
 
 /* Hero Section */
+
+.hero-title {
+  font-size: 3rem; /* Adjust based on your design */
+  font-weight: bold;
+  color: #ffffff; /* Ensure the text color stands out */
+  text-align: center;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Subtle shadow effect */
+  margin-bottom: 1rem; /* Space below the title */
+}
+
+.hero-subtitle {
+  font-size: 1.5rem;
+  color: #ffffff;
+  text-align: center;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* Subtle shadow for subtitle */
+}
+
+
 .hero-section {
   text-align: center;
   padding: 4rem 1rem;
