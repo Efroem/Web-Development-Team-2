@@ -20,7 +20,7 @@ namespace StarterKit
 
             builder.Services.AddSession(options => 
             {
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.IdleTimeout = TimeSpan.FromMinutes(10);
                 options.Cookie.HttpOnly = true; 
                 options.Cookie.IsEssential = true; 
             });
@@ -37,7 +37,17 @@ namespace StarterKit
             builder.Services.AddDbContext<DatabaseContext>(
                 options => options.UseSqlite(builder.Configuration.GetConnectionString("SqlLiteDb")));
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFrontend",
+                    builder => builder.WithOrigins("http://localhost:3000")
+                                    .AllowAnyMethod()
+                                    .AllowAnyHeader());
+            });
+
             var app = builder.Build();
+            app.UseCors("AllowFrontend");
+
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

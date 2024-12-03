@@ -8,8 +8,8 @@ POST http://localhost:5097/api/v1/TheatreShows
 Content-Type: application/json
 
 {
-    "Title": "Hallo",
-    "Description": "test",
+    "Title": "The Lion King",
+    "Description": "Stap in de wereld van de Afrikaanse savanne en ervaar het magische verhaal van Simba. Deze wereldberoemde musical combineert indrukwekkende muziek, adembenemende decors en een verhaal dat je raakt.",
     "Price": 0.1,
     "TheatreShowDates": [
         {
@@ -27,6 +27,8 @@ Content-Type: application/json
     }
 }
 
+
+
 ####
 
 PUT http://localhost:5097/api/v1/TheatreShows/1
@@ -40,7 +42,7 @@ Content-Type: application/json
 }
 ####
 
-DELETE http://localhost:5097/api/v1/TheatreShows/1
+DELETE http://localhost:5097/api/v1/TheatreShows/4
 ####
 # ADMIN REST----------------------------------------------------------------------
 #VINCENT
