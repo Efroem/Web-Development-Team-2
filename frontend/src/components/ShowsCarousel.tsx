@@ -5,14 +5,14 @@ interface TheatreShow {
   theatreShowId: number;
   title: string;
   description: string;
-  image?: string; // Optional since we'll add images manually
+  image?: string; 
 }
 
 const ShowsCarousel: React.FC = () => {
   const [theatreShows, setTheatreShows] = useState<TheatreShow[]>([]);
   
-  // Manually specify the IDs you want to display
-  const specificIds = [13, 14]; // Replace with the desired TheatreShowId values
+  // Manually specify the IDs
+  const specificIds = [13, 14];
 
   useEffect(() => {
     const fetchTheatreShows = async () => {

@@ -34,9 +34,9 @@ a {
 /* Hero Section */
 
 .hero-title {
-  font-size: 3rem; /* Adjust based on your design */
+  font-size: 3rem;
   font-weight: bold;
-  color: #ffffff; /* Ensure the text color stands out */
+  color: #ffffff;
   text-align: center;
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Subtle shadow effect */
   margin-bottom: 1rem; /* Space below the title */

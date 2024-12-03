@@ -12,7 +12,7 @@ const WeeklyShows: React.FC<{ shows: Show[] }> = ({ shows }) => {
     const container = document.querySelector('.shows-grid');
     if (container) {
       container.scrollBy({
-        left: -container.clientWidth, // Scroll left by one container width
+        left: -container.clientWidth, // left scroll fix cuz it was fucked for some reason
         behavior: 'smooth',
       });
     }
