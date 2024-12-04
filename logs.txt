@@ -13,3 +13,6 @@ POST /api/v1/TheatreShows was requested but user  is not admin!
 POST /api/v1/TheatreShows was requested but user  is not admin!
 GET /api/v1/ReservationManagement was requested but user  is not admin!
 GET /api/v1/ReservationManagement was requested but user  is not admin!
+POST /api/v1/TheatreShows was requested but user  is not admin!
+POST /api/v1/TheatreShows was requested but user  is not admin!
+POST /api/v1/TheatreShows was requested but user  is not admin!

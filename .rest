@@ -8,8 +8,8 @@ POST http://localhost:5097/api/v1/TheatreShows
 Content-Type: application/json
 
 {
-    "Title": "Hallo",
-    "Description": "test",
+    "Title": "Soldaat van Oranje",
+    "Description": "Een episch verhaal over moed, liefde en verzet tijdens de Tweede Wereldoorlog. Beleef de indrukwekkende musical die je meeneemt in het leven van een student die zijn weg vindt in het verzet.",
     "Price": 0.1,
     "TheatreShowDates": [
         {
@@ -27,20 +27,24 @@ Content-Type: application/json
     }
 }
 
+
+
+
+
 ####
 
-PUT http://localhost:5097/api/v1/TheatreShows/1
+PUT http://localhost:5097/api/v1/TheatreShows/14
 Content-Type: application/json
 
 {
-    "Title": "Test2",
-    "Description": "test2",
+    "Title": "The Lion King",
+    "Description": "Stap in de wereld van de Afrikaanse savanne en ervaar het magische verhaal van Simba. Deze wereldberoemde musical combineert indrukwekkende muziek, adembenemende decors en een verhaal dat je raakt.",
     "Price": 4.20,
     "VenueId": 1
 }
 ####
 
-DELETE http://localhost:5097/api/v1/TheatreShows/1
+DELETE http://localhost:5097/api/v1/TheatreShows/4
 ####
 # ADMIN REST----------------------------------------------------------------------
 #VINCENT
@@ -60,23 +64,8 @@ Content-Type: application/json
 POST http://localhost:5097/api/v1/Adminlogin/logout
 ####
 #------------------------------------------------------------------------------------------
-# Invalid date
-POST http://localhost:5097/api/v1/Reservations
-Content-Type: application/json
 
-{
-  "firstName": "John",
-  "lastName": "Doe",
-  "email": "nolan.zijdemans@gmail.com",
-  "reservations": [
-    {
-      "showDateId": 10,
-      "ticketCount": 3
-    }
-  ]
-}
 
-###------------------------------------------------------------
 # Working
 POST http://localhost:5097/api/v1/Reservations
 Content-Type: application/json
@@ -109,6 +98,41 @@ Content-Type: application/json
     }
   ]
 }
+###
+
+# Invalid date
+POST http://localhost:5097/api/v1/Reservations
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "nolan.zijdemans@gmail.com",
+  "reservations": [
+    {
+      "showDateId": 10,
+      "ticketCount": 3
+    }
+  ]
+}
+###
+
+# Invalid E-mail
+POST http://localhost:5097/api/v1/Reservations
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "yo@",
+  "reservations": [
+    {
+      "showDateId": 10,
+      "ticketCount": 3
+    }
+  ]
+}
+
 ###
 # Multiple Shows (1 invalid)
 POST http://localhost:5097/api/v1/Reservations
