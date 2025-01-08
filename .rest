@@ -189,3 +189,10 @@ PATCH http://localhost:5097/api/v1/ReservationManagement/5/mark-as-used
 
 # Delete
 DELETE http://localhost:5097/api/v1/ReservationManagement/5
+
+###
+
+GET http://localhost:5097/api/v1/Weather
+###
+
+GET https://api.openweathermap.org/data/2.5/weather?lat=50&lon=5&appid=71af1060865718c81642c67c33562b59
