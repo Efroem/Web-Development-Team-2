@@ -6,11 +6,19 @@ import WeeklyShows from './components/WeeklyShows';
 import Footer from './components/Footer';
 import axios from 'axios';
 import './App.css';
+import ShowsOfTheDayCarousel from './components/ShowOfTheDayCarousel';
 
 interface Show {
   title: string;
   description: string;
+  showMood: string;
 }
+
+// interface ShowWithMood {
+//   title: string;
+//   description: string;
+//   showMood: string;
+// }
 
 interface WeatherData {
   name: string;
@@ -77,6 +85,7 @@ const App: React.FC = () => {
       <Header weatherData={weatherData} />
       <HeroSection />
       <ShowsCarousel />
+      <ShowsOfTheDayCarousel shows={shows} weatherData={weatherData} />
       <WeeklyShows shows={shows} />
       <Footer />
     </div>

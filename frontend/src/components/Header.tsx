@@ -2,6 +2,7 @@ import React from 'react';
 import scatteredCloudsImg from './../scatteredclouds.png';
 import eyeOfRahImg from './../eye-of-rah.png';
 import hotdayImg from './../hotday.png';
+import rainImg from './../rain.png';
 
 interface WeatherData {
   name: string;
@@ -75,8 +76,8 @@ const Header: React.FC<HeaderProps> = ({ weatherData }) => {
   if (weatherData != null) {
     let weatherType: string = weatherData.weather[0].main.toLowerCase();
     let temperature: number = weatherData.main.temp;
-    weatherType = 'clear';
-    temperature = 27;
+    // weatherType = 'clear';
+    // temperature = 27;
     // switch (weatherData.weather[0].main.toLowerCase()) {
     // If the temperature is high enough to be considered a hot day
     if (weatherType === 'clear' && temperature >= 25) {
@@ -85,6 +86,9 @@ const Header: React.FC<HeaderProps> = ({ weatherData }) => {
     }
     else if (weatherType === 'clouds') {
       weatherImage = scatteredCloudsImg
+    }
+    else if (weatherType === 'rain') {
+      weatherImage = rainImg
     }
       // case 'clear sky':
       //   return 'url(/src/clear-sky.jpg)';
