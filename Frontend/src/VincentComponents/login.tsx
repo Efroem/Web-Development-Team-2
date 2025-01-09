@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import styles from "./login.module.css";
 
 const Login = () => {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   const SetUserChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,52 +24,52 @@ const Login = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:5097/api/v1/Adminlogin/login", {
-        UserName: user,
-        Password: password,
-      });
+      const response = await axios.post(
+        "http://localhost:5097/api/v1/Adminlogin/login",
+        {
+          UserName: user,
+          Password: password,
+        }
+      );
 
       if (response.status === 200) {
-        setIsLoggedIn(true);
         setError("");
         navigate("/");
       } else {
-        // Axios geeft een error als iets invalid is dus dit gaat hij nooit uitvoeren
-        setIsLoggedIn(false);
         setError(response.data.message || "Invalid username or password!");
       }
     } catch (error: any) {
-      setIsLoggedIn(false);
       if (error.response) {
         setError(error.response.data.message || "Invalid username or password!");
-      }
-      else {
+      } else {
         setError("An unexpected error occurred. Please try again.");
       }
     }
   };
 
   return (
-    <div className="login-container">
-      <h1>Admin Login System</h1>
-      <input
-        type="text"
-        value={user}
-        onChange={SetUserChange}
-        placeholder="Enter username"
-        className="input-field"
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={SetPasswordChange}
-        placeholder="Enter password"
-        className="input-field"
-      />
-      <button onClick={handleLogin} className="login-button">
-        Login
-      </button>
-      {error && <p className="error-message">{error}</p>}
+    <div className={styles["full-screen-container"]}>
+      <div className={styles["login-container"]}>
+        <h1>Admin Login System</h1>
+        <input
+          type="text"
+          value={user}
+          onChange={SetUserChange}
+          placeholder="Enter username"
+          className={styles["input-field"]}
+        />
+        <input
+          type="password"
+          value={password}
+          onChange={SetPasswordChange}
+          placeholder="Enter password"
+          className={styles["input-field"]}
+        />
+        <button onClick={handleLogin} className={styles["login-button"]}>
+          Login
+        </button>
+        {error && <p className={styles["error-message"]}>{error}</p>}
+      </div>
     </div>
   );
 };
