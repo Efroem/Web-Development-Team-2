@@ -24,18 +24,20 @@ namespace StarterKit.Controllers
         {
             if (string.IsNullOrEmpty(request.UserName) || string.IsNullOrEmpty(request.Password))
             {
-                return BadRequest("Username and password cannot be empty.");
+                return BadRequest(new { message = "Username and password cannot be empty." });
             }
 
             bool isValidAdmin = _loginService.ValidateAdmin(request.UserName, request.Password);
 
             if (!isValidAdmin)
             {
-                return Unauthorized("Invalid username or password");
+                return BadRequest(new { message = "Invalid username or password" });
             }
+
             _loginService.SetAdminUsername(request.UserName);
-            return Ok($"Login successful with username: {request.UserName}!");
+            return Ok(new { message = "Login successful", username = request.UserName });
         }
+
 
 
         [HttpPost("logout")]
