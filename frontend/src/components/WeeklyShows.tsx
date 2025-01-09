@@ -25,8 +25,6 @@ const WeeklyShows: React.FC<{ shows: Show[] }> = ({ shows }) => {
   const [searchTerm, setSearchTerm] = useState("")
   const [sortTerm, setFilterTerm] = useState("")
   const [filterMonth, setFilterMonth] = useState("")
-  const [sortAscending, setSortAscending] = useState("")
-  const [sortOrder, setSortOrder] = useState("")
 
   const scrollLeft = () => {
     const container = document.querySelector('.shows-grid');
@@ -60,33 +58,60 @@ const WeeklyShows: React.FC<{ shows: Show[] }> = ({ shows }) => {
     show.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  if (filterMonth != "" ) {
-    filteredShows = filteredShows.filter((show) =>
-      show.theatreShowDates.some((date) =>
-        new Intl.DateTimeFormat("en-US", { month: "long" }).format(new Date(date.dateAndTime)) == filterMonth
-      )
-    );
+  if (filterMonth != "") {
+    filteredShows = filteredShows.filter((show) => {
+      // Get the earliest date from the theatreShowDates array
+      const earliestDate = show.theatreShowDates
+        .map((date) => new Date(date.dateAndTime))
+        .sort((a, b) => a.getTime() - b.getTime())[0]; // Get the earliest date
+  
+      // Check if the earliest date's month matches the filterMonth
+      const earliestMonth = new Intl.DateTimeFormat("en-US", { month: "long" }).format(earliestDate);
+  
+      return earliestMonth === filterMonth;
+    });
   }
+  
 
-  if (sortTerm != "") {
+  let sortField: keyof Show = 'title'; // Default to 'title'
+  let sortOrder: 'ascending' | 'descending' = 'ascending'; // Default to 'ascending'
+  
+  switch (sortTerm) {
+    case "A-Z":
+      sortField = 'title';
+      sortOrder = 'ascending';
+      break;
+    case "Z-A":
+      sortField = 'title';
+      sortOrder = 'descending';
+      break;
+    case "Price Ascending":
+      sortField = 'price';
+      sortOrder = 'ascending';
+      break;
+    case "Price Descending":
+      sortField = 'price';
+      sortOrder = 'descending';
+      break;
+    case "Date Ascending":
+      sortField = 'theatreShowDates'; // Special case for sorting by date
+      sortOrder = 'ascending';
+      break;
+    case "Date Descending":
+      sortField = 'theatreShowDates'; // Special case for sorting by date
+      sortOrder = 'descending';
+      break;
+    default:
+      // Fallback if no valid case is matched
+      sortField = 'title';
+      sortOrder = 'ascending';
+      break;
+  }
+  
+  // Apply the sorting
+  filteredShows = sortShows(filteredShows, sortField, sortOrder);
+  
     
-    let sortField = ''
-    let sortOrder = ''
-    switch (sortTerm) {
-      case "A-Z":
-        sortField = 'price'
-
-    }
-  
-    // if (sortAscending === "Descending") {
-    //   filteredShows = [...filteredShows].sort((a, b) => {
-    //     if (a.title.toLowerCase() > b.title.toLowerCase()) return -1;
-    //     if (a.title.toLowerCase() < b.title.toLowerCase()) return 1;
-    //     return 0;
-    //   });
-    // }
-  }
-  
 
   return (
     <section className="weekly-shows">
@@ -129,23 +154,10 @@ const WeeklyShows: React.FC<{ shows: Show[] }> = ({ shows }) => {
           <option value="Price Ascending"> Price Ascending</option>
           <option value="Price Descending"> Price Descending</option>
           <option value="Date Ascending"> Date Ascending</option>
-          <option value="Date descending"> Date</option>
+          <option value="Date descending"> Date Descending</option>
         </select>
       </div>
 
-      
-
-
-      <div className="sortOrder">
-        <select
-          onChange={(e) => setSortAscending(e.target.value)}
-        >
-          <option value="Ascending"> Ascending</option>
-          <option value="Descending"> Descending</option>
-        </select>
-      </div>
-
-    
       <div className="scroll-container">
         <button className="scroll-button left" onClick={scrollLeft}>
           &#8249;
@@ -156,9 +168,18 @@ const WeeklyShows: React.FC<{ shows: Show[] }> = ({ shows }) => {
               <h3>{show.title}</h3>
               <p>{show.description}</p>
               <p>{show.price}</p>
-              {Array.isArray(show.theatreShowDates) && show.theatreShowDates.length != 0 && (
-                <p>{show.theatreShowDates[0].dateAndTime}</p>
-              )}
+              {Array.isArray(show.theatreShowDates) && show.theatreShowDates.length > 0 && (
+              
+              <p>
+                Earliest Date: <br />
+                {
+                  // Sort the dates in ascending order (earliest first)
+                  show.theatreShowDates
+                    .sort((a, b) => new Date(a.dateAndTime).getTime() - new Date(b.dateAndTime).getTime())
+                    .map((date, index) => index === 0 && <span key={date.dateAndTime}>{date.dateAndTime}</span>) // Only show the earliest date
+                }
+              </p>
+            )}
 
             </div>
           ))}
