@@ -1,6 +1,9 @@
 #THEATERSHOWS REQUESTS
 GET http://localhost:5097/api/v1/TheatreShows
 ####
+
+GET http://localhost:5097/api/v1/TheatreShows/Venues
+####
 GET http://localhost:5097/api/v1/TheatreShows/1
 ####
 
