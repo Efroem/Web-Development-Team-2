@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import styles from './MainPage.module.css';
 
 interface TheatreShow {
   theatreShowId: number;
@@ -10,8 +11,7 @@ interface TheatreShow {
 
 const ShowsCarousel: React.FC = () => {
   const [theatreShows, setTheatreShows] = useState<TheatreShow[]>([]);
-  
-  // Manually specify the IDs
+
   const specificIds = [13, 14];
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const ShowsCarousel: React.FC = () => {
         const filteredShows = response.data.filter((show) => specificIds.includes(show.theatreShowId));
         const showsWithImages = filteredShows.map((show, index) => ({
           ...show,
-          image: index === 0 ? '/show1.png' : '/show2.png', // Assign manual paths
+          image: index === 0 ? '/show1.png' : '/show2.png',
         }));
         setTheatreShows(showsWithImages);
       } catch (error) {
@@ -33,11 +33,11 @@ const ShowsCarousel: React.FC = () => {
   }, []);
 
   return (
-    <section className="carousel">
+    <section className={styles['carousel']}>
       {theatreShows.map((show) => (
-        <div className="carousel-item" key={show.theatreShowId}>
+        <div className={styles['carousel-item']} key={show.theatreShowId}>
           <img src={show.image} alt={show.title} />
-          <div className="carousel-overlay">
+          <div className={styles['carousel-overlay']}>
             <h3>{show.title}</h3>
             <p>{show.description}</p>
           </div>
