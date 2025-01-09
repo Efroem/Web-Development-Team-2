@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import styles from "./login.module.css";
-
 
 const Login = () => {
   const [user, setUser] = useState("");
@@ -36,6 +34,7 @@ const Login = () => {
         setError("");
         navigate("/");
       } else {
+        // Axios geeft een error als iets invalid is dus dit gaat hij nooit uitvoeren
         setIsLoggedIn(false);
         setError(response.data.message || "Invalid username or password!");
       }
@@ -51,26 +50,28 @@ const Login = () => {
   };
 
   return (
-    <div className={styles["login-container"]}>
+    <div className="login-container">
       <h1>Admin Login System</h1>
       <input
         type="text"
         value={user}
         onChange={SetUserChange}
         placeholder="Enter username"
-        className={styles["input-field"]}
+        className="input-field"
       />
       <input
         type="password"
         value={password}
         onChange={SetPasswordChange}
         placeholder="Enter password"
-        className={styles["input-field"]}
+        className="input-field"
       />
-      <button onClick={handleLogin} className={styles["login-button"]}>Login</button>
-      {error && <p className={styles["error-message"]}>{error}</p>}
-      {isLoggedIn && <p className={styles["welcome-message"]}>Welcome, {user}!</p>}
+      <button onClick={handleLogin} className="login-button">
+        Login
+      </button>
+      {error && <p className="error-message">{error}</p>}
     </div>
   );
 };
+
 export default Login;
