@@ -26,24 +26,28 @@ const Login = () => {
     try {
       const response = await axios.post("http://localhost:5097/api/v1/Adminlogin/login", {
         UserName: user,
-        Password: password,  
+        Password: password,
       });
 
-      if (response.data.success) {
+      if (response.status === 200) {
         setIsLoggedIn(true);
         setError("");
-        navigate("/");  
+        navigate("/");
       } else {
+        // Axios geeft een error als iets invalid is dus dit gaat hij nooit uitvoeren
         setIsLoggedIn(false);
-        setError("Invalid username or password!");
+        setError(response.data.message || "Invalid username or password!");
       }
-    } catch (error) {
+    } catch (error: any) {
       setIsLoggedIn(false);
-      setError("Something went wrong! Please try again.");
-      console.error(error);
+      if (error.response) {
+        setError(error.response.data.message || "Invalid username or password!");
+      }
+      else {
+        setError("An unexpected error occurred. Please try again.");
+      }
     }
   };
-
 
   return (
     <div className="login-container">
