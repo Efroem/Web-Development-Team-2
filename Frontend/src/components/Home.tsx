@@ -6,7 +6,7 @@ import ShowsOfTheDayCarousel from './ShowOfTheDayCarousel';
 import WeeklyShows from './WeeklyShows';
 import Footer from './Footer';
 import axios from 'axios';
-import "./MainPage.css"
+import styles from './Mainpage.module.css';
 
 interface Show {
   title: string;
