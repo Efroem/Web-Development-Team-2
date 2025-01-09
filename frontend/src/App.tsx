@@ -12,6 +12,10 @@ interface Show {
   title: string;
   description: string;
   showMood: string;
+  price: number;
+  theatreShowDates: {
+    dateAndTime: string
+  } []
 }
 
 // interface ShowWithMood {
