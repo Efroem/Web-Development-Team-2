@@ -9,6 +9,13 @@ interface Show {
   theatreShowDates: {
     dateAndTime: string
   } []
+  venue: Venue
+}
+
+interface Venue {
+  venueId: number
+  name: "Hogeschool Rotterdam 2",
+  capacity: 250,
 }
 
 export type AppState = {
@@ -20,9 +27,10 @@ export type AppState = {
   showMessage: boolean
 }
 
-const WeeklyShows: React.FC<{ shows: Show[] }> = ({ shows }) => {
+const WeeklyShows: React.FC<{ shows: Show[], venues: Venue[] }> = ({ shows, venues}) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [searchTerm, setSearchTerm] = useState("")
+  const [searchVenue, setSearchVenue] = useState("")
   const [sortTerm, setFilterTerm] = useState("")
   const [filterMonth, setFilterMonth] = useState("")
 
@@ -70,6 +78,10 @@ const WeeklyShows: React.FC<{ shows: Show[] }> = ({ shows }) => {
   
       return earliestMonth === filterMonth;
     });
+  }
+
+  if (searchVenue != "") {
+    filteredShows = filteredShows.filter((show) => show.venue.name == searchVenue)
   }
   
 
@@ -124,6 +136,17 @@ const WeeklyShows: React.FC<{ shows: Show[] }> = ({ shows }) => {
           onChange={(e) => setSearchTerm(e.target.value)} // Update search term
         />
       </div>
+      <div className="filterVenue">
+      <select onChange={(e) => setSearchVenue(e.target.value)}>
+        <option value="">Search by Venue</option>
+        {/* Map over the venues array and create an option for each venue */}
+        {venues.map((venue) => (
+          <option key={venue.venueId} value={venue.name}>
+            {venue.name}
+          </option>
+        ))}
+      </select>
+    </div>
       <div className="filterMonth">
         <select
           onChange={(e) => setFilterMonth(e.target.value)}
@@ -157,6 +180,7 @@ const WeeklyShows: React.FC<{ shows: Show[] }> = ({ shows }) => {
           <option value="Date descending"> Date Descending</option>
         </select>
       </div>
+      
 
       <div className="scroll-container">
         <button className="scroll-button left" onClick={scrollLeft}>
@@ -168,6 +192,7 @@ const WeeklyShows: React.FC<{ shows: Show[] }> = ({ shows }) => {
               <h3>{show.title}</h3>
               <p>{show.description}</p>
               <p>{show.price}</p>
+              <p>{show.venue.name}</p>
               {Array.isArray(show.theatreShowDates) && show.theatreShowDates.length > 0 && (
               
               <p>
