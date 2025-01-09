@@ -50,7 +50,7 @@ a {
 }
 
 
-.hero-section {
+.hero-section { 
   text-align: center;
   padding: 4rem 1rem;
   background: url('hero.png') no-repeat center center/cover;
