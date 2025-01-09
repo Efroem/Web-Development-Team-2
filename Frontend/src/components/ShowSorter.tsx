@@ -13,8 +13,8 @@ interface Show {
 
 interface Venue {
   venueId: number
-  name: "Hogeschool Rotterdam 2",
-  capacity: 250,
+  name: string
+  capacity: number
 }
 
 // Define the sorting function with a specific key type for 'field'

@@ -43,8 +43,8 @@ interface WeatherData {
 
 interface Venue {
   venueId: number
-  name: "Hogeschool Rotterdam 2",
-  capacity: 250,
+  name: string
+  capacity: number
 }
 
 const Home: React.FC = () => {

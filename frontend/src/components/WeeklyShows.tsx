@@ -12,7 +12,6 @@ interface Show {
   } []
   venue: Venue
 }
-
 interface Venue {
   venueId: number
   name: string
@@ -37,8 +36,9 @@ const WeeklyShows: React.FC<{ shows: Show[], venues: Venue[] }> = ({ shows, venu
       scrollRef.current.scrollBy({ left: 300, behavior: 'smooth' });
     }
   };
+  
 
-  let filteredShows = shows.filter((show) =>
+  let filteredShows: Show[] = shows.filter((show) =>
     show.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     show.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -121,6 +121,15 @@ const WeeklyShows: React.FC<{ shows: Show[], venues: Venue[] }> = ({ shows, venu
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
+      <select onChange={(e) => setSearchVenue(e.target.value)}>
+        <option value="">Search by Venue</option>
+        {venues.map((venue) => (
+          <option key={venue.venueId} value={venue.name}>
+            {venue.name}
+          </option>
+        ))}
+      </select>
+
       <div className={styles['filter-month']}>
         <select onChange={(e) => setFilterMonth(e.target.value)}>
           <option value="">Select a month</option>
