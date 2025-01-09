@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import Header from './Header';
 import HeroSection from './HeroSection';
 import ShowsCarousel from './ShowsCarousel';
 import WeeklyShows from './WeeklyShows';
 import Footer from './Footer';
 import axios from 'axios';
+import "./MainPage.css"
 
 interface Show {
   title: string;
@@ -31,13 +31,11 @@ const Home: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...BHWDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD</div>;
-    
+    return <div>Loading...</div>;
   }
 
   return (
-    <div className="app">
-      <Header />
+    <div>
       <HeroSection />
       <ShowsCarousel />
       <WeeklyShows shows={shows} />

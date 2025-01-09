@@ -1,8 +1,5 @@
-export {};  // This ensures the file is treated as a module
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Login.css";
 
 const Login = () => {
   const [user, setUser] = useState("");
