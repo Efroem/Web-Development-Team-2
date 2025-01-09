@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
   const [user, setUser] = useState("");
@@ -8,27 +9,41 @@ const Login = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
-  function SetUserChange(event: React.ChangeEvent<HTMLInputElement>) {
+  const SetUserChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUser(event.target.value);
-  }
+  };
 
-  function SetPasswordChange(event: React.ChangeEvent<HTMLInputElement>) {
+  const SetPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
-  }
+  };
 
-  function handleLogin() {
-    const predefinedUsername = "admin";
-    const predefinedPassword = "admin123";
-
-    if (user === predefinedUsername && password === predefinedPassword) {
-      setIsLoggedIn(true);
-      setError("");
-      navigate("/MainPage");  // Navigate to MainPage
-    } else {
-      setIsLoggedIn(false);
-      setError("Invalid username or password!");
+  const handleLogin = async () => {
+    if (!user || !password) {
+      setError("Please enter both username and password!");
+      return;
     }
-  }
+
+    try {
+      const response = await axios.post("http://localhost:5097/api/v1/Adminlogin/login", {
+        UserName: user,
+        Password: password,  
+      });
+
+      if (response.data.success) {
+        setIsLoggedIn(true);
+        setError("");
+        navigate("/");  
+      } else {
+        setIsLoggedIn(false);
+        setError("Invalid username or password!");
+      }
+    } catch (error) {
+      setIsLoggedIn(false);
+      setError("Something went wrong! Please try again.");
+      console.error(error);
+    }
+  };
+
 
   return (
     <div className="login-container">
@@ -47,9 +62,10 @@ const Login = () => {
         placeholder="Enter password"
         className="input-field"
       />
-      <button onClick={handleLogin} className="login-button">Login</button>
+      <button onClick={handleLogin} className="login-button">
+        Login
+      </button>
       {error && <p className="error-message">{error}</p>}
-      {isLoggedIn && <p className="welcome-message">Welcome, {user}!</p>}
     </div>
   );
 };
