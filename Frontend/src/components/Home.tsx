@@ -16,6 +16,7 @@ interface Show {
   theatreShowDates: {
     dateAndTime: string
   } []
+  venue: Venue
 }
 
 interface WeatherData {
@@ -40,10 +41,17 @@ interface WeatherData {
   };
 }
 
+interface Venue {
+  venueId: number
+  name: string
+  capacity: number
+}
+
 const Home: React.FC = () => {
   const [shows, setShows] = useState<Show[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+  const [venues, setVenues] = useState<Venue[]>([]);
 
   useEffect(() => {
     const fetchWeather = async () => {
@@ -73,6 +81,21 @@ const Home: React.FC = () => {
     fetchShows();
   }, []);
 
+  useEffect(() => {
+    const fetchVenues = async () => {
+      try {
+        const response = await axios.get<Venue[]>('http://localhost:5097/api/v1/TheatreShows/Venues');
+        setVenues(response.data);
+      } catch (error) {
+        console.error('Error fetching shows:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVenues();
+  }, []);
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -83,7 +106,7 @@ const Home: React.FC = () => {
       <HeroSection />
       <ShowsCarousel />
       <ShowsOfTheDayCarousel shows={shows} weatherData={weatherData} />
-      <WeeklyShows shows={shows} />
+      <WeeklyShows shows={shows} venues={venues}/>
       <Footer />
     </div>
   );

@@ -1,14 +1,21 @@
 import React, { useRef, useState } from 'react';
 
 interface Show {
-    title: string;
-    description: string;
-    showMood: string;
-    price: number;
-    theatreShowDates: {
-      dateAndTime: string
-    } []
-  }
+  title: string;
+  description: string;
+  showMood: string;
+  price: number;
+  theatreShowDates: {
+    dateAndTime: string
+  } []
+  venue: Venue
+}
+
+interface Venue {
+  venueId: number
+  name: string
+  capacity: number
+}
 
 // Define the sorting function with a specific key type for 'field'
 export const sortShows = (shows: Show[], field: keyof Show, order: 'ascending' | 'descending') => {

@@ -76,6 +76,11 @@ public class TheatreShowService : ITheatreShowService
         return theatreShowCollectives;
     }
 
+    public async Task<IEnumerable<Venue>> GetAllVenues() {
+        return await dbContext.Venue.ToListAsync();
+    }
+
+
     public async Task<TheatreShowCollective> GetById(int theatreShowId)
     {
         TheatreShow? theatreShow = await dbContext.TheatreShow.FirstOrDefaultAsync(x => x.TheatreShowId == theatreShowId);
