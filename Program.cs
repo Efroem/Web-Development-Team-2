@@ -17,6 +17,7 @@ namespace StarterKit
             builder.Services.Configure<Options>(builder.Configuration.GetSection("Admin"));
 
             builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddHttpClient();
 
             builder.Services.AddSession(options => 
             {
@@ -31,6 +32,7 @@ namespace StarterKit
             builder.Services.AddScoped<IReservationService, ReservationService>();
             builder.Services.AddTransient<ITheatreShowService, TheatreShowService>();
             builder.Services.AddScoped<MailSender>();
+            builder.Services.AddScoped<WeatherService>();
 
 
             // Add the database context
