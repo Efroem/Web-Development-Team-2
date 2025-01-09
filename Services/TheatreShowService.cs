@@ -66,6 +66,7 @@ public class TheatreShowService : ITheatreShowService
                 Description = show.Description,
                 Price = show.Price,
                 TheatreShowDates = theatreShowDates,
+                ShowMood = show.ShowMood,
                 Venue = venue
             };      
             theatreShowCollectives.Add(theatreShowCollective);
