@@ -18,6 +18,8 @@ a {
   align-items: center;
   padding: 1rem 2rem;
   background-color: #1f1f1f;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Subtle shadow effect */
+  /* max-height: 70px; */
 }
 
 .header .logo {
@@ -50,7 +52,7 @@ a {
 }
 
 
-.hero-section {
+.hero-section { 
   text-align: center;
   padding: 4rem 1rem;
   background: url('hero.png') no-repeat center center/cover;

@@ -1,4 +1,6 @@
+using System.Text.Json.Serialization;
 using Newtonsoft.Json;
+using JsonIgnoreAttribute = System.Text.Json.Serialization.JsonIgnoreAttribute;
 
 namespace StarterKit.Models
 {
@@ -50,9 +52,12 @@ namespace StarterKit.Models
 
         public double Price { get; set; }
 
+        public string? ShowMood { get; set; }
+
         public List<TheatreShowDate>? TheatreShowDates { get; set; }
 
         public Venue? Venue { get; set; }
+
 
     }
 
@@ -63,6 +68,8 @@ namespace StarterKit.Models
         public string? Title { get; set; }
 
         public string? Description { get; set; }
+        [JsonPropertyName("showMood")]
+        public string? ShowMood { get; set; }
 
         public double Price { get; set; }
 

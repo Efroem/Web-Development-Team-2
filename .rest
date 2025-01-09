@@ -8,7 +8,7 @@ POST http://localhost:5097/api/v1/TheatreShows
 Content-Type: application/json
 
 {
-    "Title": "Soldaat van Oranje",
+    "Title": "Vincent de Grote",
     "Description": "Een episch verhaal over moed, liefde en verzet tijdens de Tweede Wereldoorlog. Beleef de indrukwekkende musical die je meeneemt in het leven van een student die zijn weg vindt in het verzet.",
     "Price": 0.1,
     "TheatreShowDates": [
@@ -44,7 +44,7 @@ Content-Type: application/json
 }
 ####
 
-DELETE http://localhost:5097/api/v1/TheatreShows/4
+DELETE http://localhost:5097/api/v1/TheatreShows/5
 ####
 # ADMIN REST----------------------------------------------------------------------
 #VINCENT
@@ -189,3 +189,10 @@ PATCH http://localhost:5097/api/v1/ReservationManagement/5/mark-as-used
 
 # Delete
 DELETE http://localhost:5097/api/v1/ReservationManagement/5
+
+###
+
+GET http://localhost:5097/api/v1/Weather
+###
+
+GET https://api.openweathermap.org/data/2.5/weather?lat=50&lon=5&appid=71af1060865718c81642c67c33562b59
