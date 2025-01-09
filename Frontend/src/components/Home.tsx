@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import HeroSection from './HeroSection';
+import Header from './Header';
 import ShowsCarousel from './ShowsCarousel';
 import WeeklyShows from './WeeklyShows';
 import Footer from './Footer';
@@ -36,6 +37,7 @@ const Home: React.FC = () => {
 
   return (
     <div>
+      <Header />
       <HeroSection />
       <ShowsCarousel />
       <WeeklyShows shows={shows} />

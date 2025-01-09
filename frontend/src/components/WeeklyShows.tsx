@@ -27,7 +27,7 @@ const WeeklyShows: React.FC<{ shows: Show[] }> = ({ shows }) => {
 
   return (
     <section className="weekly-shows">
-      <h2>Shows van de week</h2>
+      <h2>Onze Shows</h2>
       <div className="scroll-container">
         <button className="scroll-button left" onClick={scrollLeft}>
           &#8249;
