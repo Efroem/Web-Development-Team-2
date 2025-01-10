@@ -1,6 +1,7 @@
-import React, { useRef, useState } from 'react';
-import { sortShows } from './ShowSorter';
+import React, { useRef, useState, useEffect } from 'react';
+import { applySorting, fetchShowsInMonth, sortShows } from './ShowSorter';
 import styles from './MainPage.module.css';
+import axios from 'axios';
 
 interface Show {
   title: string;
@@ -18,12 +19,13 @@ interface Venue {
   capacity: number
 }
 
-const WeeklyShows: React.FC<{ shows: Show[], venues: Venue[] }> = ({ shows, venues}) => {
+const WeeklyShows: React.FC<{ venues: Venue[] }> = ({ venues}) => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [filteredShows, setFilteredShows] = useState<Show[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const [searchVenue, setSearchVenue] = useState("")
   const [sortTerm, setFilterTerm] = useState("")
-  const [filterMonth, setFilterMonth] = useState("")
+  const [filterMonth, setFilterMonth] = useState<number>(-1)
 
   const scrollLeft = () => {
     if (scrollRef.current) {
@@ -38,77 +40,19 @@ const WeeklyShows: React.FC<{ shows: Show[], venues: Venue[] }> = ({ shows, venu
   };
   
 
-  let filteredShows: Show[] = shows.filter((show) =>
-    show.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    show.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  useEffect(() => {
+    const loadShows = async () => {
+      const shows = await fetchShowsInMonth(filterMonth); // Fetch shows
+      setFilteredShows(shows); // Update the filteredShows state
+    };
+    loadShows()
+  }, [filterMonth]); // this code reruns when any of these variables change
 
-  if (filterMonth != "") {
-    filteredShows = filteredShows.filter((show) => {
-      // Get the earliest date from the theatreShowDates array
-      const earliestDate = show.theatreShowDates
-        .map((date) => new Date(date.dateAndTime))
-        .sort((a, b) => a.getTime() - b.getTime())[0]; // Get the earliest date
-  
-      // Check if the earliest date's month matches the filterMonth
-      const earliestMonth = new Intl.DateTimeFormat("en-US", { month: "long" }).format(earliestDate);
-  
-      return earliestMonth === filterMonth;
-    });
-  }
+  useEffect(() => {
+    setFilteredShows(applySorting(filteredShows, searchTerm, searchVenue, sortTerm));
 
-  if (searchVenue != "") {
-    filteredShows = filteredShows.filter((show) => show.venue.name == searchVenue)
-  }
-  
+  }, [searchTerm, searchVenue, filterMonth, sortTerm]); // Dependencies to trigger the effect
 
-  let sortField: keyof Show = 'title'; // Default to 'title'
-  let sortOrder: 'ascending' | 'descending' = 'ascending'; // Default to 'ascending'
-  
-  switch (sortTerm) {
-    case "A-Z":
-      sortField = 'title';
-      sortOrder = 'ascending';
-      break;
-    case "Z-A":
-      sortField = 'title';
-      sortOrder = 'descending';
-      break;
-    case "Price Ascending":
-      sortField = 'price';
-      sortOrder = 'ascending';
-      break;
-    case "Price Descending":
-      sortField = 'price';
-      sortOrder = 'descending';
-      break;
-    case "Date Ascending":
-      sortField = 'theatreShowDates'; // Special case for sorting by date
-      sortOrder = 'ascending';
-      break;
-    case "Date Descending":
-      sortField = 'theatreShowDates'; // Special case for sorting by date
-      sortOrder = 'descending';
-      break;
-    default:
-      // Fallback if no valid case is matched
-      sortField = 'title';
-      sortOrder = 'ascending';
-      break;
-  }
-  
-  // Apply the sorting
-  filteredShows = sortShows(filteredShows, sortField, sortOrder);
-  
-    
-
-  if (filterMonth) {
-    filteredShows = filteredShows.filter((show) =>
-      show.theatreShowDates.some((date) =>
-        new Intl.DateTimeFormat('en-US', { month: 'long' }).format(new Date(date.dateAndTime)) === filterMonth
-      )
-    );
-  }
 
   return (
     <section className={styles['weekly-shows']}>
@@ -129,22 +73,33 @@ const WeeklyShows: React.FC<{ shows: Show[], venues: Venue[] }> = ({ shows, venu
           </option>
         ))}
       </select>
-
       <div className={styles['filter-month']}>
-        <select onChange={(e) => setFilterMonth(e.target.value)}>
-          <option value="">Select a month</option>
-          <option value="January">January</option>
-          <option value="February">February</option>
-          <option value="March">March</option>
-          <option value="April">April</option>
-          <option value="May">May</option>
-          <option value="June">June</option>
-          <option value="July">July</option>
-          <option value="August">August</option>
-          <option value="September">September</option>
-          <option value="October">October</option>
-          <option value="November">November</option>
-          <option value="December">December</option>
+        <select onChange={(e) => setFilterTerm(e.target.value)}>
+          <option value="">Set Filter</option>
+          <option value="A-Z">A-Z</option>
+          <option value="Z-A">Z-A</option>
+          <option value="Price Ascending">Price Ascending</option>
+          <option value="Price Descending">Price Descending</option>
+          <option value="Date Ascending">Date Ascending</option>
+          <option value="Date Descending">Date Descending</option>
+
+        </select>
+      </div>
+      <div className={styles['filter-month']}>
+        <select onChange={(e) => setFilterMonth(Number(e.target.value))}>
+          <option value="-1">Search by Month</option>
+          <option value="0">January</option>
+          <option value="1">February</option>
+          <option value="2">March</option>
+          <option value="3">April</option>
+          <option value="4">May</option>
+          <option value="5">June</option>
+          <option value="6">July</option>
+          <option value="7">August</option>
+          <option value="8">September</option>
+          <option value="9">October</option>
+          <option value="10">November</option>
+          <option value="11">December</option>
         </select>
       </div>
       <div className={styles['scroll-container']}>
@@ -181,5 +136,6 @@ const WeeklyShows: React.FC<{ shows: Show[], venues: Venue[] }> = ({ shows, venu
     </section>
   );
 };
+
 
 export default WeeklyShows;

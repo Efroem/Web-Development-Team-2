@@ -105,8 +105,8 @@ const Home: React.FC = () => {
       <Header weatherData={weatherData}/>
       <HeroSection />
       <ShowsCarousel />
-      <ShowsOfTheDayCarousel shows={shows} weatherData={weatherData} />
-      <WeeklyShows shows={shows} venues={venues}/>
+      <ShowsOfTheDayCarousel venues={venues} weatherData={weatherData} />
+      <WeeklyShows venues={venues}/>
       <Footer />
     </div>
   );

@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import axios from 'axios';
 
 interface Show {
   title: string;
@@ -58,6 +59,99 @@ export const sortShows = (shows: Show[], field: keyof Show, order: 'ascending' |
     return 0;
   });
 };
+
+export const fetchShowsInMonth = async (filterMonth: number): Promise<Show[]> => {
+  try {
+    const currentYear = new Date().getFullYear();
+    const startDate = new Date(currentYear, filterMonth, 1, 0, 0, 0, 0); // first day of the current month in the current year
+    const endDate = new Date(startDate);
+    endDate.setMonth(filterMonth + 1); // Get the next month's date
+
+    let response: { data: Show[] } | null = null; // Explicitly type the response
+
+    if (filterMonth !== -1) {
+      // Make sure the URL is valid and the date format matches the backend expectations
+      response = await axios.get(`http://localhost:5097/api/v1/TheatreShows`, {
+        params: {
+          startDate: startDate.toISOString(),
+          endDate: endDate.toISOString(),
+        },
+      });
+    } else {
+      response = await axios.get('http://localhost:5097/api/v1/TheatreShows');
+    }
+
+    if (response != null) {
+      return response.data; // Use setState inside useEffect to update state
+    }
+    return []
+
+  } catch (error) {
+    console.error('Error fetching shows:', error);
+    return []
+  }
+};
+
+export const applySorting = (filteredShows: Show[], 
+                            searchTerm: string = "", 
+                            searchVenue: string = "",
+                            sortTerm: string = ""): Show[] => {
+  let updatedShows = filteredShows;
+  
+    // Apply search term filter
+    if (searchTerm) {
+      updatedShows = updatedShows.filter((show) =>
+        show.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        show.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Apply search venue filter
+    if (searchVenue) {
+      updatedShows = updatedShows.filter((show) => show.venue.name === searchVenue);
+    }
+
+    // Apply sorting
+    let sortField: keyof Show = 'title'; // Default to 'title'
+    let sortOrder: 'ascending' | 'descending' = 'ascending'; // Default to 'ascending'
+
+    switch (sortTerm) {
+      case "A-Z":
+        sortField = 'title';
+        sortOrder = 'ascending';
+        break;
+      case "Z-A":
+        sortField = 'title';
+        sortOrder = 'descending';
+        break;
+      case "Price Ascending":
+        sortField = 'price';
+        sortOrder = 'ascending';
+        break;
+      case "Price Descending":
+        sortField = 'price';
+        sortOrder = 'descending';
+        break;
+      case "Date Ascending":
+        sortField = 'theatreShowDates'; // Special case for sorting by date
+        sortOrder = 'ascending';
+        break;
+      case "Date Descending":
+        sortField = 'theatreShowDates'; // Special case for sorting by date
+        sortOrder = 'descending';
+        break;
+      default:
+        sortField = 'title';
+        sortOrder = 'ascending';
+        break;
+    }
+
+    // Apply sorting logic
+    updatedShows = sortShows(updatedShows, sortField, sortOrder);
+
+    // Update state with filtered and sorted shows
+    return updatedShows;
+}
 
   
   // Example of how to use it:
