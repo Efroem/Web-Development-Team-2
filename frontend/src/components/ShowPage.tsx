@@ -108,7 +108,7 @@ const ShowPage: React.FC = () => {
           <button className={styles['reserve-button']}>Reserveren</button>
         </div>
         <div className={styles['venue-info']}>
-          <h2>Locatie Informatie</h2>
+          <h2>Locatie</h2>
           <p><strong>Naam:</strong> {show.venue.name}</p>
           <p><strong>Capaciteit:</strong> {show.venue.capacity}</p>
           <div className={styles['date-container']}>
