@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { Link } from 'react-router-dom';
 import styles from './MainPage.module.css';
 
 interface WeatherData {
@@ -25,10 +26,13 @@ interface WeatherData {
 
 interface Show {
   title: string;
-  description: string;
   showMood: string;
+  price: number;
+  theatreShowDates: {
+    dateAndTime: string;
+  }[];
+  theatreShowId: number;
 }
-
 interface ShowOfTheDay {
   weatherData: WeatherData | null;
   shows: Show[];
@@ -71,11 +75,14 @@ const ShowsOfTheDayCarousel: React.FC<ShowOfTheDay> = ({ shows, weatherData }) =
         </button>
         <div className={styles['shows-grid']} ref={scrollRef}>
           {filteredShows.map((show, index) => (
-            <div className={styles['show-card']} key={index}>
-              <h3>{show.title}</h3>
-              <p>{show.description}</p>
-              <p>{show.showMood}</p>
-            </div>
+            <Link to={`/show/${show.theatreShowId}`} key={show.theatreShowId}>
+              <div className={styles['show-card']}>
+                <h3>{show.title}</h3>
+                <p>{show.showMood}</p>
+                <p>€{show.price}</p>
+                {show.theatreShowDates.length > 0 && <p>{show.theatreShowDates[0].dateAndTime}</p>}
+              </div>
+            </Link>
           ))}
         </div>
         <button className={styles['scroll-button']} onClick={scrollRight}>

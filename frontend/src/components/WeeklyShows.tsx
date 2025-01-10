@@ -1,15 +1,15 @@
 import React, { useRef, useState } from 'react';
-import { sortShows } from './ShowSorter';
+import { Link } from 'react-router-dom';
 import styles from './MainPage.module.css';
 
 interface Show {
   title: string;
-  description: string;
   showMood: string;
   price: number;
   theatreShowDates: {
     dateAndTime: string;
   }[];
+  theatreShowId: number;
 }
 
 const WeeklyShows: React.FC<{ shows: Show[] }> = ({ shows }) => {
@@ -30,8 +30,7 @@ const WeeklyShows: React.FC<{ shows: Show[] }> = ({ shows }) => {
   };
 
   let filteredShows = shows.filter((show) =>
-    show.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    show.description.toLowerCase().includes(searchTerm.toLowerCase())
+    show.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (filterMonth) {
@@ -76,12 +75,13 @@ const WeeklyShows: React.FC<{ shows: Show[] }> = ({ shows }) => {
         </button>
         <div className={styles['shows-grid']} ref={scrollRef}>
           {filteredShows.map((show, index) => (
-            <div className={styles['show-card']} key={index}>
-              <h3>{show.title}</h3>
-              <p>{show.description}</p>
-              <p>{show.price}</p>
-              {show.theatreShowDates.length > 0 && <p>{show.theatreShowDates[0].dateAndTime}</p>}
-            </div>
+            <Link to={`/show/${show.theatreShowId}`} key={show.theatreShowId}>
+              <div className={styles['show-card']}>
+                <h3>{show.title}</h3>
+                <p>€{show.price}</p>
+                {show.theatreShowDates.length > 0 && <p>{show.theatreShowDates[0].dateAndTime}</p>}
+              </div>
+            </Link>
           ))}
         </div>
         <button className={styles['scroll-button']} onClick={scrollRight}>
