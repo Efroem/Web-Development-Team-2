@@ -114,7 +114,7 @@ const WeeklyShows: React.FC<{ venues: Venue[] }> = ({ venues}) => {
             <Link to={`/show/${show.theatreShowId}`} key={show.theatreShowId}>
               <div className={styles['show-card']}>
                 <h3>{show.title}</h3>
-                <p>€{show.price}</p>
+                <p>€{show.price.toFixed(2)}</p>
                 {show.theatreShowDates.length > 0 && <p>{show.theatreShowDates[0].dateAndTime}</p>}
               </div>
             </Link>

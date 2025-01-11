@@ -102,7 +102,7 @@ const ShowsOfTheDayCarousel: React.FC<{ weatherData: WeatherData | null, venues:
 
   return (
     <section className={styles['weekly-shows']}>
-      <h2>Onze Shows</h2>
+      <h2>Shows van de Dag</h2>
       <div className={styles['search-bar']}>
         <input
           type="text"
@@ -158,7 +158,8 @@ const ShowsOfTheDayCarousel: React.FC<{ weatherData: WeatherData | null, venues:
               <div className={styles['show-card']}>
                 <h3>{show.title}</h3>
                 <p>{show.showMood}</p>
-                <p>€{show.price}</p>
+                <p style={{ textDecoration: 'line-through' }}>€{show.price.toFixed(2)}</p>
+                <p>€{(show.price * 0.85).toFixed(2)}</p>
                 {show.theatreShowDates.length > 0 && <p>{show.theatreShowDates[0].dateAndTime}</p>}
               </div>
             </Link>
