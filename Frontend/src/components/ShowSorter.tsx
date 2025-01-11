@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import axios from 'axios';
 
 interface Show {
+  theatreShowId: number; // Added the missing property
   title: string;
   description: string;
   showMood: string;
@@ -11,6 +12,7 @@ interface Show {
   } []
   venue: Venue
 }
+
 
 interface Venue {
   venueId: number
