@@ -115,7 +115,9 @@ const WeeklyShows: React.FC<{ venues: Venue[] }> = ({ venues}) => {
               <div className={styles['show-card']}>
                 <h3>{show.title}</h3>
                 <p>€{show.price.toFixed(2)}</p>
-                {show.theatreShowDates.length > 0 && <p>{show.theatreShowDates[0].dateAndTime}</p>}
+                {show.theatreShowDates.length > 0 && (
+                  <p>{new Date(show.theatreShowDates[0].dateAndTime).toLocaleString()}</p>
+                )}
               </div>
             </Link>
           ))}

@@ -160,7 +160,9 @@ const ShowsOfTheDayCarousel: React.FC<{ weatherData: WeatherData | null, venues:
                 <p>{show.showMood}</p>
                 <p style={{ textDecoration: 'line-through' }}>€{show.price.toFixed(2)}</p>
                 <p>€{(show.price * 0.85).toFixed(2)}</p>
-                {show.theatreShowDates.length > 0 && <p>{show.theatreShowDates[0].dateAndTime}</p>}
+                {show.theatreShowDates.length > 0 && (
+                  <p>{new Date(show.theatreShowDates[0].dateAndTime).toLocaleString()}</p> // Changes the Date string to a properly formatted one
+                )}
               </div>
             </Link>
           ))}
