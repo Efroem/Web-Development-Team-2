@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import styles from './MainPage.module.css';
 import { applySorting, fetchShowsInMonth, sortShows } from './ShowSorter';
 
@@ -25,6 +26,7 @@ interface WeatherData {
 }
 
 interface Show {
+  theatreShowId: number;
   title: string;
   description: string;
   showMood: string;
@@ -40,7 +42,6 @@ interface Venue {
   name: string
   capacity: number
 }
-
 interface ShowOfTheDay {
   weatherData: WeatherData | null;
   shows: Show[];
@@ -153,25 +154,14 @@ const ShowsOfTheDayCarousel: React.FC<{ weatherData: WeatherData | null, venues:
         </button>
         <div className={styles['shows-grid']} ref={scrollRef}>
           {filteredShows.map((show, index) => (
-            <div className={styles['show-card']} key={index}>
-              <h3>{show.title}</h3>
-              <p>{show.description}</p>
-              <p>{show.price}</p>
-              <p>{show.venue.name}</p>
-              {Array.isArray(show.theatreShowDates) && show.theatreShowDates.length > 0 && (
-              
-              <p>
-                Earliest Date: <br />
-                {
-                  // Sort the dates in ascending order (earliest first)
-                  show.theatreShowDates
-                    .sort((a, b) => new Date(a.dateAndTime).getTime() - new Date(b.dateAndTime).getTime())
-                    .map((date, index) => index === 0 && <span key={date.dateAndTime}>{date.dateAndTime}</span>) // Only show the earliest date
-                }
-              </p>
-            )}
-
-            </div>
+            <Link to={`/show/${show.theatreShowId}`} key={show.theatreShowId}>
+              <div className={styles['show-card']}>
+                <h3>{show.title}</h3>
+                <p>{show.showMood}</p>
+                <p>€{show.price}</p>
+                {show.theatreShowDates.length > 0 && <p>{show.theatreShowDates[0].dateAndTime}</p>}
+              </div>
+            </Link>
           ))}
         </div>
         <button className={styles['scroll-button']} onClick={scrollRight}>

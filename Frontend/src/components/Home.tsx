@@ -9,6 +9,7 @@ import axios from 'axios';
 import styles from './Mainpage.module.css';
 
 interface Show {
+  theatreShowId: number; // Added the missing property
   title: string;
   description: string;
   showMood: string;
@@ -22,7 +23,7 @@ interface Show {
 interface WeatherData {
   name: string;
   weather: {
-    main: string
+    main: string;
     description: string;
     icon: string;
   }[];
