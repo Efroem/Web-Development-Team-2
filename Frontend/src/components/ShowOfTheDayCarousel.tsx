@@ -71,27 +71,27 @@ const ShowsOfTheDayCarousel: React.FC<{ weatherData: WeatherData | null, venues:
   useEffect(() => {
     const loadShows = async () => {
       const shows = await fetchShowsInMonth(filterMonth); // Fetch shows
-      setFilteredShows(applySorting(shows, searchTerm, searchVenue, sortTerm));
+      setFilteredShows(applySorting(shows, searchTerm, searchVenue, sortTerm, weatherData));
     };
     loadShows()
   }, [searchTerm, searchVenue, filterMonth, sortTerm]); // this code reruns when any of these variables change
   
-  useEffect(() => {
-    if (weatherData) {
-      const weatherCondition = weatherData.weather[0]?.main.toLowerCase();
-      setFilteredShows((prevShows) =>
-        prevShows.filter((show) => {
-          if (weatherCondition === 'rain') {
-            return show.showMood === 'Sad';
-          }
-          if (weatherCondition === 'clear') {
-            return show.showMood === 'Happy';
-          }
-          return true;
-        })
-      );
-    }
-  }, [weatherData, filteredShows]); // Re-run when weatherData or filteredShows change
+  // useEffect(() => {
+  //   if (weatherData) {
+  //     const weatherCondition = weatherData.weather[0]?.main.toLowerCase();
+  //     setFilteredShows((prevShows) =>
+  //       prevShows.filter((show) => {
+  //         if (weatherCondition === 'rain') {
+  //           return show.showMood === 'Sad';
+  //         }
+  //         if (weatherCondition === 'clear') {
+  //           return show.showMood === 'Happy';
+  //         }
+  //         return true;
+  //       })
+  //     );
+  //   }
+  // }, [weatherData, filteredShows]); // Re-run when weatherData or filteredShows change
 
   return (
     <section className={styles['weekly-shows']}>
