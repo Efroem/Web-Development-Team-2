@@ -107,7 +107,7 @@ const Home: React.FC = () => {
       <HeroSection />
       <ShowsCarousel />
       <ShowsOfTheDayCarousel venues={venues} weatherData={weatherData} />
-      <WeeklyShows venues={venues}/>
+      <WeeklyShows weatherData={weatherData} venues={venues}/>
       <Footer />
     </div>
   );
