@@ -1,0 +1,113 @@
+/* ShoppingCart.css */
+
+.shopping-cart {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .cart-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .cart-details {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .cart-item {
+    padding: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .cart-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  
+  .cart-field label {
+    font-weight: bold;
+    color: #555;
+  }
+  
+  .cart-field p,
+  .cart-field input {
+    margin: 0;
+  }
+  
+  .cart-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  
+  .cart-footer-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  .edit-btn {
+    background-color: #ffa500;
+    color: #fff;
+  }
+  
+  .remove-btn {
+    background-color: #ff4d4f;
+    color: #fff;
+  }
+  
+  .save-btn {
+    background-color: #4caf50;
+    color: #fff;
+  }
+  
+  .cancel-btn {
+    background-color: #888;
+    color: #fff;
+  }
+  
+  .add-reservations-btn {
+    background-color: #007bff;
+    color: #fff;
+    flex-grow: 1;
+  }
+  
+  .checkout-btn {
+    background-color: #28a745;
+    color: #fff;
+    flex-grow: 1;
+  }
+  
+  .btn:hover {
+    opacity: 0.9;
+  }
+  
+  .empty-cart {
+    text-align: center;
+    font-size: 16px;
+    color: #777;
+  }
+  

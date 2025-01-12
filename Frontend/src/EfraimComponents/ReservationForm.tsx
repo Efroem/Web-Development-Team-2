@@ -13,7 +13,7 @@ interface ShowDate {
 }
 
 const ReservationForm = () => {
-  const { addToCart } = useShoppingCart();
+  const { addToCart, setCustomerDetails } = useShoppingCart();
   const [shows, setShows] = useState<Show[]>([]);
   const [selectedShowId, setSelectedShowId] = useState<number | null>(null);
   const [showDates, setShowDates] = useState<ShowDate[]>([]);
@@ -28,7 +28,7 @@ const ReservationForm = () => {
 
   // Fetch all shows from the backend
   useEffect(() => {
-    fetch("http://localhost:5097/api/v1/TheatreShows?startDate=")
+    fetch("http://localhost:5097/api/v1/TheatreShows")
       .then((response) => response.json())
       .then((data) => setShows(data))
       .catch((error) => console.error("Error fetching shows:", error));
@@ -50,6 +50,7 @@ const ReservationForm = () => {
     e.preventDefault();
 
     if (selectedShowId && selectedShowDateId) {
+      // Add the reservation to the cart, including customer details
       addToCart({
         showTitle:
           shows.find((show) => show.theatreShowId === selectedShowId)?.title ||
@@ -59,13 +60,38 @@ const ReservationForm = () => {
             (date) => date.theatreShowDateId === selectedShowDateId
           )?.dateAndTime || "",
         ticketCount,
+        showDateId: selectedShowDateId, // Include showDateId
+        firstName: firstName.trim(), // Add customer details to the reservation
+        lastName: lastName.trim(),
+        email: email.trim(),
       });
 
-      // alert("Item has been added to the shopping cart!");
+      console.log("Reservation Added to Cart:", {
+        showTitle:
+          shows.find((show) => show.theatreShowId === selectedShowId)?.title ||
+          "",
+        dateAndTime:
+          showDates.find(
+            (date) => date.theatreShowDateId === selectedShowDateId
+          )?.dateAndTime || "",
+        ticketCount,
+        showDateId: selectedShowDateId,
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        email: email.trim(),
+      }); // Debugging
+
       setShowPopup(true); // Show the popup after adding to cart
+
+      // Reset the form fields
       setSelectedShowId(null);
       setSelectedShowDateId(null);
       setTicketCount(1);
+      setFirstName(""); // Reset first name
+      setLastName(""); // Reset last name
+      setEmail(""); // Reset email
+    } else {
+      alert("Please select a show and date before adding to the cart.");
     }
   };
 
@@ -150,7 +176,7 @@ const ReservationForm = () => {
             <p>Ticket Added to Shopping Cart!</p>
             <button onClick={() => (window.location.href = "/")}>Home</button>
             <button onClick={() => (window.location.href = "/ShoppingCart")}>
-              Look at My Shopping Cart
+              Shopping Cart
             </button>
           </div>
         </div>

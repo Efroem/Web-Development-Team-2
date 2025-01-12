@@ -10,6 +10,16 @@ interface Reservation {
   showTitle: string;
   dateAndTime: string;
   ticketCount: number;
+  showDateId: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
+interface CustomerDetails {
+  firstName: string;
+  lastName: string;
+  email: string;
 }
 
 interface ShoppingCartContextType {
@@ -17,6 +27,8 @@ interface ShoppingCartContextType {
   addToCart: (reservation: Reservation) => void;
   updateCartItem: (index: number, updatedReservation: Reservation) => void;
   removeFromCart: (index: number) => void;
+  setCustomerDetails: (details: CustomerDetails) => void;
+  customerDetails: CustomerDetails;
 }
 
 const ShoppingCartContext = createContext<ShoppingCartContextType | undefined>(
@@ -25,15 +37,28 @@ const ShoppingCartContext = createContext<ShoppingCartContextType | undefined>(
 
 export const ShoppingCartProvider = ({ children }: { children: ReactNode }) => {
   const [cartItems, setCartItems] = useState<Reservation[]>(() => {
-    // Initialize cart from localStorage
     const storedCart = localStorage.getItem("shoppingCart");
     return storedCart ? JSON.parse(storedCart) : [];
   });
+
+  const [customerDetails, setCustomerDetailsState] = useState<CustomerDetails>(
+    () => {
+      const storedDetails = localStorage.getItem("customerDetails");
+      return storedDetails
+        ? JSON.parse(storedDetails)
+        : { firstName: "", lastName: "", email: "" };
+    }
+  );
 
   // Sync cart with localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem("shoppingCart", JSON.stringify(cartItems));
   }, [cartItems]);
+
+  // Sync customer details with localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("customerDetails", JSON.stringify(customerDetails));
+  }, [customerDetails]);
 
   const addToCart = (reservation: Reservation) => {
     setCartItems([...cartItems, reservation]);
@@ -51,6 +76,10 @@ export const ShoppingCartProvider = ({ children }: { children: ReactNode }) => {
     setCartItems(updatedCart);
   };
 
+  const setCustomerDetails = (details: CustomerDetails) => {
+    setCustomerDetailsState(details);
+  };
+
   return (
     <ShoppingCartContext.Provider
       value={{
@@ -58,6 +87,8 @@ export const ShoppingCartProvider = ({ children }: { children: ReactNode }) => {
         addToCart,
         updateCartItem,
         removeFromCart,
+        setCustomerDetails,
+        customerDetails,
       }}
     >
       {children}

@@ -72,8 +72,8 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Home weatherData={weatherData} />} />
           <Route path="/adminlogin" element={<Login />} />
-          <Route path="/ShoppingCart" element={<ShoppingCart />} />
           <Route path="/ReservationForm" element={<ReservationForm />} />
+          <Route path="/ShoppingCart" element={<ShoppingCart />} />
           <Route path="/show/:showId" element={<ShowPage />} />
         </Routes>
       </Router>

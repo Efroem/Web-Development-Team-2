@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { useShoppingCart } from "./ShoppingCartContext";
+import { useShoppingCart } from "../EfraimComponents/ShoppingCartContext";
 import axios from "axios";
 import "../EfraimComponents/Reservation.css";
+import "./ShoppingCart.css"; // Add a custom CSS file for styling
 
 const ShoppingCart = () => {
   const { cartItems, updateCartItem, removeFromCart } = useShoppingCart();
@@ -41,105 +42,183 @@ const ShoppingCart = () => {
 
   const handleCheckout = async () => {
     try {
-      // Iterate through cart items and send them to the backend
+      // Validate that all required fields are filled
       for (const item of cartItems) {
-        await axios.post("http://localhost:5097/api/reservations", {
-          AmountOfTickets: item.ticketCount,
-          CustomerId: 1, // Replace with actual customer ID logic
-          TheatreShowDateId: item.dateAndTime, // Map to correct show date ID
-          Used: 0,
-        });
+        if (!item.firstName || !item.lastName || !item.email) {
+          alert(
+            "All reservations must have a First Name, Last Name, and Email."
+          );
+          return;
+        }
       }
+
+      // Extract customer details from the first cart item
+      const { firstName, lastName, email } = cartItems[0];
+
+      // Map cart items to reservations
+      const reservations = cartItems.map((item) => ({
+        showDateId: item.showDateId,
+        ticketCount: item.ticketCount,
+      }));
+
+      // Build the request body
+      const requestBody = {
+        firstName,
+        lastName,
+        email,
+        reservations,
+      };
+
+      console.log("Request Body:", requestBody);
+
+      // Send the request
+      await axios.post(
+        "http://localhost:5097/api/v1/Reservations",
+        requestBody
+      );
 
       alert("Checkout completed successfully. Redirecting to home page...");
       window.location.href = "/"; // Redirect to home
-    } catch (error) {
-      console.error("Error during checkout:", error);
-      alert("An error occurred during checkout. Please try again.");
+    } catch (error: any) {
+      console.error(
+        "Error during checkout:",
+        error.response?.data || error.message
+      );
+      alert(
+        "An error occurred during checkout. Please check the details and try again."
+      );
     }
   };
 
   return (
     <div className="shopping-cart">
-      <h2>Shopping Cart</h2>
+      <h2 className="cart-title">Shopping Cart</h2>
+
       {cartItems.length === 0 ? (
-        <p>Your cart is empty.</p>
+        <p className="empty-cart">Your cart is empty.</p>
       ) : (
-        <table className="cart-table">
-          <thead>
-            <tr>
-              <th>Show</th>
-              <th>Date</th>
-              <th>Ticket Count</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {cartItems.map((item, index) => (
-              <tr key={index}>
-                {editingIndex === index ? (
-                  <>
-                    <td>
-                      <input
-                        type="text"
-                        value={editingItem.showTitle}
-                        onChange={(e) =>
-                          handleEditChange("showTitle", e.target.value)
-                        }
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="datetime-local"
-                        value={new Date(editingItem.dateAndTime)
-                          .toISOString()
-                          .slice(0, -1)} // Convert to datetime-local format
-                        onChange={(e) =>
-                          handleEditChange("dateAndTime", e.target.value)
-                        }
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        min="1"
-                        value={editingItem.ticketCount}
-                        onChange={(e) =>
-                          handleEditChange(
-                            "ticketCount",
-                            parseInt(e.target.value)
-                          )
-                        }
-                      />
-                    </td>
-                    <td>
-                      <button onClick={saveEdit}>Save</button>
-                      <button onClick={cancelEdit}>Cancel</button>
-                    </td>
-                  </>
-                ) : (
-                  <>
-                    <td>{item.showTitle}</td>
-                    <td>{new Date(item.dateAndTime).toLocaleString()}</td>
-                    <td>{item.ticketCount}</td>
-                    <td>
-                      <button onClick={() => startEdit(index)}>Edit</button>
-                      <button onClick={() => handleRemove(index)}>
-                        Remove
-                      </button>
-                    </td>
-                  </>
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="cart-details">
+          {cartItems.map((item, index) => (
+            <div key={index} className="cart-item card">
+              {editingIndex === index ? (
+                <>
+                  <div className="cart-field">
+                    <label>First Name:</label>
+                    <input
+                      type="text"
+                      value={editingItem.firstName}
+                      onChange={(e) =>
+                        handleEditChange("firstName", e.target.value)
+                      }
+                    />
+                  </div>
+                  <div className="cart-field">
+                    <label>Last Name:</label>
+                    <input
+                      type="text"
+                      value={editingItem.lastName}
+                      onChange={(e) =>
+                        handleEditChange("lastName", e.target.value)
+                      }
+                    />
+                  </div>
+                  <div className="cart-field">
+                    <label>Email:</label>
+                    <input
+                      type="email"
+                      value={editingItem.email}
+                      onChange={(e) =>
+                        handleEditChange("email", e.target.value)
+                      }
+                    />
+                  </div>
+                  <div className="cart-field">
+                    <label>Show:</label>
+                    <p>{item.showTitle}</p>
+                  </div>
+                  <div className="cart-field">
+                    <label>Date:</label>
+                    <p>{new Date(item.dateAndTime).toLocaleString()}</p>
+                  </div>
+                  <div className="cart-field">
+                    <label>Ticket Count:</label>
+                    <input
+                      type="number"
+                      min="1"
+                      value={editingItem.ticketCount}
+                      onChange={(e) =>
+                        handleEditChange(
+                          "ticketCount",
+                          parseInt(e.target.value)
+                        )
+                      }
+                    />
+                  </div>
+                  <div className="cart-actions">
+                    <button className="btn save-btn" onClick={saveEdit}>
+                      Save
+                    </button>
+                    <button className="btn cancel-btn" onClick={cancelEdit}>
+                      Cancel
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="cart-field">
+                    <label>First Name:</label>
+                    <p>{item.firstName}</p>
+                  </div>
+                  <div className="cart-field">
+                    <label>Last Name:</label>
+                    <p>{item.lastName}</p>
+                  </div>
+                  <div className="cart-field">
+                    <label>Email:</label>
+                    <p>{item.email}</p>
+                  </div>
+                  <div className="cart-field">
+                    <label>Show:</label>
+                    <p>{item.showTitle}</p>
+                  </div>
+                  <div className="cart-field">
+                    <label>Date:</label>
+                    <p>{new Date(item.dateAndTime).toLocaleString()}</p>
+                  </div>
+                  <div className="cart-field">
+                    <label>Ticket Count:</label>
+                    <p>{item.ticketCount}</p>
+                  </div>
+                  <div className="cart-actions">
+                    <button
+                      className="btn edit-btn"
+                      onClick={() => startEdit(index)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="btn remove-btn"
+                      onClick={() => handleRemove(index)}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          ))}
+        </div>
       )}
-      <div className="cart-actions">
-        <button onClick={() => (window.location.href = "/ReservationForm")}>
+      <div className="cart-footer-actions">
+        <button
+          className="btn add-reservations-btn"
+          onClick={() => (window.location.href = "/ReservationForm")}
+        >
           Add More Reservations
         </button>
-        <button onClick={handleCheckout}>Checkout</button>
+        <button className="btn checkout-btn" onClick={handleCheckout}>
+          Checkout
+        </button>
       </div>
     </div>
   );

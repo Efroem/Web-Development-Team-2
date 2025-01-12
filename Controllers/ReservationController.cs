@@ -35,7 +35,7 @@ namespace StarterKit.Controllers
             }
 
             var response = await _reservationService.MakeReservationAsync(request);
-            
+
             if (response.Success)
             {
                 return Ok(new { TotalPrice = response.TotalPrice });
