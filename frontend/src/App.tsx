@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import { ShoppingCartProvider } from "./EfraimComponents/ShoppingCartContext";
 import Header from "./components/Header";
 import Home from "./components/Home";
 import Login from "./VincentComponents/login";
 import ShoppingCart from "./EfraimComponents/ShoppingCart";
 import ReservationForm from "./EfraimComponents/ReservationForm";
+import ShowPage from "./components/ShowPage";
 import axios from "axios";
 
 interface WeatherData {
@@ -30,6 +36,16 @@ interface WeatherData {
   };
 }
 
+const LocationWatcher: React.FC = () => {
+  const location = useLocation();
+
+  React.useEffect(() => {
+    console.log("Navigated to:", location.pathname);
+  }, [location]);
+
+  return null;
+};
+
 const App: React.FC = () => {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
 
@@ -51,12 +67,14 @@ const App: React.FC = () => {
   return (
     <ShoppingCartProvider>
       <Router>
+        <LocationWatcher />
         <Header weatherData={weatherData} />
         <Routes>
           <Route path="/" element={<Home weatherData={weatherData} />} />
           <Route path="/adminlogin" element={<Login />} />
           <Route path="/ShoppingCart" element={<ShoppingCart />} />
           <Route path="/ReservationForm" element={<ReservationForm />} />
+          <Route path="/show/:showId" element={<ShowPage />} />
         </Routes>
       </Router>
     </ShoppingCartProvider>
@@ -64,3 +82,15 @@ const App: React.FC = () => {
 };
 
 export default App;
+//     <Router>
+//       <LocationWatcher />
+//       <Routes>
+//         <Route path="/" element={<Home />} />
+//         <Route path="/adminlogin" element={<Login />} />
+//         <Route path="/show/:showId" element={<ShowPage />} />
+//       </Routes>
+//     </Router>
+//   );
+// };
+
+// export default App;
