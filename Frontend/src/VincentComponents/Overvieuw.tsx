@@ -11,17 +11,17 @@ interface Show {
     theatreShowDates: {
         theathershowid: number
         dateAndTime: string
-    }[]
-    venue: Venue
+    }[];
+    venue: Venue;
 }
 
 interface Venue {
-    venueId: number
-    name: string
-    capacity: number
+    venueId: number;
+    name: string;
+    capacity: number;
 }
 
-const TheatreShows: React.FC = () => {
+const Overview: React.FC = () => {
     const [shows, setShows] = useState<Show[]>([]);
     const [error, setError] = useState<string | null>(null);
 
@@ -32,29 +32,11 @@ const TheatreShows: React.FC = () => {
                 setShows(response.data); 
             } catch (error: any) {
                 setError(error.message); 
-            } finally {
             }
         };
 
         fetchTheatreShows(); 
     }, []); 
-
-    const handleDelete = async (id: number) => {
-        const confirmDelete = window.confirm("Are you sure you want to delete this show?");
-        
-        if (!confirmDelete) {
-            return;
-        }
-
-        try {            
-            const response = await axios.delete(`http://localhost:5097/api/v1/TheatreShows/${id}`, {
-            });
-            
-            setShows(shows.filter(show => show.theatreShowId !== id));
-        } catch (error: any) {
-            setError("Error deleting show: " + error.message);
-        }
-    };
 
     if (error) {
         return <div className={styles.error}>Error: {error}</div>;
@@ -62,7 +44,7 @@ const TheatreShows: React.FC = () => {
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.header}>Theatre Shows</h1>
+            <h1 className={styles.header}>All Theatre Shows</h1>
             {shows.length === 0 ? (
                 <p className={styles.noShows}>No shows available</p>
             ) : (
@@ -80,12 +62,6 @@ const TheatreShows: React.FC = () => {
                                     </li>
                                 ))}
                             </ul>
-                            <button 
-                                className={styles.deleteButton} 
-                                onClick={() => handleDelete(show.theatreShowId)}
-                            >
-                                Delete
-                            </button>
                         </li>
                     ))}
                 </ul>
@@ -94,4 +70,4 @@ const TheatreShows: React.FC = () => {
     );
 };
 
-export default TheatreShows;
+export default Overview;

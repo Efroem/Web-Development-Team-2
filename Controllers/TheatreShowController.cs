@@ -89,7 +89,6 @@ public class TheatreShowController : Controller {
         return Ok(venues);
     }
 
-    [AdminOnly]
     [HttpPost()]
     public async Task<IActionResult> PostTheatreShow([FromBody] TheatreShowCollective theatreShowCreator) {
         TheatreShow theatreShow = new TheatreShow();
@@ -108,7 +107,6 @@ public class TheatreShowController : Controller {
         bool updatedTheatreShow = await theatreShowService.Update(theatreShow, theatreShowId);
         return updatedTheatreShow == true ? Ok($"Successfully updated") : BadRequest("Failed to update TheatreShow");
     }
-    [AdminOnly]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTheatreShow(int id) {
         bool removedFromDB = await theatreShowService.Delete(id);

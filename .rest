@@ -14,7 +14,7 @@ POST http://localhost:5097/api/v1/TheatreShows
 Content-Type: application/json
 
 {
-    "Title": "Vincent de Grote",
+    "Title": "lala land",
     "Description": "Een episch verhaal over moed, liefde en verzet tijdens de Tweede Wereldoorlog. Beleef de indrukwekkende musical die je meeneemt in het leven van een student die zijn weg vindt in het verzet.",
     "Price": 0.1,
     "TheatreShowDates": [

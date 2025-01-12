@@ -6,15 +6,23 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
 
   const handleDeleteShowClick = () => {
-    navigate("/delete"); // This will navigate to the /create-show route (the Create page)
+    navigate("/delete");
+  };
+  const HandleOverviewClick = () => {
+    navigate("/overview");
   };
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.heading}>Admin Dashboard</h1>
-      <button className={styles.createShowButton} onClick={handleDeleteShowClick}>
-        Create Show
-      </button>
+      <div className={styles["white-box"]}> {/* White box container */}
+        <h1 className={styles.heading}>Admin Dashboard</h1>
+        <button className={styles.createShowButton} onClick={handleDeleteShowClick}>
+          Delete Show
+        </button>
+        <button className={styles.createShowButton} onClick={HandleOverviewClick}>
+          List of Shows
+        </button>
+      </div>
     </div>
   );
 };

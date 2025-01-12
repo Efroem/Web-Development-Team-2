@@ -1,37 +1,68 @@
-/* AdminDashboard.module.css */
-
-.container {
+/* Basic Reset */
+:global(*) {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Full-Screen Centering Container */
+  .container {
+    height: 100vh; /* Full height of the viewport */
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    min-height: 100vh;
-    background-color: #f4f4f4;
+    align-items: center;
+    background: linear-gradient(to bottom right, #ff9800, #ffc107); /* Orange gradient */
     padding: 20px;
   }
   
-  .heading {
-    font-size: 2.5rem;
-    color: #333;
-    margin-bottom: 20px;
+  /* White Box Styling */
+  .white-box {
+    background-color: #ffffff; /* White background */
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    width: 100%;
+    max-width: 500px; /* Max width to keep it compact */
+    text-align: center;
+    box-sizing: border-box;
   }
   
+  /* Title Styling */
+  .heading {
+    margin-bottom: 30px;
+    color: #ff9800; /* Dark orange for the title */
+    font-size: 36px;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  /* Button Styling */
   .createShowButton {
-    font-size: 1.2rem;
-    padding: 10px 20px;
-    background-color: #007bff;
+    width: 250px;
+    padding: 12px;
+    background-color: #ff9800; /* Lighter dark orange */
     color: white;
     border: none;
     border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+    margin: 10px 0;
+    box-shadow: 0 4px 8px rgba(255, 152, 0, 0.1); /* Light shadow for depth */
   }
   
+  /* Button Hover Styling */
   .createShowButton:hover {
-    background-color: #0056b3;
+    background-color: #fb8c00; /* Slightly darker orange on hover */
+    box-shadow: 0 4px 12px rgba(255, 152, 0, 0.2); /* Stronger shadow on hover */
   }
   
-  .createShowButton:focus {
-    outline: none;
+  /* Button Active (clicked) effect */
+  .createShowButton:active {
+    background-color: #f57c00; /* Darker orange when clicked */
+    transform: translateY(1px);
   }
   
