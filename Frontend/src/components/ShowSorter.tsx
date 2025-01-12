@@ -103,8 +103,8 @@ export const applySorting = (filteredShows: Show[],
     // Apply search term filter
     if (searchTerm) {
       updatedShows = updatedShows.filter((show) =>
-        show.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        show.description.toLowerCase().includes(searchTerm.toLowerCase())
+        show.title.toLowerCase().includes(searchTerm.toLowerCase()) /*||
+        show.description.toLowerCase().includes(searchTerm.toLowerCase()) */
       );
     }
 
