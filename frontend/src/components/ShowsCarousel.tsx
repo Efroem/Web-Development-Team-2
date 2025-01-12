@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import styles from './MainPage.module.css';
 
 interface TheatreShow {
@@ -35,13 +36,14 @@ const ShowsCarousel: React.FC = () => {
   return (
     <section className={styles['carousel']}>
       {theatreShows.map((show) => (
-        <div className={styles['carousel-item']} key={show.theatreShowId}>
-          <img src={show.image} alt={show.title} />
-          <div className={styles['carousel-overlay']}>
-            <h3>{show.title}</h3>
-            <p>{show.description}</p>
+        <Link to={`/show/${show.theatreShowId}`} key={show.theatreShowId}>
+          <div className={styles['carousel-item']}>
+            <img src={show.image} alt={show.title} />
+            <div className={styles['carousel-overlay']}>
+              <h3>{show.title}</h3>
+            </div>
           </div>
-        </div>
+        </Link>
       ))}
     </section>
   );
