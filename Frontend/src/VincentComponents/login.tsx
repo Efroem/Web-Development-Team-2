@@ -17,14 +17,12 @@ const Login = () => {
     setPassword(event.target.value);
   };
 
-
-
   const handleLogin = async () => {
     if (!user || !password) {
       setError("Please enter both username and password!");
       return;
     }
-    
+
     try {
       const response = await axios.post(
         "http://localhost:5097/api/v1/Adminlogin/login",
@@ -43,8 +41,6 @@ const Login = () => {
     } catch (error: any) {
       if (error.response) {
         setError(error.response.data.message || "Invalid username or password!");
-      } else if (error.request) {
-        setError("Network error. Please check your connection.");
       } else {
         setError("An unexpected error occurred. Please try again.");
       }
@@ -62,15 +58,13 @@ const Login = () => {
           placeholder="Enter username"
           className={styles["input-field"]}
         />
-        <div className={styles["password-container"]}>
-          <input
-          type="text"
-            value={password}
-            onChange={SetPasswordChange}
-            placeholder="Enter password"
-            className={styles["input-field"]}
-          />
-        </div>
+        <input
+          type="password"
+          value={password}
+          onChange={SetPasswordChange}
+          placeholder="Enter password"
+          className={styles["input-field"]}
+        />
         <button onClick={handleLogin} className={styles["login-button"]}>
           Login
         </button>

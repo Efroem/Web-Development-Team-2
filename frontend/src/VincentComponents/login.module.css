@@ -11,8 +11,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(to bottom right, #ff6f00, #ff9800); /* Stronger gradient from dark to light orange */
+  background: linear-gradient(to bottom right, #ff9800, #ffc107); /* Orange gradient */
 }
+
 
 /* Login Form Container */
 .login-container {
@@ -82,31 +83,4 @@ h1 {
   color: #ff9800; /* Lighter dark orange color for success message */
   font-size: 18px;
   font-weight: bold;
-}
-
-/* Password Container (to align toggle with password field) */
-.password-container {
-  position: relative;
-  width: 100%;
-  margin-bottom: 15px;
-}
-
-/* Show/Hide Password Toggle Button */
-.toggle-password-btn {
-  position: absolute;
-  right: 10px; /* Position the button on the right side */
-  top: 40%; /* Adjusted top to move the button up */
-  transform: translateY(-50%); /* Vertically center the button */
-  background: none;
-  border: none;
-  color: #ff9800; /* Match button color */
-  font-size: 14px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: color 0.3s ease;
-}
-
-/* Toggle Button Hover Effect */
-.toggle-password-btn:hover {
-  color: #fb8c00; /* Slightly darker orange on hover */
 }
