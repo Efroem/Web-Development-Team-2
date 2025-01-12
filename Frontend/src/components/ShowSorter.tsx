@@ -13,6 +13,28 @@ interface Show {
   venue: Venue
 }
 
+interface WeatherData {
+  name: string;
+  weather: {
+    main: string;
+    description: string;
+    icon: string;
+  }[];
+  main: {
+    temp: number;
+    feels_like: number;
+    temp_min: number;
+    temp_max: number;
+    pressure: number;
+    humidity: number;
+  };
+  wind: {
+    speed: number;
+    deg: number;
+    gust: number;
+  };
+}
+
 
 interface Venue {
   venueId: number
@@ -97,7 +119,8 @@ export const fetchShowsInMonth = async (filterMonth: number): Promise<Show[]> =>
 export const applySorting = (filteredShows: Show[], 
                             searchTerm: string = "", 
                             searchVenue: string = "",
-                            sortTerm: string = ""): Show[] => {
+                            sortTerm: string = "",
+                            weatherData: WeatherData | null = null): Show[] => {
   let updatedShows = filteredShows;
   
     // Apply search term filter
@@ -111,6 +134,19 @@ export const applySorting = (filteredShows: Show[],
     // Apply search venue filter
     if (searchVenue) {
       updatedShows = updatedShows.filter((show) => show.venue.name === searchVenue);
+    }
+
+    if (weatherData != null) {
+      const weatherCondition = weatherData.weather[0]?.main.toLowerCase();
+      updatedShows = updatedShows.filter((show) => {
+        if (weatherCondition === 'rain') {
+          return show.showMood === 'Sad';
+        }
+        if (weatherCondition === 'clear') {
+          return show.showMood === 'Happy';
+        }
+        return false;
+      })
     }
 
     // Apply sorting
