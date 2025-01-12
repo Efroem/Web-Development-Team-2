@@ -166,6 +166,7 @@ a {
   background-color: #282828;
   text-align: center;
   display: flex;
+  white-space: nowrap; /* Prevents text breaking onto multiple lines */
   flex-direction: column;
   align-items: center; /* Centers the entire component horizontally */
 }
