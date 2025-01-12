@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-route
 import Home from './components/Home';
 import Login from './VincentComponents/login';
 import ShowPage from './components/ShowPage';
+import AdminDashboard from './VincentComponents/AdminDashboard';
+import TheatreShows from './VincentComponents/Deleteshows';
 
 const LocationWatcher: React.FC = () => {
   const location = useLocation();
@@ -21,17 +23,13 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/adminlogin" element={<Login />} />
-<<<<<<< HEAD
-=======
         <Route path="/show/:showId" element={<ShowPage />} />
->>>>>>> main
+        <Route path="/dashboard" element={<AdminDashboard />} />
+        <Route path="/delete" element={<TheatreShows />} />
+
       </Routes>
     </Router>
   );
 };
 
-<<<<<<< HEAD
 export default App;
-=======
-export default App;
->>>>>>> main
