@@ -22,13 +22,37 @@ interface Venue {
   capacity: number
 }
 
-const WeeklyShows: React.FC<{ venues: Venue[] }> = ({ venues}) => {
+interface WeatherData {
+  name: string;
+  weather: {
+    main: string;
+    description: string;
+    icon: string;
+  }[];
+  main: {
+    temp: number;
+    feels_like: number;
+    temp_min: number;
+    temp_max: number;
+    pressure: number;
+    humidity: number;
+  };
+  wind: {
+    speed: number;
+    deg: number;
+    gust: number;
+  };
+}
+
+
+const WeeklyShows: React.FC<{ weatherData: WeatherData | null, venues: Venue[] }> = ({ weatherData, venues}) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [filteredShows, setFilteredShows] = useState<Show[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const [searchVenue, setSearchVenue] = useState("")
   const [sortTerm, setFilterTerm] = useState("")
   const [filterMonth, setFilterMonth] = useState<number>(-1)
+  const [discountMood, setDiscountMood] = useState("")
 
   const scrollLeft = () => {
     if (scrollRef.current) {
@@ -41,20 +65,30 @@ const WeeklyShows: React.FC<{ venues: Venue[] }> = ({ venues}) => {
       scrollRef.current.scrollBy({ left: 300, behavior: 'smooth' });
     }
   };
-  
+  useEffect(() => {
+    const setMood = async () => {
+      if (weatherData) {
+        const weatherCondition = weatherData.weather[0]?.main.toLowerCase();
+        
+        if (weatherCondition === 'rain' || weatherCondition === 'clouds') {
+          setDiscountMood('Sad');
+        }
+        if (weatherCondition === 'clear') {
+          setDiscountMood('Happy');
+        }
+      }
+    };
+    setMood();
+  }, [weatherData])
 
+  
   useEffect(() => {
     const loadShows = async () => {
       const shows = await fetchShowsInMonth(filterMonth); // Fetch shows
-      setFilteredShows(shows); // Update the filteredShows state
+      setFilteredShows(applySorting(shows, searchTerm, searchVenue, sortTerm));
     };
     loadShows()
-  }, [filterMonth]); // this code reruns when any of these variables change
-
-  useEffect(() => {
-    setFilteredShows(applySorting(filteredShows, searchTerm, searchVenue, sortTerm));
-
-  }, [searchTerm, searchVenue, filterMonth, sortTerm]); // Dependencies to trigger the effect
+  }, [searchTerm, searchVenue, filterMonth, sortTerm]); // this code reruns when any of these variables change
 
 
   return (
@@ -114,7 +148,13 @@ const WeeklyShows: React.FC<{ venues: Venue[] }> = ({ venues}) => {
             <Link to={`/show/${show.theatreShowId}`} key={show.theatreShowId}>
               <div className={styles['show-card']}>
                 <h3>{show.title}</h3>
-                <p>€{show.price.toFixed(2)}</p>
+                {show.showMood === discountMood && (
+                  <><p style={{ textDecoration: 'line-through' }}>€{show.price.toFixed(2)}</p>
+                  <p>€{(show.price * 0.85).toFixed(2)}</p></>
+                )}
+                {show.showMood !== discountMood && (
+                  <p>€{(show.price).toFixed(2)}</p>
+                )}
                 {show.theatreShowDates.length > 0 && (
                   <p>{new Date(show.theatreShowDates[0].dateAndTime).toLocaleString()}</p>
                 )}
