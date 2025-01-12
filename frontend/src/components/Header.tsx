@@ -70,7 +70,13 @@ const Header: React.FC<HeaderProps> = ({ weatherData }) => {
         <Link to="/contact">Contact</Link>
         <Link to="/adminlogin">Admin Login</Link>
         <Link to="/ReservationForm">Reservation Form</Link>
-        <Link to="/ShoppingCart">Shopping Cart</Link>
+        <Link to="/ShoppingCart">
+          <img
+            src={require("./../shopping-cart.png")}
+            alt="Shopping Cart"
+            className={styles["cart-icon"]}
+          />
+        </Link>
       </nav>
     </header>
   );

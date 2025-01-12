@@ -285,3 +285,9 @@ a {
   color: #aaaaaa;
   font-size: 0.9rem;
 }
+
+.cart-icon {
+  width: 25px;
+  height: 25px;
+  object-fit: contain;
+}
