@@ -82,15 +82,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-//     <Router>
-//       <LocationWatcher />
-//       <Routes>
-//         <Route path="/" element={<Home />} />
-//         <Route path="/adminlogin" element={<Login />} />
-//         <Route path="/show/:showId" element={<ShowPage />} />
-//       </Routes>
-//     </Router>
-//   );
-// };
-
-// export default App;

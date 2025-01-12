@@ -5,6 +5,7 @@ import eyeOfRahImg from "./../eye-of-rah.png";
 import hotdayImg from "./../hotday.png";
 import rainImg from "./../rain.png";
 import styles from "./MainPage.module.css";
+import shopping_cart from "./../shopping-cart.png";
 
 interface WeatherData {
   name: string;
@@ -69,7 +70,7 @@ const Header: React.FC<HeaderProps> = ({ weatherData }) => {
         <Link to="/pricing">Prijslijst</Link>
         <Link to="/contact">Contact</Link>
         <Link to="/adminlogin">Admin Login</Link>
-        <Link to="/ReservationForm">Reservation Form</Link>
+        <Link to="/ReservationForm">Reserveren</Link>
         <Link to="/ShoppingCart">
           <img
             src={require("./../shopping-cart.png")}

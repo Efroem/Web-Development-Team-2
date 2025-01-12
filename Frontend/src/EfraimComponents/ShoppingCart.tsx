@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useShoppingCart } from "./ShoppingCartContext";
+import axios from "axios";
 import "../EfraimComponents/Reservation.css";
 
 const ShoppingCart = () => {
@@ -36,6 +37,26 @@ const ShoppingCart = () => {
 
   const handleRemove = (index: number) => {
     removeFromCart(index);
+  };
+
+  const handleCheckout = async () => {
+    try {
+      // Iterate through cart items and send them to the backend
+      for (const item of cartItems) {
+        await axios.post("http://localhost:5097/api/reservations", {
+          AmountOfTickets: item.ticketCount,
+          CustomerId: 1, // Replace with actual customer ID logic
+          TheatreShowDateId: item.dateAndTime, // Map to correct show date ID
+          Used: 0,
+        });
+      }
+
+      alert("Checkout completed successfully. Redirecting to home page...");
+      window.location.href = "/"; // Redirect to home
+    } catch (error) {
+      console.error("Error during checkout:", error);
+      alert("An error occurred during checkout. Please try again.");
+    }
   };
 
   return (
@@ -118,9 +139,7 @@ const ShoppingCart = () => {
         <button onClick={() => (window.location.href = "/ReservationForm")}>
           Add More Reservations
         </button>
-        <button onClick={() => alert("Proceeding to checkout...")}>
-          Checkout
-        </button>
+        <button onClick={handleCheckout}>Checkout</button>
       </div>
     </div>
   );

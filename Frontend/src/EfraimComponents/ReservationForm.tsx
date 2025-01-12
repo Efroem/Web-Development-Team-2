@@ -61,7 +61,7 @@ const ReservationForm = () => {
         ticketCount,
       });
 
-      alert("Item has been added to the shopping cart!");
+      // alert("Item has been added to the shopping cart!");
       setShowPopup(true); // Show the popup after adding to cart
       setSelectedShowId(null);
       setSelectedShowDateId(null);
@@ -147,10 +147,8 @@ const ReservationForm = () => {
       {showPopup && (
         <div className="popup">
           <div className="popup-content">
-            <p>What would you like to do next?</p>
-            <button onClick={() => (window.location.href = "/")}>
-              Go Back Home
-            </button>
+            <p>Ticket Added to Shopping Cart!</p>
+            <button onClick={() => (window.location.href = "/")}>Home</button>
             <button onClick={() => (window.location.href = "/ShoppingCart")}>
               Look at My Shopping Cart
             </button>
