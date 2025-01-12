@@ -1,38 +1,92 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useShoppingCart } from "./ShoppingCartContext";
+import "./App.css";
+
+interface ShowDate {
+  id: number;
+  showName: string;
+  date: string;
+}
 
 const ReservationForm = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [showId, setShowId] = useState("");
-  const [date, setDate] = useState("");
-  const [tickets, setTickets] = useState(1);
+  const { addToCart } = useShoppingCart();
+  const [showDates, setShowDates] = useState<ShowDate[]>([]);
+  const [selectedShowDateId, setSelectedShowDateId] = useState<number | null>(
+    null
+  );
+  const [ticketCount, setTicketCount] = useState<number>(1);
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  useEffect(() => {
+    fetch("/api/showdates")
+      .then((response) => response.json())
+      .then((data) => setShowDates(data));
+  }, []);
+
+  const handleAddToCart = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const reservation = { name, email, showId, date, tickets };
-
-    // Save to local storage as a shopping cart item
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-    cart.push(reservation);
-    localStorage.setItem("cart", JSON.stringify(cart));
-
-    alert("Ticket added to cart!");
+    if (selectedShowDateId) {
+      addToCart({
+        firstName,
+        lastName,
+        email,
+        reservations: [
+          {
+            showDateId: selectedShowDateId,
+            ticketCount,
+          },
+        ],
+      });
+      setSelectedShowDateId(null);
+      setTicketCount(1);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Reserve a Ticket</h2>
-      <div>
-        <label>Name:</label>
+    <div className="reservation-form">
+      <form onSubmit={handleAddToCart}>
+        <label>Show Date:</label>
+        <select
+          value={selectedShowDateId || ""}
+          onChange={(e) => setSelectedShowDateId(parseInt(e.target.value))}
+          required
+        >
+          <option value="">Select a show date</option>
+          {showDates.map((show) => (
+            <option key={show.id} value={show.id}>
+              {show.showName} - {show.date}
+            </option>
+          ))}
+        </select>
+
+        <label>Ticket Count:</label>
         <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          type="number"
+          min="1"
+          value={ticketCount}
+          onChange={(e) => setTicketCount(parseInt(e.target.value))}
           required
         />
-      </div>
-      <div>
+
+        <label>First Name:</label>
+        <input
+          type="text"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          required
+        />
+
+        <label>Last Name:</label>
+        <input
+          type="text"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          required
+        />
+
         <label>Email:</label>
         <input
           type="email"
@@ -40,37 +94,10 @@ const ReservationForm = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-      </div>
-      <div>
-        <label>Show ID:</label>
-        <input
-          type="text"
-          value={showId}
-          onChange={(e) => setShowId(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label>Date:</label>
-        <input
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label>Number of Tickets:</label>
-        <input
-          type="number"
-          value={tickets}
-          onChange={(e) => setTickets(parseInt(e.target.value))}
-          min="1"
-          required
-        />
-      </div>
-      <button type="submit">Add to Cart</button>
-    </form>
+
+        <button type="submit">Add to Cart</button>
+      </form>
+    </div>
   );
 };
 

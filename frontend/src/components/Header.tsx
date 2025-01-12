@@ -1,10 +1,10 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import scatteredCloudsImg from './../scatteredclouds.png';
-import eyeOfRahImg from './../eye-of-rah.png';
-import hotdayImg from './../hotday.png';
-import rainImg from './../rain.png';
-import styles from './MainPage.module.css';
+import React from "react";
+import { Link } from "react-router-dom";
+import scatteredCloudsImg from "./../scatteredclouds.png";
+import eyeOfRahImg from "./../eye-of-rah.png";
+import hotdayImg from "./../hotday.png";
+import rainImg from "./../rain.png";
+import styles from "./MainPage.module.css";
 
 interface WeatherData {
   name: string;
@@ -33,33 +33,35 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ weatherData }) => {
-
-  let weatherImage = '';
+  let weatherImage = "";
 
   if (weatherData) {
     const weatherType = weatherData.weather[0].main.toLowerCase();
     const temperature = weatherData.main.temp;
 
-    if (weatherType === 'clear' && temperature >= 25) {
+    if (weatherType === "clear" && temperature >= 25) {
       weatherImage = hotdayImg;
-    } else if (weatherType === 'clouds') {
+    } else if (weatherType === "clouds") {
       weatherImage = scatteredCloudsImg;
-    } else if (weatherType === 'rain') {
+    } else if (weatherType === "rain") {
       weatherImage = rainImg;
     }
   }
 
   return (
     <header
-      className={styles['header']}
+      className={styles["header"]}
       style={{
-        backgroundImage: weatherImage ? `url(${weatherImage})` : 'none',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        backgroundImage: weatherImage ? `url(${weatherImage})` : "none",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
       }}
     >
-      <div className={styles['logo']}>Altijd Volle Bak Theater</div>
-      <nav className={styles['nav']}>
+      <Link to="/" className={styles["logo"]}>
+        Altijd Volle Bak Theater
+      </Link>
+      {/* <div className={styles['logo']}>Altijd Volle Bak Theater</div> */}
+      <nav className={styles["nav"]}>
         <Link to="/">Home</Link>
         <Link to="/shows">Shows</Link>
         <Link to="/news">News</Link>
@@ -67,6 +69,8 @@ const Header: React.FC<HeaderProps> = ({ weatherData }) => {
         <Link to="/pricing">Prijslijst</Link>
         <Link to="/contact">Contact</Link>
         <Link to="/adminlogin">Admin Login</Link>
+        <Link to="/ReservationForm">Reservation Form</Link>
+        <Link to="/ShoppingCart">Shopping Cart</Link>
       </nav>
     </header>
   );
