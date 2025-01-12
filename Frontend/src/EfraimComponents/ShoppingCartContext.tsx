@@ -27,6 +27,7 @@ interface ShoppingCartContextType {
   addToCart: (reservation: Reservation) => void;
   updateCartItem: (index: number, updatedReservation: Reservation) => void;
   removeFromCart: (index: number) => void;
+  clearCart: () => void; // New method to clear the cart
   setCustomerDetails: (details: CustomerDetails) => void;
   customerDetails: CustomerDetails;
 }
@@ -76,6 +77,10 @@ export const ShoppingCartProvider = ({ children }: { children: ReactNode }) => {
     setCartItems(updatedCart);
   };
 
+  const clearCart = () => {
+    setCartItems([]); // Clear the cart
+  };
+
   const setCustomerDetails = (details: CustomerDetails) => {
     setCustomerDetailsState(details);
   };
@@ -87,6 +92,7 @@ export const ShoppingCartProvider = ({ children }: { children: ReactNode }) => {
         addToCart,
         updateCartItem,
         removeFromCart,
+        clearCart, // Expose the clearCart method
         setCustomerDetails,
         customerDetails,
       }}

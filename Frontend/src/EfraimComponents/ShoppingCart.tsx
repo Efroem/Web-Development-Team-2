@@ -5,7 +5,8 @@ import "../EfraimComponents/Reservation.css";
 import "./ShoppingCart.css"; // Add a custom CSS file for styling
 
 const ShoppingCart = () => {
-  const { cartItems, updateCartItem, removeFromCart } = useShoppingCart();
+  const { cartItems, updateCartItem, removeFromCart, clearCart } =
+    useShoppingCart();
   const [editingIndex, setEditingIndex] = useState<number | null>(null); // Track which reservation is being edited
   const [editingItem, setEditingItem] = useState<any>(null); // Store the current item being edited
 
@@ -78,7 +79,12 @@ const ShoppingCart = () => {
       );
 
       alert("Checkout completed successfully. Redirecting to home page...");
-      window.location.href = "/"; // Redirect to home
+
+      // Clear the cart after successful checkout
+      clearCart();
+
+      // Redirect to home
+      window.location.href = "/";
     } catch (error: any) {
       console.error(
         "Error during checkout:",
