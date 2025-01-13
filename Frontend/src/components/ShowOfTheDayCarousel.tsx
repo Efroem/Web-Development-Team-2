@@ -69,14 +69,19 @@ const ShowsOfTheDayCarousel: React.FC<{ weatherData: WeatherData | null, venues:
   };
 
   useEffect(() => {
-      const loadShows = async () => {
-        const shows = await sortAndFilterShows(sortTerm, filterMonth, searchTerm, searchVenue)
-        if (shows != undefined) {
-          setFilteredShows(shows);
-        }
-      };
-      loadShows()
-    }, [searchTerm, searchVenue, filterMonth, sortTerm]); // this code reruns when any of these variables change
+    const loadShows = async () => {
+      const shows = await sortAndFilterShows(sortTerm, filterMonth, searchTerm, searchVenue);
+  
+      if (shows) {
+        const currentDate = new Date();
+        const upcomingShows = shows.filter(show =>
+          show.theatreShowDates.some(date => new Date(date.dateAndTime) > currentDate)
+        );
+        setFilteredShows(upcomingShows); // logic for only displaying upcoming shows
+      }
+    };
+    loadShows();
+  }, [searchTerm, searchVenue, filterMonth, sortTerm]);   // this code reruns when any of these variables change
     
   // useEffect(() => {
   //   if (weatherData) {
