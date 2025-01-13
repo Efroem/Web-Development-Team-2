@@ -52,7 +52,8 @@ const Overview: React.FC = () => {
                     {shows.map((show) => (
                         <li key={show.theatreShowId} className={styles.showItem}>
                             <h2 className={styles.showItemTitle}>{show.title}</h2>
-                            <p className={styles.showItemDetails}>{show.description}</p>
+                            <p className={styles.showItemDetails}>Show ID: {show.theatreShowId}</p>
+                            <p className={styles.showItemDetails}>Beschrijving: {show.description}</p>
                             <p className={styles.showItemDetails}>Prijs: €{show.price}</p>
                             <p className={styles.showItemDetails}>Locatie: {show.venue ? show.venue.name : 'Niet beschikbaar'}</p>
                             <ul className={styles.nestedList}>

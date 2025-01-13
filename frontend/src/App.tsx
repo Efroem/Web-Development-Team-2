@@ -16,7 +16,9 @@ import AdminDashboard from './VincentComponents/AdminDashboard';
 import Deleteshows from './VincentComponents/Deleteshows';
 import Overview from './VincentComponents/Overview';
 import axios from "axios";
-import ProtectedRoute from "./VincentComponents/ProtectedRoute";
+import ProtectedRoute from "./VincentComponents/ProtectedRoute"; // Import ProtectedRoute
+import AddShow from "./VincentComponents/AddShows";
+import EditShow from "./VincentComponents/EditShow";
 
 interface WeatherData {
   name: string;
@@ -87,8 +89,38 @@ const App: React.FC = () => {
               </ProtectedRoute>
             }
           />
-          <Route path="/delete" element={<Deleteshows />} />
-          <Route path="/overview" element={<Overview />} />
+          <Route
+            path="/delete"
+            element={
+              <ProtectedRoute>
+                <Deleteshows />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/add"
+            element={
+              <ProtectedRoute>
+                <AddShow />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/overview"
+            element={
+              <ProtectedRoute>
+                <Overview />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/edit"
+            element={
+              <ProtectedRoute>
+                <EditShow />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </Router>
     </ShoppingCartProvider>

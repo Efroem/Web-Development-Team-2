@@ -14,6 +14,14 @@ const AdminDashboard: React.FC = () => {
     navigate("/delete");
   };
 
+  const handleAddShowClick = () => {
+    navigate("/add");
+  };
+
+  const handleEditShowClick = () => {
+    navigate("/edit");
+  };
+
   const handleOverviewClick = () => {
     navigate("/overview");
   };
@@ -22,17 +30,27 @@ const AdminDashboard: React.FC = () => {
     <div className={styles.container}>
       <div className={styles["white-box"]}>
         <h1 className={styles.heading}>Admin Dashboard</h1>
+
+        <button className={styles.createShowButton} onClick={handleAddShowClick}>
+          Voeg shows toe
+        </button>
+
         <button className={styles.createShowButton} onClick={handleDeleteShowClick}>
           Verwijder Shows
         </button>
+
+        <button className={styles.createShowButton} onClick={handleEditShowClick}>
+          Edit Shows
+        </button>
+
         <button className={styles.createShowButton} onClick={handleOverviewClick}>
           Lijst van Shows
         </button>
 
-        {/* Logout Button */}
         <button className={styles.logoutButton} onClick={handleLogout}>
           Logout
         </button>
+
       </div>
     </div>
   );

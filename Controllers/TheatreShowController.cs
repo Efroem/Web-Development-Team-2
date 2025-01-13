@@ -100,7 +100,6 @@ public class TheatreShowController : Controller {
         return addedToDB == true ? Ok(theatreShow) : BadRequest("Failed to add TheatreShow to DB. Entry already exists");
     }
 
-    [AdminOnly]
     [HttpPut("{theatreShowId}")]
     public async Task<IActionResult> UpdateTheatreShow([FromBody] TheatreShow theatreShow, int theatreShowId) {
         // return Ok($"{theatreShowId}");
