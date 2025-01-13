@@ -175,37 +175,35 @@ const ReservationForm = () => {
 
   return (
     <div className={styles.reservationForm}>
+      <h2 className={styles.reservationTitle}>Make a Reservation</h2>
       <form onSubmit={handleAddToCart}>
-        <label className={styles.cartField}>Show:</label>
-        <select
-          value={selectedShowId || ""}
-          onChange={(e) => setSelectedShowId(parseInt(e.target.value))}
-          required
-        >
-          <option value="">Select a show</option>
-          {shows.map((show) => (
-            <option
-              key={show.theatreShowId}
-              value={show.theatreShowId}
-              disabled={show.theatreShowDates.length === 0} // Disable if no future dates
-              style={
-                show.theatreShowDates.length === 0
-                  ? { textDecoration: "line-through", color: "grey" }
-                  : {}
-              }
-            >
-              {show.title}
-            </option>
-          ))}
-        </select>
+        <div className={styles.reservationField}>
+          <label htmlFor="show">Show:</label>
+          <select
+            id="show"
+            value={selectedShowId || ""}
+            onChange={(e) => setSelectedShowId(parseInt(e.target.value))}
+            required
+            className={styles.select}
+          >
+            <option value="">Select a show</option>
+            {shows.map((show) => (
+              <option key={show.theatreShowId} value={show.theatreShowId}>
+                {show.title}
+              </option>
+            ))}
+          </select>
+        </div>
 
         {showDates.length > 0 && (
-          <>
-            <label className={styles.cartField}>Date:</label>
+          <div className={styles.reservationField}>
+            <label htmlFor="date">Date:</label>
             <select
+              id="date"
               value={selectedShowDateId || ""}
               onChange={(e) => setSelectedShowDateId(parseInt(e.target.value))}
               required
+              className={styles.select}
             >
               <option value="">Select a date</option>
               {showDates.map((date) => (
@@ -217,41 +215,57 @@ const ReservationForm = () => {
                 </option>
               ))}
             </select>
-          </>
+          </div>
         )}
 
-        <label className={styles.label}>Ticket Count:</label>
-        <input
-          type="number"
-          min="1"
-          value={ticketCount}
-          onChange={(e) => setTicketCount(parseInt(e.target.value))}
-          required
-        />
+        <div className={styles.reservationField}>
+          <label htmlFor="ticketCount">Ticket Count:</label>
+          <input
+            id="ticketCount"
+            type="number"
+            min="1"
+            value={ticketCount}
+            onChange={(e) => setTicketCount(parseInt(e.target.value))}
+            required
+            className={styles.input}
+          />
+        </div>
 
-        <label className={styles.label}>First Name:</label>
-        <input
-          type="text"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-          required
-        />
+        <div className={styles.reservationField}>
+          <label htmlFor="firstName">First Name:</label>
+          <input
+            id="firstName"
+            type="text"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            required
+            className={styles.input}
+          />
+        </div>
 
-        <label className={styles.label}>Last Name:</label>
-        <input
-          type="text"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-          required
-        />
+        <div className={styles.reservationField}>
+          <label htmlFor="lastName">Last Name:</label>
+          <input
+            id="lastName"
+            type="text"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            required
+            className={styles.input}
+          />
+        </div>
 
-        <label className={styles.label}>Email:</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+        <div className={styles.reservationField}>
+          <label htmlFor="email">Email:</label>
+          <input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className={styles.input}
+          />
+        </div>
 
         {selectedShow && selectedShowDateId && (
           <>
@@ -270,18 +284,26 @@ const ReservationForm = () => {
             <p className={styles.cartField}>€{totalPrice.toFixed(2)}</p>
           </>
         )}
-
-        <button type="submit">Add to Cart</button>
+        <button type="submit" className={styles.button}>
+          Add to Cart
+        </button>
       </form>
 
-      {/* Popup after adding to cart */}
       {showPopup && (
         <div className={styles.popup}>
           <div className={styles.popupContent}>
             <p>Ticket Added to Shopping Cart!</p>
-            <button onClick={() => (window.location.href = "/")}>Home</button>
-            <button onClick={() => (window.location.href = "/ShoppingCart")}>
-              Shopping Cart
+            <button
+              className={styles.popupContentButton}
+              onClick={() => (window.location.href = "/")}
+            >
+              Home
+            </button>
+            <button
+              className={styles.popupContentButton}
+              onClick={() => (window.location.href = "/ShoppingCart")}
+            >
+              Look at My Shopping Cart
             </button>
           </div>
         </div>
