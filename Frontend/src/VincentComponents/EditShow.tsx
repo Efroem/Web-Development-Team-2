@@ -78,7 +78,7 @@ const EditShow: React.FC = () => {
     const { name, value } = event.target;
     setShow(prevState => ({
       ...prevState,
-      [name]: value || ''  // Zorg ervoor dat de waarde altijd een string is
+      [name]: value || ''  
     }));
   };
 
