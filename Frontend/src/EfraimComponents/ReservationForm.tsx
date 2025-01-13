@@ -277,11 +277,11 @@ const ReservationForm = () => {
               <>
                 {selectedShow?.showMood.trim() === discountMood ? (
                   <p className={styles.cartField}>
-                  <span style={{ textDecoration: 'line-through' }}>
-                    ${ticketPrice.toFixed(2)}
-                  </span>{" "}
-                  (15% Off: ${discountedPrice.toFixed(2)})
-                </p>
+                    <span style={{ textDecoration: 'line-through' }}>
+                      €{ticketPrice.toFixed(2)}
+                    </span>{" "}
+                    (€{discountedPrice.toFixed(2)})
+                  </p>
                 ) : (
                   <p className={styles.cartField}>
                     {ticketPrice.toFixed(2)}

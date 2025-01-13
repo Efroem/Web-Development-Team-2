@@ -143,10 +143,10 @@ export const applySorting = (filteredShows: Show[],
           return false;
         }
         if (weatherCondition === 'rain' || weatherCondition === 'clouds') {
-          return show.showMood === 'Sad';
+          return show.showMood.trim() === 'Sad';
         }
         if (weatherCondition === 'clear') {
-          return show.showMood === 'Happy';
+          return show.showMood.trim() === 'Happy';
         }
         return true;
       })
