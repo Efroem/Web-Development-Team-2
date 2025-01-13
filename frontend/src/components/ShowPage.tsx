@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Footer from './Footer';
 import axios from 'axios';
 import styles from './ShowPage.module.css';
 
 interface TheatreShowDate {
   theatreShowDateId: number;
-  dateAndTime: string; // Assuming this is a string formatted as "yyyy-MM-ddTHH:mm:ss"
+  dateAndTime: string;
 }
 
 interface TheatreShow {
@@ -22,46 +22,11 @@ interface TheatreShow {
   theatreShowDates: TheatreShowDate[];
 }
 
-interface WeatherData {
-  name: string;
-  weather: {
-    main: string;
-    description: string;
-    icon: string;
-  }[];
-  main: {
-    temp: number;
-    feels_like: number;
-    temp_min: number;
-    temp_max: number;
-    pressure: number;
-    humidity: number;
-  };
-  wind: {
-    speed: number;
-    deg: number;
-    gust: number;
-  };
-}
-
 const ShowPage: React.FC = () => {
   const { showId } = useParams<{ showId: string }>();
   const [show, setShow] = useState<TheatreShow | null>(null);
   const [loading, setLoading] = useState(true);
-  const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
-
-  useEffect(() => {
-    const fetchWeather = async () => {
-      try {
-        const response = await axios.get('http://localhost:5097/api/v1/Weather');
-        setWeatherData(response.data);
-      } catch (error) {
-        console.error('Error fetching weather data:', error);
-      }
-    };
-
-    fetchWeather();
-  }, []);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchShowDetails = async () => {
@@ -77,6 +42,12 @@ const ShowPage: React.FC = () => {
 
     fetchShowDetails();
   }, [showId]);
+
+  const handleReserveClick = () => {
+    if (show) {
+      navigate(`/ReservationForm?showId=${show.theatreShowId}`);
+    }
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -103,7 +74,7 @@ const ShowPage: React.FC = () => {
             dangerouslySetInnerHTML={{ __html: show.description }}
             className={styles['description']}
           />
-          <button className={styles['reserve-button']}>Reserveren</button>
+          <button className={styles['reserve-button']} onClick={handleReserveClick}>Reserveren</button>
         </div>
         <div className={styles['venue-info']}>
           <h2>Locatie</h2>
