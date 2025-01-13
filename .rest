@@ -1,8 +1,8 @@
 #THEATERSHOWS REQUESTS
-GET http://localhost:5097/api/v1/TheatreShows?startDate=
+GET http://localhost:5097/api/v1/TheatreShows?
 ####
 
-GET http://localhost:5097/api/v1/TheatreShows?startDate=2025-01-01T00:00:00&endDate=2025-01-31T23:59:59
+GET http://localhost:5097/api/v1/TheatreShows?startDate=2025-01-01T00:00:00&endDate=2026-01-31T23:59:59&sortBy=date&ascending=false
 ###
 
 GET http://localhost:5097/api/v1/TheatreShows/Venues
