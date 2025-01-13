@@ -128,184 +128,65 @@ const ShoppingCart = () => {
   return (
     <div className={styles.shoppingCart}>
       <h2 className={styles.cartTitle}>Shopping Cart</h2>
-
       {cartItems.length === 0 ? (
-        <p className={styles.emptyCart}>Your cart is empty.</p>
+        <p>Your cart is empty.</p>
       ) : (
         <div className={styles.cartDetails}>
           {cartItems.map((item, index) => (
-            <div key={index} className={`${styles.cartItem} ${styles.card}`}>
-              {editingIndex === index ? (
-                <>
-                  <div className={styles.cartField}>
-                    <label>First Name:</label>
-                    <input
-                      type="text"
-                      value={editingItem.firstName}
-                      onChange={(e) =>
-                        handleEditChange("firstName", e.target.value)
-                      }
-                    />
-                    {errorMessages.firstName && (
-                      <span className={styles.errorMessage}>
-                        {errorMessages.firstName}
-                      </span>
-                    )}
-                  </div>
-                  <div className={styles.cartField}>
-                    <label>Last Name:</label>
-                    <input
-                      type="text"
-                      value={editingItem.lastName}
-                      onChange={(e) =>
-                        handleEditChange("lastName", e.target.value)
-                      }
-                    />
-                    {errorMessages.lastName && (
-                      <span className={styles.errorMessage}>
-                        {errorMessages.lastName}
-                      </span>
-                    )}
-                  </div>
-                  <div className={styles.cartField}>
-                    <label>Email:</label>
-                    <input
-                      type="email"
-                      value={editingItem.email}
-                      onChange={(e) =>
-                        handleEditChange("email", e.target.value)
-                      }
-                    />
-                    {errorMessages.email && (
-                      <span className={styles.errorMessage}>
-                        {errorMessages.email}
-                      </span>
-                    )}
-                  </div>
-                  <div className={styles.cartField}>
-                    <label>Ticket Count:</label>
-                    <input
-                      type="number"
-                      min="1"
-                      value={editingItem.ticketCount}
-                      onChange={(e) =>
-                        handleEditChange(
-                          "ticketCount",
-                          parseInt(e.target.value)
-                        )
-                      }
-                    />
-                    {errorMessages.ticketCount && (
-                      <span className={styles.errorMessage}>
-                        {errorMessages.ticketCount}
-                      </span>
-                    )}
-                  </div>
-                  <div className={styles.cartField}>
-                    <label>Show:</label>
-                    <p>{item.showTitle}</p>
-                  </div>
-                  <div className={styles.cartField}>
-                    <label>Date:</label>
-                    <p>{new Date(item.dateAndTime).toLocaleString()}</p>
-                  </div>
-                  <div className={styles.cartField}>
-                    <label>Price per Ticket:</label>
-                    <p>€{(item.price || 0).toFixed(2)}</p>
-                  </div>
-                  <div className={styles.cartField}>
-                    <label>Total Price:</label>
-                    <p>
-                      €
-                      {(
-                        (item.price || 0) * (editingItem.ticketCount || 1)
-                      ).toFixed(2)}
-                    </p>
-                  </div>
-                  <div className={styles.cartActions}>
-                    <button className={styles.saveBtn} onClick={saveEdit}>
-                      Save
-                    </button>
-                    <button className={styles.cancelBtn} onClick={cancelEdit}>
-                      Cancel
-                    </button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className={styles.cartField}>
-                    <label>First Name:</label>
-                    <p>{item.firstName}</p>
-                  </div>
-                  <div className={styles.cartField}>
-                    <label>Last Name:</label>
-                    <p>{item.lastName}</p>
-                  </div>
-                  <div className={styles.cartField}>
-                    <label>Email:</label>
-                    <p>{item.email}</p>
-                  </div>
-                  <div className={styles.cartField}>
-                    <label>Ticket Count:</label>
-                    <p>{item.ticketCount}</p>
-                  </div>
-                  <div className={styles.cartField}>
-                    <label>Show:</label>
-                    <p>{item.showTitle}</p>
-                  </div>
-                  <div className={styles.cartField}>
-                    <label>Date:</label>
-                    <p>{new Date(item.dateAndTime).toLocaleString()}</p>
-                  </div>
-                  <div className={styles.cartField}>
-                    <label>Price per Ticket:</label>
-                    <p>€{(item.price || 0).toFixed(2)}</p>
-                  </div>
-                  <div className={styles.cartField}>
-                    <label>Total Price:</label>
-                    <p>
-                      €
-                      {((item.price || 0) * (item.ticketCount || 1)).toFixed(2)}
-                    </p>
-                  </div>
-                  <div className={styles.cartActions}>
-                    <button
-                      className={styles.editBtn}
-                      onClick={() => startEdit(index)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className={styles.removeBtn}
-                      onClick={() => handleRemove(index)}
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </>
-              )}
+            <div key={index} className={styles.cartItem}>
+              <p>
+                <strong>First Name:</strong> {item.firstName}
+              </p>
+              <p>
+                <strong>Last Name:</strong> {item.lastName}
+              </p>
+              <p>
+                <strong>Email:</strong> {item.email}
+              </p>
+              <p>
+                <strong>Show:</strong> {item.showTitle}
+              </p>
+              <p>
+                <strong>Date:</strong>{" "}
+                {new Date(item.dateAndTime).toLocaleString()}
+              </p>
+              <p>
+                <strong>Ticket Count:</strong> {item.ticketCount}
+              </p>
+              <p>
+                <strong>Price per Ticket:</strong> €{item.price}
+              </p>
+              <p>
+                <strong>Total Price:</strong> €
+                {item.price * item.ticketCount}
+              </p>
+              <div className={styles.cartItemActions}>
+                <button
+                  className={`${styles.smallButton}`}
+                  onClick={() => removeFromCart(index)}
+                >
+                  Remove
+                </button>
+              </div>
             </div>
           ))}
-          <div className={styles.cartSummary}>
-            <p>
-              <strong>Total Price:</strong> €{calculateTotalPrice()}
-            </p>
-          </div>
         </div>
       )}
-      <div className={styles.cartFooterActions}>
+      <div className={styles.cartActions}>
         <button
-          className={styles.addReservationsBtn}
+          className={`${styles.button} ${styles.addReservationsBtn}`}
           onClick={() => (window.location.href = "/ReservationForm")}
         >
           Add More Reservations
         </button>
-        <button className={styles.checkoutBtn} onClick={handleCheckout}>
+        <button
+          className={`${styles.button} ${styles.checkoutBtn}`}
+          onClick={handleCheckout}
+        >
           Checkout
         </button>
       </div>
     </div>
   );
 };
-
 export default ShoppingCart;
