@@ -270,18 +270,28 @@ const ReservationForm = () => {
         {selectedShow && selectedShowDateId && (
           <>
             <label className={styles.label}>Price per Ticket:</label>
-            <p className={styles.cartField}>
+            {selectedShow?.showMood !== null && (
+              <>
+                {selectedShow?.showMood.trim() === discountMood ? (
+                  <p className={styles.cartField}>
+                    {ticketPrice.toFixed(2)} (15% Off: ${discountedPrice.toFixed(2)})
+                  </p>
+                ) : (
+                  <p className={styles.cartField}>
+                    {ticketPrice.toFixed(2)}
+                  </p>
+                )}
+              </>
+            )}
+            {/* <p className={styles.cartField}>
               €
               {selectedShow?.showMood === discountMood
                 ? `${ticketPrice.toFixed(
                     2
                   )} (15% Off: ${discountedPrice.toFixed(2)})`
                 : ticketPrice.toFixed(2)}
-            </p>
-            <p>{weatherData === null ? "nee" : weatherData.weather[0].main}</p>
-
-            <label className={styles.label}>Total Price:</label>
-            <p className={styles.cartField}>€{totalPrice.toFixed(2)}</p>
+            </p> */}
+            {/* <p>{weatherData === null ? "nee" : discountMood}</p> */}
           </>
         )}
         <button type="submit" className={styles.button}>
