@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import HeroSection from './HeroSection';
-import Header from './Header';
-import ShowsCarousel from './ShowsCarousel';
-import ShowsOfTheDayCarousel from './ShowOfTheDayCarousel';
-import WeeklyShows from './WeeklyShows';
-import Footer from './Footer';
-import axios from 'axios';
-import styles from './Mainpage.module.css';
+import React, { useEffect, useState } from "react";
+import HeroSection from "./HeroSection";
+import Header from "./Header";
+import ShowsCarousel from "./ShowsCarousel";
+import ShowsOfTheDayCarousel from "./ShowOfTheDayCarousel";
+import WeeklyShows from "./WeeklyShows";
+import Footer from "./Footer";
+import styles from "./Mainpage.module.css";
+import axios from "axios";
 
 interface Show {
   theatreShowId: number; // Added the missing property
@@ -15,9 +15,9 @@ interface Show {
   showMood: string;
   price: number;
   theatreShowDates: {
-    dateAndTime: string
-  } []
-  venue: Venue
+    dateAndTime: string;
+  }[];
+  venue: Venue;
 }
 
 interface WeatherData {
@@ -43,37 +43,29 @@ interface WeatherData {
 }
 
 interface Venue {
-  venueId: number
-  name: string
-  capacity: number
+  venueId: number;
+  name: string;
+  capacity: number;
 }
 
-const Home: React.FC = () => {
+interface HomeProps {
+  weatherData: WeatherData | null;
+}
+
+const Home: React.FC<HomeProps> = ({ weatherData }) => {
   const [shows, setShows] = useState<Show[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [venues, setVenues] = useState<Venue[]>([]);
-
-  useEffect(() => {
-    const fetchWeather = async () => {
-      try {
-        const response = await axios.get('http://localhost:5097/api/v1/Weather'); 
-        setWeatherData(response.data); 
-      } catch (error) {
-        console.error('Error fetching weather data:', error);
-      }
-    };
-
-    fetchWeather();
-  }, []);
 
   useEffect(() => {
     const fetchShows = async () => {
       try {
-        const response = await axios.get<Show[]>('http://localhost:5097/api/v1/TheatreShows');
+        const response = await axios.get<Show[]>(
+          "http://localhost:5097/api/v1/TheatreShows"
+        );
         setShows(response.data);
       } catch (error) {
-        console.error('Error fetching shows:', error);
+        console.error("Error fetching shows:", error);
       } finally {
         setLoading(false);
       }
@@ -85,10 +77,12 @@ const Home: React.FC = () => {
   useEffect(() => {
     const fetchVenues = async () => {
       try {
-        const response = await axios.get<Venue[]>('http://localhost:5097/api/v1/TheatreShows/Venues');
+        const response = await axios.get<Venue[]>(
+          "http://localhost:5097/api/v1/TheatreShows/Venues"
+        );
         setVenues(response.data);
       } catch (error) {
-        console.error('Error fetching shows:', error);
+        console.error("Error fetching venues:", error);
       } finally {
         setLoading(false);
       }
@@ -103,11 +97,10 @@ const Home: React.FC = () => {
 
   return (
     <div>
-      <Header weatherData={weatherData}/>
       <HeroSection />
       <ShowsCarousel />
       <ShowsOfTheDayCarousel venues={venues} weatherData={weatherData} />
-      <WeeklyShows weatherData={weatherData} venues={venues}/>
+      <WeeklyShows weatherData={weatherData} venues={venues} />
       <Footer />
     </div>
   );
