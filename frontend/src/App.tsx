@@ -4,8 +4,8 @@ import Home from './components/Home';
 import Login from './VincentComponents/login';
 import ShowPage from './components/ShowPage';
 import AdminDashboard from './VincentComponents/AdminDashboard';
-import TheatreShows from './VincentComponents/Deleteshows';
-import Overview from './VincentComponents/Overvieuw';
+import Deleteshows from './VincentComponents/Deleteshows';
+import Overview from './VincentComponents/Overview';
 const LocationWatcher: React.FC = () => {
   const location = useLocation();
 
@@ -25,9 +25,8 @@ const App: React.FC = () => {
         <Route path="/adminlogin" element={<Login />} />
         <Route path="/show/:showId" element={<ShowPage />} />
         <Route path="/dashboard" element={<AdminDashboard />} />
-        <Route path="/delete" element={<TheatreShows />} />
+        <Route path="/delete" element={<Deleteshows />} />
         <Route path="/overview" element={<Overview />} />
-
       </Routes>
     </Router>
   );

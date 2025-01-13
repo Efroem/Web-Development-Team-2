@@ -9,8 +9,8 @@ interface Show {
     showMood: string;
     price: number;
     theatreShowDates: {
-        theathershowid: number
-        dateAndTime: string
+        theathershowid: number;
+        dateAndTime: string;
     }[];
     venue: Venue;
 }
@@ -31,7 +31,7 @@ const Overview: React.FC = () => {
                 const response = await axios.get<Show[]>('http://localhost:5097/api/v1/TheatreShows');
                 setShows(response.data); 
             } catch (error: any) {
-                setError(error.message); 
+                setError("Er is een fout opgetreden bij het ophalen van de voorstellingen. Probeer het later opnieuw."); 
             }
         };
 
@@ -39,26 +39,26 @@ const Overview: React.FC = () => {
     }, []); 
 
     if (error) {
-        return <div className={styles.error}>Error: {error}</div>;
+        return <div className={styles.error}>Fout: {error}</div>;
     }
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.header}>All Theatre Shows</h1>
+            <h1 className={styles.header}>Alle Theatervoorstellingen</h1>
             {shows.length === 0 ? (
-                <p className={styles.noShows}>No shows available</p>
+                <p className={styles.noShows}>Geen voorstellingen beschikbaar</p>
             ) : (
                 <ul className={styles.list}>
                     {shows.map((show) => (
                         <li key={show.theatreShowId} className={styles.showItem}>
                             <h2 className={styles.showItemTitle}>{show.title}</h2>
                             <p className={styles.showItemDetails}>{show.description}</p>
-                            <p className={styles.showItemDetails}>Price: ${show.price}</p>
-                            <p className={styles.showItemDetails}>Venue: {show.venue ? show.venue.name : 'Not available'}</p>
+                            <p className={styles.showItemDetails}>Prijs: €{show.price}</p>
+                            <p className={styles.showItemDetails}>Locatie: {show.venue ? show.venue.name : 'Niet beschikbaar'}</p>
                             <ul className={styles.nestedList}>
                                 {show.theatreShowDates?.map((date) => (
                                     <li key={date.theathershowid} className={styles.nestedItem}>
-                                        <p className={styles.nestedItemDetails}>Date: {new Date(date.dateAndTime).toLocaleString()}</p>
+                                        <p className={styles.nestedItemDetails}>Datum: {new Date(date.dateAndTime).toLocaleString()}</p>
                                     </li>
                                 ))}
                             </ul>

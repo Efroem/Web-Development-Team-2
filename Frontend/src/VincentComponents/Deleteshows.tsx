@@ -9,19 +9,19 @@ interface Show {
     showMood: string;
     price: number;
     theatreShowDates: {
-        theathershowid: number
-        dateAndTime: string
-    }[]
-    venue: Venue
+        theathershowid: number;
+        dateAndTime: string;
+    }[];
+    venue: Venue;
 }
 
 interface Venue {
-    venueId: number
-    name: string
-    capacity: number
+    venueId: number;
+    name: string;
+    capacity: number;
 }
 
-const TheatreShows: React.FC = () => {
+const Deleteshows: React.FC = () => {
     const [shows, setShows] = useState<Show[]>([]);
     const [error, setError] = useState<string | null>(null);
 
@@ -31,7 +31,7 @@ const TheatreShows: React.FC = () => {
                 const response = await axios.get<Show[]>('http://localhost:5097/api/v1/TheatreShows');
                 setShows(response.data); 
             } catch (error: any) {
-                setError(error.message); 
+                setError("Er is een fout opgetreden bij het ophalen van de voorstellingen. Probeer het later opnieuw.");
             } finally {
             }
         };
@@ -40,43 +40,41 @@ const TheatreShows: React.FC = () => {
     }, []); 
 
     const handleDelete = async (id: number) => {
-        const confirmDelete = window.confirm("Are you sure you want to delete this show?");
+        const confirmDelete = window.confirm("Weet je zeker dat je deze voorstelling wilt verwijderen?");
         
         if (!confirmDelete) {
             return;
         }
 
         try {            
-            const response = await axios.delete(`http://localhost:5097/api/v1/TheatreShows/${id}`, {
-            });
-            
+            const response = await axios.delete(`http://localhost:5097/api/v1/TheatreShows/${id}`);
             setShows(shows.filter(show => show.theatreShowId !== id));
         } catch (error: any) {
-            setError("Error deleting show: " + error.message);
+            setError("Fout bij het verwijderen van de voorstelling: " + error.message);
         }
     };
 
     if (error) {
-        return <div className={styles.error}>Error: {error}</div>;
+        return <div className={styles.error}>Fout: {error}</div>;
     }
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.header}>Theatre Shows</h1>
+            <h1 className={styles.header}>Theatervoorstellingen</h1>
             {shows.length === 0 ? (
-                <p className={styles.noShows}>No shows available</p>
+                <p className={styles.noShows}>Geen voorstellingen beschikbaar</p>
             ) : (
                 <ul className={styles.list}>
                     {shows.map((show) => (
                         <li key={show.theatreShowId} className={styles.showItem}>
                             <h2 className={styles.showItemTitle}>{show.title}</h2>
                             <p className={styles.showItemDetails}>{show.description}</p>
-                            <p className={styles.showItemDetails}>Price: ${show.price}</p>
-                            <p className={styles.showItemDetails}>Venue: {show.venue ? show.venue.name : 'Not available'}</p>
+                            <p className={styles.showItemDetails}>Prijs: €{show.price}</p>
+                            <p className={styles.showItemDetails}>Locatie: {show.venue ? show.venue.name : 'Niet beschikbaar'}</p>
                             <ul className={styles.nestedList}>
                                 {show.theatreShowDates?.map((date) => (
                                     <li key={date.theathershowid} className={styles.nestedItem}>
-                                        <p className={styles.nestedItemDetails}>Date: {new Date(date.dateAndTime).toLocaleString()}</p>
+                                        <p className={styles.nestedItemDetails}>Datum: {new Date(date.dateAndTime).toLocaleString()}</p>
                                     </li>
                                 ))}
                             </ul>
@@ -84,7 +82,7 @@ const TheatreShows: React.FC = () => {
                                 className={styles.deleteButton} 
                                 onClick={() => handleDelete(show.theatreShowId)}
                             >
-                                Delete
+                                Verwijderen
                             </button>
                         </li>
                     ))}
@@ -94,4 +92,4 @@ const TheatreShows: React.FC = () => {
     );
 };
 
-export default TheatreShows;
+export default Deleteshows;

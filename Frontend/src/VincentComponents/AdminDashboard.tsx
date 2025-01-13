@@ -17,10 +17,10 @@ const AdminDashboard = () => {
       <div className={styles["white-box"]}> {/* White box container */}
         <h1 className={styles.heading}>Admin Dashboard</h1>
         <button className={styles.createShowButton} onClick={handleDeleteShowClick}>
-          Delete Show
+          Verwijder Shows
         </button>
         <button className={styles.createShowButton} onClick={HandleOverviewClick}>
-          List of Shows
+          Lijst van Shows
         </button>
       </div>
     </div>

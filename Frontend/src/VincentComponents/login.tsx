@@ -19,7 +19,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     if (!user || !password) {
-      setError("Please enter both username and password!");
+      setError("Vul zowel gebruikersnaam als wachtwoord in!");
       return;
     }
 
@@ -34,15 +34,15 @@ const Login = () => {
 
       if (response.status === 200) {
         setError("");
-        navigate("/");
+        navigate("/dashboard");
       } else {
-        setError(response.data.message || "Invalid username or password!");
+        setError("Ongeldige gebruikersnaam of wachtwoord!");
       }
     } catch (error: any) {
       if (error.response) {
-        setError(error.response.data.message || "Invalid username or password!");
+        setError("Ongeldige gebruikersnaam of wachtwoord!");
       } else {
-        setError("An unexpected error occurred. Please try again.");
+        setError("Er is een onverwachte fout opgetreden. Probeer het opnieuw.");
       }
     }
   };
@@ -50,19 +50,19 @@ const Login = () => {
   return (
     <div className={styles["full-screen-container"]}>
       <div className={styles["login-container"]}>
-        <h1>Admin Login System</h1>
+        <h1>Admin Login Systeem</h1>
         <input
           type="text"
           value={user}
           onChange={SetUserChange}
-          placeholder="Enter username"
+          placeholder="Voer gebruikersnaam in"
           className={styles["input-field"]}
         />
         <input
           type="password"
           value={password}
           onChange={SetPasswordChange}
-          placeholder="Enter password"
+          placeholder="Voer wachtwoord in"
           className={styles["input-field"]}
         />
         <button onClick={handleLogin} className={styles["login-button"]}>
