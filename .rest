@@ -39,15 +39,31 @@ Content-Type: application/json
 
 ####
 
-PUT http://localhost:5097/api/v1/TheatreShows/14
+PUT http://localhost:5097/api/v1/TheatreShows/8
 Content-Type: application/json
 
 {
-    "Title": "The Lion King",
-    "Description": "Stap in de wereld van de Afrikaanse savanne en ervaar het magische verhaal van Simba. Deze wereldberoemde musical combineert indrukwekkende muziek, adembenemende decors en een verhaal dat je raakt.",
-    "Price": 4.20,
-    "VenueId": 1
+  "theatreShowId": 8,
+  "title": "Updated Show Title",
+  "description": "Updated Show Description",
+  "price": 50.0,
+  "venueId": 2,
+  "theatreShowDates": [
+    {
+      "theatreShowDateId": 16,
+      "dateAndTime": "2025-10-10T19:00:00"
+    },
+    {
+      "theatreShowDateId": 15,
+      "dateAndTime": "2025-11-11T20:00:00"
+    },
+    {
+      "dateAndTime": "2025-12-12T21:00:00"
+    }
+  ]
 }
+
+
 ####
 
 DELETE http://localhost:5097/api/v1/TheatreShows/5
