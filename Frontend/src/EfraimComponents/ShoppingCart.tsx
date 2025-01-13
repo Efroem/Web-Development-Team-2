@@ -134,43 +134,120 @@ const ShoppingCart = () => {
         <div className={styles.cartDetails}>
           {cartItems.map((item, index) => (
             <div key={index} className={styles.cartItem}>
-              <p>
-                <strong>First Name:</strong> {item.firstName}
-              </p>
-              <p>
-                <strong>Last Name:</strong> {item.lastName}
-              </p>
-              <p>
-                <strong>Email:</strong> {item.email}
-              </p>
-              <p>
-                <strong>Show:</strong> {item.showTitle}
-              </p>
-              <p>
-                <strong>Date:</strong>{" "}
-                {new Date(item.dateAndTime).toLocaleString()}
-              </p>
-              <p>
-                <strong>Ticket Count:</strong> {item.ticketCount}
-              </p>
-              <p>
-                <strong>Price per Ticket:</strong> €{item.price}
-              </p>
-              <p>
-                <strong>Total Price:</strong> €
-                {item.price * item.ticketCount}
-              </p>
-              <div className={styles.cartItemActions}>
-                <button
-                  className={`${styles.smallButton}`}
-                  onClick={() => removeFromCart(index)}
-                >
-                  Remove
-                </button>
-              </div>
+              {editingIndex === index ? (
+                <>
+                  <label>
+                    <strong>First Name:</strong>
+                    <input
+                      type="text"
+                      value={editingItem.firstName}
+                      onChange={(e) =>
+                        handleEditChange("firstName", e.target.value)
+                      }
+                      className={styles.input}
+                    />
+                  </label>
+                  <label>
+                    <strong>Last Name:</strong>
+                    <input
+                      type="text"
+                      value={editingItem.lastName}
+                      onChange={(e) =>
+                        handleEditChange("lastName", e.target.value)
+                      }
+                      className={styles.input}
+                    />
+                  </label>
+                  <label>
+                    <strong>Email:</strong>
+                    <input
+                      type="email"
+                      value={editingItem.email}
+                      onChange={(e) =>
+                        handleEditChange("email", e.target.value)
+                      }
+                      className={styles.input}
+                    />
+                  </label>
+                  <label>
+                    <strong>Ticket Count:</strong>
+                    <input
+                      type="number"
+                      min="1"
+                      value={editingItem.ticketCount}
+                      onChange={(e) =>
+                        handleEditChange("ticketCount", parseInt(e.target.value))
+                      }
+                      className={styles.input}
+                    />
+                  </label>
+                  <div className={styles.cartItemActions}>
+                    <button
+                      className={`${styles.smallButton} ${styles.saveBtn}`}
+                      onClick={saveEdit}
+                    >
+                      Save
+                    </button>
+                    <button
+                      className={`${styles.smallButton} ${styles.cancelBtn}`}
+                      onClick={cancelEdit}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p>
+                    <strong>First Name:</strong> {item.firstName}
+                  </p>
+                  <p>
+                    <strong>Last Name:</strong> {item.lastName}
+                  </p>
+                  <p>
+                    <strong>Email:</strong> {item.email}
+                  </p>
+                  <p>
+                    <strong>Show:</strong> {item.showTitle}
+                  </p>
+                  <p>
+                    <strong>Date:</strong>{" "}
+                    {new Date(item.dateAndTime).toLocaleString()}
+                  </p>
+                  <p>
+                    <strong>Ticket Count:</strong> {item.ticketCount}
+                  </p>
+                  <p>
+                    <strong>Price per Ticket:</strong> €{item.price}
+                  </p>
+                  <p>
+                    <strong>Total Price:</strong> €
+                    {(item.price * item.ticketCount).toFixed(2)}
+                  </p>
+                  <div className={styles.cartItemActions}>
+                    <button
+                      className={`${styles.smallButton}`}
+                      onClick={() => startEdit(index)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className={`${styles.smallButton}`}
+                      onClick={() => handleRemove(index)}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           ))}
+          <div className={styles.cartTotal}>
+            <p>
+              <strong>Total Price:</strong> €{calculateTotalPrice()}
+            </p>
         </div>
+      </div>
       )}
       <div className={styles.cartActions}>
         <button
