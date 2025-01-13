@@ -32,17 +32,17 @@ const Login = () => {
         }
       );
 
-      if (response.status === 200) {
-        setError("");
-        localStorage.setItem("adminToken", response.data.token);
-        navigate("/dashboard");
+      // Controleer of de backend een foutmelding in de response heeft
+      if (response.data.error) {
+        setError(response.data.error); // Stel foutmelding in
+        return;
       }
+
+      localStorage.setItem("adminToken", response.data.token);
+      setError(""); 
+      navigate("/dashboard");
     } catch (error: any) {
-      if (error.response && error.response.status === 401) {
-        setError("Ongeldige gebruikersnaam of wachtwoord!");
-      } else {
-        setError("Er is een onverwachte fout opgetreden. Probeer het opnieuw.");
-      }
+      setError("Ongeldige naam of wachtwoord!");
     }
   };
 
