@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useShoppingCart } from "./ShoppingCartContext";
-import "../EfraimComponents/Reservation.css";
+import styles from "./checkout.module.css";
 
 interface Show {
   theatreShowId: number;
   title: string;
+  theatreShowDates: ShowDate[];
 }
 
 interface ShowDate {
@@ -26,11 +27,21 @@ const ReservationForm = () => {
   const [email, setEmail] = useState<string>("");
   const [showPopup, setShowPopup] = useState<boolean>(false);
 
-  // Fetch all shows from the backend
+  // Fetch all shows and filter them to include only those with future dates
   useEffect(() => {
     fetch("http://localhost:5097/api/v1/TheatreShows")
       .then((response) => response.json())
-      .then((data) => setShows(data))
+      .then((data) => {
+        const now = new Date();
+        const filteredShows = data.filter((show: Show) => {
+          const futureDates = (show.theatreShowDates || []).filter(
+            (date) => new Date(date.dateAndTime) > now
+          );
+          show.theatreShowDates = futureDates; // Keep only future dates for each show
+          return futureDates.length > 0; // Only include shows with future dates
+        });
+        setShows(filteredShows);
+      })
       .catch((error) => console.error("Error fetching shows:", error));
   }, []);
 
@@ -39,7 +50,13 @@ const ReservationForm = () => {
     if (selectedShowId) {
       fetch(`http://localhost:5097/api/v1/TheatreShows/${selectedShowId}`)
         .then((response) => response.json())
-        .then((data) => setShowDates(data.theatreShowDates || []))
+        .then((data) => {
+          const now = new Date();
+          const futureDates = (data.theatreShowDates || []).filter(
+            (date: { dateAndTime: string }) => new Date(date.dateAndTime) > now
+          );
+          setShowDates(futureDates);
+        })
         .catch((error) => console.error("Error fetching show dates:", error));
     } else {
       setShowDates([]);
@@ -50,7 +67,6 @@ const ReservationForm = () => {
     e.preventDefault();
 
     if (selectedShowId && selectedShowDateId) {
-      // Add the reservation to the cart, including customer details
       addToCart({
         showTitle:
           shows.find((show) => show.theatreShowId === selectedShowId)?.title ||
@@ -65,21 +81,6 @@ const ReservationForm = () => {
         lastName: lastName.trim(),
         email: email.trim(),
       });
-
-      console.log("Reservation Added to Cart:", {
-        showTitle:
-          shows.find((show) => show.theatreShowId === selectedShowId)?.title ||
-          "",
-        dateAndTime:
-          showDates.find(
-            (date) => date.theatreShowDateId === selectedShowDateId
-          )?.dateAndTime || "",
-        ticketCount,
-        showDateId: selectedShowDateId,
-        firstName: firstName.trim(),
-        lastName: lastName.trim(),
-        email: email.trim(),
-      }); // Debugging
 
       setShowPopup(true); // Show the popup after adding to cart
 
@@ -96,7 +97,7 @@ const ReservationForm = () => {
   };
 
   return (
-    <div className="reservation-form">
+    <div className={styles.reservationForm}>
       <form onSubmit={handleAddToCart}>
         <label>Show:</label>
         <select
@@ -106,7 +107,16 @@ const ReservationForm = () => {
         >
           <option value="">Select a show</option>
           {shows.map((show) => (
-            <option key={show.theatreShowId} value={show.theatreShowId}>
+            <option
+              key={show.theatreShowId}
+              value={show.theatreShowId}
+              disabled={show.theatreShowDates.length === 0} // Disable if no future dates
+              style={
+                show.theatreShowDates.length === 0
+                  ? { textDecoration: "line-through", color: "grey" }
+                  : {}
+              }
+            >
               {show.title}
             </option>
           ))}
@@ -171,8 +181,8 @@ const ReservationForm = () => {
 
       {/* Popup after adding to cart */}
       {showPopup && (
-        <div className="popup">
-          <div className="popup-content">
+        <div className={styles.popup}>
+          <div className={styles.popupContent}>
             <p>Ticket Added to Shopping Cart!</p>
             <button onClick={() => (window.location.href = "/")}>Home</button>
             <button onClick={() => (window.location.href = "/ShoppingCart")}>

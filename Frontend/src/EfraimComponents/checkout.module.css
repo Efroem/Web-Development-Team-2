@@ -1,0 +1,199 @@
+/* General Container Styles */
+.shoppingCart, .reservationForm {
+  max-width: 700px;
+  margin: 20px auto;
+  padding: 25px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: #fefefe; /* Slightly off-white for warmth */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  font-family: "Roboto", Arial, sans-serif;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.shoppingCart:hover, .reservationForm:hover {
+  transform: scale(1.01);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Titles */
+.cartTitle, .reservationTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #222;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+/* Labels and Text */
+.cartField label {
+  font-weight: 600;
+  color: #555;
+  display: block;
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+
+.cartField p,
+input,
+select,
+button {
+  color: #333;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Fields */
+input,
+select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus,
+select:focus {
+  border-color: #3498db;
+  outline: none;
+  box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+/* Buttons */
+button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #2980b9;
+  transform: scale(1.05);
+}
+
+.saveBtn {
+  background-color: #2ecc71;
+}
+
+.saveBtn:hover {
+  background-color: #27ae60;
+}
+
+.cancelBtn {
+  background-color: #e74c3c;
+}
+
+.cancelBtn:hover {
+  background-color: #c0392b;
+}
+
+.addReservationsBtn,
+.checkoutBtn {
+  width: 48%;
+  margin: 15px 1%;
+  font-size: 1rem;
+}
+
+.addReservationsBtn {
+  background-color: #ff7675;
+}
+
+.addReservationsBtn:hover {
+  background-color: #d63031;
+}
+
+/* Empty Cart Message */
+.emptyCart {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #777;
+  margin-top: 30px;
+}
+
+/* Cart Items */
+.cartDetails {
+  margin-top: 20px;
+}
+
+.cartItem {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #fafafa;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cartItem:hover {
+  background-color: #f1f1f1;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cartItem p {
+  margin: 8px 0;
+}
+
+.cartActions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cartFooterActions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 25px;
+}
+
+/* Popup Styling */
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 25px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.popupContent {
+  text-align: center;
+}
+
+.popupContentButton {
+  margin: 10px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.popupContentButton:hover {
+  background-color: #2980b9;
+  transform: scale(1.05);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}

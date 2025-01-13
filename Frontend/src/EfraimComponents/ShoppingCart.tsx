@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useShoppingCart } from "../EfraimComponents/ShoppingCartContext";
 import axios from "axios";
-import "../EfraimComponents/Reservation.css";
-import "./ShoppingCart.css"; // Add a custom CSS file for styling
+import styles from "./checkout.module.css";
 
 const ShoppingCart = () => {
   const { cartItems, updateCartItem, removeFromCart, clearCart } =
@@ -97,18 +96,18 @@ const ShoppingCart = () => {
   };
 
   return (
-    <div className="shopping-cart">
-      <h2 className="cart-title">Shopping Cart</h2>
+    <div className={styles.shoppingCart}>
+      <h2 className={styles.cartTitle}>Shopping Cart</h2>
 
       {cartItems.length === 0 ? (
-        <p className="empty-cart">Your cart is empty.</p>
+        <p className={styles.emptyCart}>Your cart is empty.</p>
       ) : (
-        <div className="cart-details">
+        <div className={styles.cartDetails}>
           {cartItems.map((item, index) => (
-            <div key={index} className="cart-item card">
+            <div key={index} className={`${styles.cartItem} ${styles.card}`}>
               {editingIndex === index ? (
                 <>
-                  <div className="cart-field">
+                  <div className={styles.cartField}>
                     <label>First Name:</label>
                     <input
                       type="text"
@@ -118,7 +117,7 @@ const ShoppingCart = () => {
                       }
                     />
                   </div>
-                  <div className="cart-field">
+                  <div className={styles.cartField}>
                     <label>Last Name:</label>
                     <input
                       type="text"
@@ -128,7 +127,7 @@ const ShoppingCart = () => {
                       }
                     />
                   </div>
-                  <div className="cart-field">
+                  <div className={styles.cartField}>
                     <label>Email:</label>
                     <input
                       type="email"
@@ -138,15 +137,15 @@ const ShoppingCart = () => {
                       }
                     />
                   </div>
-                  <div className="cart-field">
+                  <div className={styles.cartField}>
                     <label>Show:</label>
                     <p>{item.showTitle}</p>
                   </div>
-                  <div className="cart-field">
+                  <div className={styles.cartField}>
                     <label>Date:</label>
                     <p>{new Date(item.dateAndTime).toLocaleString()}</p>
                   </div>
-                  <div className="cart-field">
+                  <div className={styles.cartField}>
                     <label>Ticket Count:</label>
                     <input
                       type="number"
@@ -160,50 +159,50 @@ const ShoppingCart = () => {
                       }
                     />
                   </div>
-                  <div className="cart-actions">
-                    <button className="btn save-btn" onClick={saveEdit}>
+                  <div className={styles.cartActions}>
+                    <button className={styles.saveBtn} onClick={saveEdit}>
                       Save
                     </button>
-                    <button className="btn cancel-btn" onClick={cancelEdit}>
+                    <button className={styles.cancelBtn} onClick={cancelEdit}>
                       Cancel
                     </button>
                   </div>
                 </>
               ) : (
                 <>
-                  <div className="cart-field">
+                  <div className={styles.cartField}>
                     <label>First Name:</label>
                     <p>{item.firstName}</p>
                   </div>
-                  <div className="cart-field">
+                  <div className={styles.cartField}>
                     <label>Last Name:</label>
                     <p>{item.lastName}</p>
                   </div>
-                  <div className="cart-field">
+                  <div className={styles.cartField}>
                     <label>Email:</label>
                     <p>{item.email}</p>
                   </div>
-                  <div className="cart-field">
+                  <div className={styles.cartField}>
                     <label>Show:</label>
                     <p>{item.showTitle}</p>
                   </div>
-                  <div className="cart-field">
+                  <div className={styles.cartField}>
                     <label>Date:</label>
                     <p>{new Date(item.dateAndTime).toLocaleString()}</p>
                   </div>
-                  <div className="cart-field">
+                  <div className={styles.cartField}>
                     <label>Ticket Count:</label>
                     <p>{item.ticketCount}</p>
                   </div>
-                  <div className="cart-actions">
+                  <div className={styles.cartActions}>
                     <button
-                      className="btn edit-btn"
+                      className={styles.editBtn}
                       onClick={() => startEdit(index)}
                     >
                       Edit
                     </button>
                     <button
-                      className="btn remove-btn"
+                      className={styles.removeBtn}
                       onClick={() => handleRemove(index)}
                     >
                       Remove
@@ -215,14 +214,14 @@ const ShoppingCart = () => {
           ))}
         </div>
       )}
-      <div className="cart-footer-actions">
+      <div className={styles.cartFooterActions}>
         <button
-          className="btn add-reservations-btn"
+          className={styles.addReservationsBtn}
           onClick={() => (window.location.href = "/ReservationForm")}
         >
           Add More Reservations
         </button>
-        <button className="btn checkout-btn" onClick={handleCheckout}>
+        <button className={styles.checkoutBtn} onClick={handleCheckout}>
           Checkout
         </button>
       </div>
