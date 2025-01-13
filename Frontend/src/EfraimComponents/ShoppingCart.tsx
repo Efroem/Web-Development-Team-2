@@ -133,54 +133,81 @@ const ShoppingCart = () => {
       ) : (
         <div className={styles.cartDetails}>
           {cartItems.map((item, index) => (
-            <div key={index} className={styles.cartItem}>
+            <div key={index} className={`${styles.cartItem} ${styles.card}`}>
               {editingIndex === index ? (
                 <>
-                  <label>
-                    <strong>First Name:</strong>
-                    <input
-                      type="text"
-                      value={editingItem.firstName}
-                      onChange={(e) =>
-                        handleEditChange("firstName", e.target.value)
-                      }
-                      className={styles.input}
-                    />
-                  </label>
-                  <label>
-                    <strong>Last Name:</strong>
-                    <input
-                      type="text"
-                      value={editingItem.lastName}
-                      onChange={(e) =>
-                        handleEditChange("lastName", e.target.value)
-                      }
-                      className={styles.input}
-                    />
-                  </label>
-                  <label>
-                    <strong>Email:</strong>
-                    <input
-                      type="email"
-                      value={editingItem.email}
-                      onChange={(e) =>
-                        handleEditChange("email", e.target.value)
-                      }
-                      className={styles.input}
-                    />
-                  </label>
-                  <label>
-                    <strong>Ticket Count:</strong>
-                    <input
-                      type="number"
-                      min="1"
-                      value={editingItem.ticketCount}
-                      onChange={(e) =>
-                        handleEditChange("ticketCount", parseInt(e.target.value))
-                      }
-                      className={styles.input}
-                    />
-                  </label>
+                  <div className={styles.cartField}>
+                    <label>
+                      <strong>First Name:</strong>
+                      <input
+                        type="text"
+                        value={editingItem.firstName}
+                        onChange={(e) =>
+                          handleEditChange("firstName", e.target.value)
+                        }
+                      />
+                      {errorMessages.firstName && (
+                        <span className={styles.errorMessage}>
+                          {errorMessages.firstName}
+                        </span>
+                      )}
+                    </label>
+                  </div>
+                  <div className={styles.cartField}>
+                    <label>
+                      <strong>Last Name:</strong>
+                      <input
+                        type="text"
+                        value={editingItem.lastName}
+                        onChange={(e) =>
+                          handleEditChange("lastName", e.target.value)
+                        }
+                      />
+                      {errorMessages.lastName && (
+                        <span className={styles.errorMessage}>
+                          {errorMessages.lastName}
+                        </span>
+                      )}
+                    </label>
+                  </div>
+                  <div className={styles.cartField}>
+                    <label>
+                      <strong>Email:</strong>
+                      <input
+                        type="email"
+                        value={editingItem.email}
+                        onChange={(e) =>
+                          handleEditChange("email", e.target.value)
+                        }
+                      />
+                      {errorMessages.email && (
+                        <span className={styles.errorMessage}>
+                          {errorMessages.email}
+                        </span>
+                      )}
+                    </label>
+                  </div>
+                  <div className={styles.cartField}>
+                    <label>
+                      <strong>Ticket Count:</strong>
+                      <input
+                        type="number"
+                        min="1"
+                        value={editingItem.ticketCount}
+                        onChange={(e) =>
+                          handleEditChange(
+                            "ticketCount",
+                            parseInt(e.target.value)
+                          )
+                        }
+                      />
+                      {errorMessages.ticketCount && (
+                        <span className={styles.errorMessage}>
+                          {errorMessages.ticketCount}
+                        </span>
+                      )}
+                    </label>
+                  </div>
                   <div className={styles.cartItemActions}>
                     <button
                       className={`${styles.smallButton} ${styles.saveBtn}`}
@@ -246,8 +273,8 @@ const ShoppingCart = () => {
             <p>
               <strong>Total Price:</strong> €{calculateTotalPrice()}
             </p>
+          </div>
         </div>
-      </div>
       )}
       <div className={styles.cartActions}>
         <button
