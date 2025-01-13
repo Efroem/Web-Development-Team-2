@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useShoppingCart } from "./ShoppingCartContext";
 import styles from "./checkout.module.css";
 import axios from "axios";
+import { useSearchParams } from "react-router-dom";
 
 interface Show {
   theatreShowId: number;
@@ -53,6 +54,7 @@ const ReservationForm = () => {
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [discountMood, setDiscountMood] = useState("");
+  const [searchParams] = useSearchParams();
 
   const selectedShow = shows.find(
     (show) => show.theatreShowId === selectedShowId
@@ -131,6 +133,15 @@ const ReservationForm = () => {
     };
     setMood();
   }, [weatherData]);
+
+  // Fetch reservation button ShowID
+  useEffect(() => {
+    const initialShowId = searchParams.get("showId");
+    if (initialShowId) {
+      setSelectedShowId(parseInt(initialShowId));
+    }
+  }, [searchParams]);
+
 
   const handleAddToCart = (e: React.FormEvent) => {
     e.preventDefault();
