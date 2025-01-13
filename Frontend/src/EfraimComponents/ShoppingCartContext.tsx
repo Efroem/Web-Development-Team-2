@@ -14,6 +14,8 @@ interface Reservation {
   firstName: string;
   lastName: string;
   email: string;
+  price: number;
+  discountedPrice?: number;
 }
 
 interface CustomerDetails {
@@ -62,7 +64,16 @@ export const ShoppingCartProvider = ({ children }: { children: ReactNode }) => {
   }, [customerDetails]);
 
   const addToCart = (reservation: Reservation) => {
-    setCartItems([...cartItems, reservation]);
+    const { price, discountedPrice } = reservation;
+
+    if (price === undefined) {
+      console.error("Price is missing for the reservation:", reservation);
+    }
+
+    setCartItems([
+      ...cartItems,
+      { ...reservation, price: price || 0, discountedPrice },
+    ]);
   };
 
   const updateCartItem = (index: number, updatedReservation: Reservation) => {

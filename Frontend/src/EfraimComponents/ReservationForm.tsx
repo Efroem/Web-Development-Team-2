@@ -6,6 +6,7 @@ interface Show {
   theatreShowId: number;
   title: string;
   theatreShowDates: ShowDate[];
+  price: number; // Added price property
 }
 
 interface ShowDate {
@@ -26,6 +27,17 @@ const ReservationForm = () => {
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [showPopup, setShowPopup] = useState<boolean>(false);
+
+  const selectedShow = shows.find(
+    (show) => show.theatreShowId === selectedShowId
+  );
+  const ticketPrice = selectedShow ? selectedShow.price : 0;
+  const isShowOfTheDay =
+    selectedShowId &&
+    selectedShow &&
+    selectedShow.title.includes("Show of the Day");
+  const discountedPrice = isShowOfTheDay ? ticketPrice * 0.85 : ticketPrice;
+  const totalPrice = discountedPrice * ticketCount;
 
   // Fetch all shows and filter them to include only those with future dates
   useEffect(() => {
@@ -67,30 +79,35 @@ const ReservationForm = () => {
     e.preventDefault();
 
     if (selectedShowId && selectedShowDateId) {
+      const selectedShow = shows.find(
+        (show) => show.theatreShowId === selectedShowId
+      );
+      const ticketPrice = selectedShow ? selectedShow.price : 0;
+      const isShowOfTheDay = selectedShow?.title.includes("Show of the Day");
+      const discountedPrice = isShowOfTheDay ? ticketPrice * 0.85 : undefined;
+
       addToCart({
-        showTitle:
-          shows.find((show) => show.theatreShowId === selectedShowId)?.title ||
-          "",
+        showTitle: selectedShow?.title || "",
         dateAndTime:
           showDates.find(
             (date) => date.theatreShowDateId === selectedShowDateId
           )?.dateAndTime || "",
         ticketCount,
-        showDateId: selectedShowDateId, // Include showDateId
-        firstName: firstName.trim(), // Add customer details to the reservation
+        showDateId: selectedShowDateId,
+        firstName: firstName.trim(),
         lastName: lastName.trim(),
         email: email.trim(),
+        price: ticketPrice,
+        discountedPrice,
       });
 
-      setShowPopup(true); // Show the popup after adding to cart
-
-      // Reset the form fields
+      setShowPopup(true);
       setSelectedShowId(null);
       setSelectedShowDateId(null);
       setTicketCount(1);
-      setFirstName(""); // Reset first name
-      setLastName(""); // Reset last name
-      setEmail(""); // Reset email
+      setFirstName("");
+      setLastName("");
+      setEmail("");
     } else {
       alert("Please select a show and date before adding to the cart.");
     }
@@ -175,6 +192,23 @@ const ReservationForm = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
+
+        {selectedShow && selectedShowDateId && (
+          <>
+            <label className={styles.label}>Price per Ticket:</label>
+            <p className={styles.cartField}>
+              $
+              {isShowOfTheDay
+                ? `${ticketPrice.toFixed(
+                    2
+                  )} (15% Off: ${discountedPrice.toFixed(2)})`
+                : ticketPrice.toFixed(2)}
+            </p>
+
+            <label className={styles.label}>Total Price:</label>
+            <p className={styles.cartField}>${totalPrice.toFixed(2)}</p>
+          </>
+        )}
 
         <button type="submit">Add to Cart</button>
       </form>

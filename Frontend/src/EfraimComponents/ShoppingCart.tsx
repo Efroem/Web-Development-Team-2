@@ -6,12 +6,21 @@ import styles from "./checkout.module.css";
 const ShoppingCart = () => {
   const { cartItems, updateCartItem, removeFromCart, clearCart } =
     useShoppingCart();
-  const [editingIndex, setEditingIndex] = useState<number | null>(null); // Track which reservation is being edited
-  const [editingItem, setEditingItem] = useState<any>(null); // Store the current item being edited
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingItem, setEditingItem] = useState<any>(null);
+  const [errorMessages, setErrorMessages] = useState<{ [key: string]: string }>(
+    {}
+  );
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const startEdit = (index: number) => {
     setEditingIndex(index);
-    setEditingItem({ ...cartItems[index] }); // Clone the item for editing
+    setEditingItem({ ...cartItems[index] });
+    setErrorMessages({}); // Clear error messages on edit start
   };
 
   const handleEditChange = (field: string, value: string | number) => {
@@ -25,15 +34,37 @@ const ShoppingCart = () => {
 
   const saveEdit = () => {
     if (editingIndex !== null && editingItem) {
+      const errors: { [key: string]: string } = {};
+
+      if (!editingItem.firstName.trim()) {
+        errors.firstName = "First name is required.";
+      }
+      if (!editingItem.lastName.trim()) {
+        errors.lastName = "Last name is required.";
+      }
+      if (!editingItem.email || !validateEmail(editingItem.email)) {
+        errors.email = "Invalid email format.";
+      }
+      if (editingItem.ticketCount < 1) {
+        errors.ticketCount = "Ticket count cannot be less than 1.";
+      }
+
+      if (Object.keys(errors).length > 0) {
+        setErrorMessages(errors);
+        return;
+      }
+
       updateCartItem(editingIndex, editingItem);
       setEditingIndex(null);
       setEditingItem(null);
+      setErrorMessages({});
     }
   };
 
   const cancelEdit = () => {
     setEditingIndex(null);
     setEditingItem(null);
+    setErrorMessages({}); // Clear error messages on cancel
   };
 
   const handleRemove = (index: number) => {
@@ -42,7 +73,6 @@ const ShoppingCart = () => {
 
   const handleCheckout = async () => {
     try {
-      // Validate that all required fields are filled
       for (const item of cartItems) {
         if (!item.firstName || !item.lastName || !item.email) {
           alert(
@@ -50,18 +80,18 @@ const ShoppingCart = () => {
           );
           return;
         }
+        if (!validateEmail(item.email)) {
+          alert("Invalid email format in one of the reservations.");
+          return;
+        }
       }
 
-      // Extract customer details from the first cart item
       const { firstName, lastName, email } = cartItems[0];
-
-      // Map cart items to reservations
       const reservations = cartItems.map((item) => ({
         showDateId: item.showDateId,
         ticketCount: item.ticketCount,
       }));
 
-      // Build the request body
       const requestBody = {
         firstName,
         lastName,
@@ -69,30 +99,30 @@ const ShoppingCart = () => {
         reservations,
       };
 
-      console.log("Request Body:", requestBody);
-
-      // Send the request
       await axios.post(
         "http://localhost:5097/api/v1/Reservations",
         requestBody
       );
 
       alert("Checkout completed successfully. Redirecting to home page...");
-
-      // Clear the cart after successful checkout
       clearCart();
-
-      // Redirect to home
       window.location.href = "/";
     } catch (error: any) {
       console.error(
         "Error during checkout:",
         error.response?.data || error.message
       );
-      alert(
-        "An error occurred during checkout. Please check the details and try again."
-      );
+      alert("An error occurred during checkout. Please try again.");
     }
+  };
+
+  const calculateTotalPrice = () => {
+    return cartItems
+      .reduce(
+        (total, item) => total + (item.price || 0) * (item.ticketCount || 1),
+        0
+      )
+      .toFixed(2);
   };
 
   return (
@@ -116,6 +146,11 @@ const ShoppingCart = () => {
                         handleEditChange("firstName", e.target.value)
                       }
                     />
+                    {errorMessages.firstName && (
+                      <span className={styles.errorMessage}>
+                        {errorMessages.firstName}
+                      </span>
+                    )}
                   </div>
                   <div className={styles.cartField}>
                     <label>Last Name:</label>
@@ -126,6 +161,11 @@ const ShoppingCart = () => {
                         handleEditChange("lastName", e.target.value)
                       }
                     />
+                    {errorMessages.lastName && (
+                      <span className={styles.errorMessage}>
+                        {errorMessages.lastName}
+                      </span>
+                    )}
                   </div>
                   <div className={styles.cartField}>
                     <label>Email:</label>
@@ -136,14 +176,11 @@ const ShoppingCart = () => {
                         handleEditChange("email", e.target.value)
                       }
                     />
-                  </div>
-                  <div className={styles.cartField}>
-                    <label>Show:</label>
-                    <p>{item.showTitle}</p>
-                  </div>
-                  <div className={styles.cartField}>
-                    <label>Date:</label>
-                    <p>{new Date(item.dateAndTime).toLocaleString()}</p>
+                    {errorMessages.email && (
+                      <span className={styles.errorMessage}>
+                        {errorMessages.email}
+                      </span>
+                    )}
                   </div>
                   <div className={styles.cartField}>
                     <label>Ticket Count:</label>
@@ -158,6 +195,32 @@ const ShoppingCart = () => {
                         )
                       }
                     />
+                    {errorMessages.ticketCount && (
+                      <span className={styles.errorMessage}>
+                        {errorMessages.ticketCount}
+                      </span>
+                    )}
+                  </div>
+                  <div className={styles.cartField}>
+                    <label>Show:</label>
+                    <p>{item.showTitle}</p>
+                  </div>
+                  <div className={styles.cartField}>
+                    <label>Date:</label>
+                    <p>{new Date(item.dateAndTime).toLocaleString()}</p>
+                  </div>
+                  <div className={styles.cartField}>
+                    <label>Price per Ticket:</label>
+                    <p>€{(item.price || 0).toFixed(2)}</p>
+                  </div>
+                  <div className={styles.cartField}>
+                    <label>Total Price:</label>
+                    <p>
+                      €
+                      {(
+                        (item.price || 0) * (editingItem.ticketCount || 1)
+                      ).toFixed(2)}
+                    </p>
                   </div>
                   <div className={styles.cartActions}>
                     <button className={styles.saveBtn} onClick={saveEdit}>
@@ -183,6 +246,10 @@ const ShoppingCart = () => {
                     <p>{item.email}</p>
                   </div>
                   <div className={styles.cartField}>
+                    <label>Ticket Count:</label>
+                    <p>{item.ticketCount}</p>
+                  </div>
+                  <div className={styles.cartField}>
                     <label>Show:</label>
                     <p>{item.showTitle}</p>
                   </div>
@@ -191,8 +258,15 @@ const ShoppingCart = () => {
                     <p>{new Date(item.dateAndTime).toLocaleString()}</p>
                   </div>
                   <div className={styles.cartField}>
-                    <label>Ticket Count:</label>
-                    <p>{item.ticketCount}</p>
+                    <label>Price per Ticket:</label>
+                    <p>€{(item.price || 0).toFixed(2)}</p>
+                  </div>
+                  <div className={styles.cartField}>
+                    <label>Total Price:</label>
+                    <p>
+                      €
+                      {((item.price || 0) * (item.ticketCount || 1)).toFixed(2)}
+                    </p>
                   </div>
                   <div className={styles.cartActions}>
                     <button
@@ -212,6 +286,11 @@ const ShoppingCart = () => {
               )}
             </div>
           ))}
+          <div className={styles.cartSummary}>
+            <p>
+              <strong>Total Price:</strong> €{calculateTotalPrice()}
+            </p>
+          </div>
         </div>
       )}
       <div className={styles.cartFooterActions}>
