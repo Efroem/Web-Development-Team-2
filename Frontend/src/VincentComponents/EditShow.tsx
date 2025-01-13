@@ -25,7 +25,6 @@ const EditShow: React.FC = () => {
   const [isShowLoaded, setIsShowLoaded] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  // Haal locaties op
   useEffect(() => {
     const fetchVenues = async () => {
       try {
@@ -83,8 +82,8 @@ const EditShow: React.FC = () => {
     e.preventDefault();
 
     const price = parseFloat(show.price);
-    if (isNaN(price)) {
-      setFormError("Prijs moet een geldig getal zijn.");
+    if (isNaN(price) || price < 0) {
+      setFormError("Prijs niet lager dan 0");
       return;
     }
 

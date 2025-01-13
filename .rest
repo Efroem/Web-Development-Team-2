@@ -39,7 +39,7 @@ Content-Type: application/json
 
 ####
 
-PUT http://localhost:5097/api/v1/TheatreShows/14
+PUT http://localhost:5097/api/v1/TheatreShows/8
 Content-Type: application/json
 
 {

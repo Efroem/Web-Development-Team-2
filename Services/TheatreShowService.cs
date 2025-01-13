@@ -108,6 +108,8 @@ public class TheatreShowService : ITheatreShowService
         dbContext.Entry(x).CurrentValues["Description"] = theatreShow.Description;
         dbContext.Entry(x).CurrentValues["Price"] = theatreShow.Price;
         dbContext.Entry(x).CurrentValues["VenueId"] = theatreShow.VenueId;
+        dbContext.Entry(x).CurrentValues["Description"] = theatreShow;
+
         int n = dbContext.SaveChanges();
         return n>0;
         throw new NotImplementedException();

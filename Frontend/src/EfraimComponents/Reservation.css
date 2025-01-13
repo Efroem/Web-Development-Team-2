@@ -127,7 +127,7 @@ button:hover {
   background-color: #ff9800;
 }
 
-.cart-actions {
+.cart-actions {  
   margin-top: 20px;
   display: flex;
   justify-content: space-between;

@@ -18,7 +18,7 @@ namespace StarterKit.Controllers
             _loginService = loginService;
         }
 
-
+        
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest request)
         {

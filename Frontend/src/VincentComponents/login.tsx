@@ -32,9 +32,8 @@ const Login = () => {
         }
       );
 
-      // Controleer of de backend een foutmelding in de response heeft
       if (response.data.error) {
-        setError(response.data.error); // Stel foutmelding in
+        setError(response.data.error); 
         return;
       }
 
