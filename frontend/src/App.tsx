@@ -16,6 +16,7 @@ import AdminDashboard from './VincentComponents/AdminDashboard';
 import Deleteshows from './VincentComponents/Deleteshows';
 import Overview from './VincentComponents/Overview';
 import axios from "axios";
+import ProtectedRoute from "./VincentComponents/ProtectedRoute";
 
 interface WeatherData {
   name: string;
@@ -68,20 +69,29 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <Router>
-      <LocationWatcher />
-      <Header weatherData={weatherData}/>
-      <Routes>
-        <Route path="/" element={<Home weatherData={weatherData} />} />
-        <Route path="/adminlogin" element={<Login />} />
-        <Route path="/show/:showId" element={<ShowPage />} />
-        <Route path="/dashboard" element={<AdminDashboard />} />
-        <Route path="/delete" element={<Deleteshows />} />
-        <Route path="/overview" element={<Overview />} />
-        <Route path="/ReservationForm" element={<ReservationForm />} />
-        <Route path="/ShoppingCart" element={<ShoppingCart />} />
-      </Routes>
-    </Router>
+    <ShoppingCartProvider>
+      <Router>
+        <LocationWatcher />
+        <Header weatherData={weatherData} />
+        <Routes>
+          <Route path="/" element={<Home weatherData={weatherData} />} />
+          <Route path="/adminlogin" element={<Login />} />
+          <Route path="/ReservationForm" element={<ReservationForm />} />
+          <Route path="/ShoppingCart" element={<ShoppingCart />} />
+          <Route path="/show/:showId" element={<ShowPage />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/delete" element={<Deleteshows />} />
+          <Route path="/overview" element={<Overview />} />
+        </Routes>
+      </Router>
+    </ShoppingCartProvider>
   );
 };
 

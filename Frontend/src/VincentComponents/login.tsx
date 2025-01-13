@@ -25,7 +25,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5097/api/v1/Adminlogin/login",
+        "http://localhost:5097/api/v1/AdminLogin/login",
         {
           UserName: user,
           Password: password,
@@ -34,12 +34,11 @@ const Login = () => {
 
       if (response.status === 200) {
         setError("");
+        localStorage.setItem("adminToken", response.data.token);
         navigate("/dashboard");
-      } else {
-        setError("Ongeldige gebruikersnaam of wachtwoord!");
       }
     } catch (error: any) {
-      if (error.response) {
+      if (error.response && error.response.status === 401) {
         setError("Ongeldige gebruikersnaam of wachtwoord!");
       } else {
         setError("Er is een onverwachte fout opgetreden. Probeer het opnieuw.");
