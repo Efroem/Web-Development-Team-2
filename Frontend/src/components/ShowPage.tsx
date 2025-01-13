@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Header from './Header';
 import Footer from './Footer';
 import axios from 'axios';
 import styles from './ShowPage.module.css';
@@ -89,7 +88,6 @@ const ShowPage: React.FC = () => {
 
   return (
     <div>
-      <Header weatherData={weatherData} />
       <div className={styles['show-page']}>
         <div className={styles['image-container']}>
           <img
