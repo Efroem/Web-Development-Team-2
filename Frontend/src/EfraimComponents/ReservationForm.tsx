@@ -280,11 +280,13 @@ const ReservationForm = () => {
                     <span style={{ textDecoration: 'line-through' }}>
                       €{ticketPrice.toFixed(2)}
                     </span>{" "}
-                    (€{discountedPrice.toFixed(2)})
+                    €{discountedPrice.toFixed(2)}<br />
+                    Total Price: €{(discountedPrice * ticketCount).toFixed(2)}
                   </p>
                 ) : (
                   <p className={styles.cartField}>
-                    {ticketPrice.toFixed(2)}
+                    {ticketPrice.toFixed(2)}<br />
+                    Total Price: €{(ticketPrice * ticketCount).toFixed(2)}
                   </p>
                 )}
               </>

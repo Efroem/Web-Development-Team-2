@@ -99,7 +99,7 @@ const Home: React.FC<HomeProps> = ({ weatherData }) => {
     <div>
       <HeroSection />
       <ShowsCarousel />
-      <ShowsOfTheDayCarousel venues={venues} weatherData={weatherData} />
+      <ShowsOfTheDayCarousel venues={venues} />
       <WeeklyShows weatherData={weatherData} venues={venues} />
       <Footer />
     </div>

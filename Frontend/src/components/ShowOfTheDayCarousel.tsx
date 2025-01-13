@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './MainPage.module.css';
 import { sortAndFilterShows} from './ShowSorter';
+import { fetchWeather } from './WeatherLoader';
 
 interface WeatherData {
   name: string;
@@ -42,12 +43,9 @@ interface Venue {
   name: string
   capacity: number
 }
-interface ShowOfTheDay {
-  weatherData: WeatherData | null;
-  shows: Show[];
-}
 
-const ShowsOfTheDayCarousel: React.FC<{ weatherData: WeatherData | null, venues: Venue[]} > = ({ weatherData, venues }) => {
+
+const ShowsOfTheDayCarousel: React.FC<{venues: Venue[]} > = ({ venues }) => {
   const [filteredShows, setFilteredShows] = useState<Show[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const [searchVenue, setSearchVenue] = useState("")
@@ -69,39 +67,55 @@ const ShowsOfTheDayCarousel: React.FC<{ weatherData: WeatherData | null, venues:
     }
   };
 
-    useEffect(() => {
-      const setMood = async () => {
-        if (weatherData) {
-          const weatherCondition = weatherData.weather[0]?.main.toLowerCase();
-  
-          if (weatherCondition === "rain" || weatherCondition === "clouds") {
-            setDiscountMood("Sad");
-          }
-          if (weatherCondition === "clear") {
-            setDiscountMood("Happy");
-          }
-        }
-      };
-      setMood();
-    }, [weatherData]);
+  // useEffect(() => {
+  //   const setMood = async () => {
+  //     if (weatherData) {
+  //       const weatherCondition = weatherData.weather[0]?.main.toLowerCase();
 
+  //       if (weatherCondition === "rain" || weatherCondition === "clouds") {
+  //         setDiscountMood("Sad");
+  //       }
+  //       if (weatherCondition === "clear") {
+  //         setDiscountMood("Happy");
+  //       }
+  //     }
+  //   };
+  //   setMood();
+  // }, []);
+
+  useEffect(() => {
+    const fetchAndSetMood = async () => {
+      const loadedWeatherData = await fetchWeather();
+      if (loadedWeatherData) {
+        const weatherCondition = loadedWeatherData.weather[0]?.main.toLowerCase();
+        if (weatherCondition === "rain" || weatherCondition === "clouds") {
+          setDiscountMood("Sad");
+        } else if (weatherCondition === "clear") {
+          setDiscountMood("Happy");
+        }
+      }
+    };
+    fetchAndSetMood();
+  }, []);
+  
   useEffect(() => {
     const loadShows = async () => {
       const shows = await sortAndFilterShows(sortTerm, filterMonth, searchTerm, searchVenue);
-  
       if (shows) {
         const currentDate = new Date();
-        let upcomingShows = shows.filter(show =>
-          show.theatreShowDates.some(date => new Date(date.dateAndTime) > currentDate)
+        const upcomingShows = shows.filter((show) =>
+          show.theatreShowDates.some((date) => new Date(date.dateAndTime) > currentDate)
         );
-        let actualShowsOfTheDay = upcomingShows.filter(show => 
-          show.showMood.trim() === discountMood
+  
+        const actualShowsOfTheDay = upcomingShows.filter(
+          (show) => show.showMood?.trim() === discountMood && show.showMood !== null
         );
-        setFilteredShows(actualShowsOfTheDay); // logic for only displaying upcoming shows
+  
+        setFilteredShows(actualShowsOfTheDay);
       }
     };
     loadShows();
-  }, [searchTerm, searchVenue, filterMonth, sortTerm]);   // this code reruns when any of these variables change
+  }, [searchTerm, searchVenue, filterMonth, sortTerm, discountMood]);
     
   // useEffect(() => {
   //   if (weatherData) {
@@ -178,6 +192,7 @@ const ShowsOfTheDayCarousel: React.FC<{ weatherData: WeatherData | null, venues:
               <div className={styles['show-card']}>
                 <h3>{show.title}</h3>
                 <p>{show.showMood}</p>
+                <p>{discountMood}</p>
                 {show.showMood.trim() === discountMood && (
                   <p className={styles.cartField}>
                   <span style={{ textDecoration: 'line-through' }}>
