@@ -62,7 +62,7 @@ const ReservationForm = () => {
     selectedShowId &&
     selectedShow &&
     selectedShow.title.includes("Show of the Day");
-  const discountedPrice = isShowOfTheDay ? ticketPrice * 0.85 : ticketPrice;
+  const discountedPrice = selectedShow?.showMood === discountMood ? ticketPrice * 0.85 : ticketPrice;
   const totalPrice = discountedPrice * ticketCount;
 
   // Fetch all shows and filter them to include only those with future dates
@@ -141,10 +141,13 @@ const ReservationForm = () => {
       );
       const ticketPrice = selectedShow ? selectedShow.price : 0;
       const isShowOfTheDay = selectedShow?.title.includes("Show of the Day");
-      const discountedPrice =
-        selectedShow?.showMood === discountMood
-          ? ticketPrice * 0.85
-          : undefined;
+      if (selectedShow?.showMood !== null) {
+              const discountedPrice =
+              selectedShow?.showMood.trim() === discountMood
+                ? ticketPrice * 0.85
+                : undefined;
+      }
+
 
       addToCart({
         showTitle: selectedShow?.title || "",
@@ -274,8 +277,11 @@ const ReservationForm = () => {
               <>
                 {selectedShow?.showMood.trim() === discountMood ? (
                   <p className={styles.cartField}>
-                    {ticketPrice.toFixed(2)} (15% Off: ${discountedPrice.toFixed(2)})
-                  </p>
+                  <span style={{ textDecoration: 'line-through' }}>
+                    ${ticketPrice.toFixed(2)}
+                  </span>{" "}
+                  (15% Off: ${discountedPrice.toFixed(2)})
+                </p>
                 ) : (
                   <p className={styles.cartField}>
                     {ticketPrice.toFixed(2)}
