@@ -7,11 +7,13 @@ using StarterKit.Services;
 namespace StarterKit.Controllers;
 
 [Route("api/v1/TheatreShows")]
-public class TheatreShowController : Controller {
-    
+public class TheatreShowController : Controller
+{
+
     private readonly ITheatreShowService theatreShowService;
 
-    public TheatreShowController(ITheatreShowService theatreShowService) {
+    public TheatreShowController(ITheatreShowService theatreShowService)
+    {
         this.theatreShowService = theatreShowService;
     }
 
@@ -68,30 +70,37 @@ public class TheatreShowController : Controller {
 
         return Ok(shows);
     }
-        
+
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetTheatreShowById(int id) {
+    public async Task<IActionResult> GetTheatreShowById(int id)
+    {
         TheatreShowCollective? theatreShow = await theatreShowService.GetById(id);
 
-        if (theatreShow != null) {
+        if (theatreShow != null)
+        {
             return Ok(theatreShow);
-        } else {
+        }
+        else
+        {
             return NotFound($"TheatreShow with ID {id} does not exist.");
         }
     }
-    
+
     [HttpGet("Venues")]
-    public async Task<IActionResult> GetAllVenues() {
+    public async Task<IActionResult> GetAllVenues()
+    {
         var venues = await theatreShowService.GetAllVenues();
-    if (venues == null || !venues.Any()) {
-        return NotFound("No venues found");
-    }
+        if (venues == null || !venues.Any())
+        {
+            return NotFound("No venues found");
+        }
         return Ok(venues);
     }
 
-    [AdminOnly]
+
     [HttpPost()]
-    public async Task<IActionResult> PostTheatreShow([FromBody] TheatreShowCollective theatreShowCreator) {
+    public async Task<IActionResult> PostTheatreShow([FromBody] TheatreShowCollective theatreShowCreator)
+    {
         TheatreShow theatreShow = new TheatreShow();
         theatreShow.Title = theatreShowCreator.Title;
         theatreShow.Description = theatreShowCreator.Description;
@@ -101,7 +110,7 @@ public class TheatreShowController : Controller {
         return addedToDB == true ? Ok(theatreShow) : BadRequest("Failed to add TheatreShow to DB. Entry already exists");
     }
 
-    [AdminOnly]
+
     [HttpPut("{theatreShowId}")]
     public async Task<IActionResult> UpdateTheatreShow(int theatreShowId, [FromBody] TheatreShowCollective updatedShow)
     {
@@ -123,4 +132,16 @@ public class TheatreShowController : Controller {
             ? Ok("TheatreShow and associated dates updated successfully.")
             : NotFound($"No TheatreShow found with ID {theatreShowId}.");
     }
+    
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteTheatreShow(int id)
+    {
+        var result = await theatreShowService.Delete(id);
+        if (result)
+        {
+            return NoContent();  // Success
+        }
+        return NotFound($"TheatreShow with ID {id} not found.");  // If not found
+    }
+
 }

@@ -25,6 +25,7 @@ const EditShow: React.FC = () => {
   const [isShowLoaded, setIsShowLoaded] = useState<boolean>(false);
   const navigate = useNavigate();
 
+  // Haal locaties op
   useEffect(() => {
     const fetchVenues = async () => {
       try {
@@ -38,14 +39,7 @@ const EditShow: React.FC = () => {
     fetchVenues();
   }, []);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = event.target;
-    setShow(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
-  };
-
+  // Haal gegevens van de show op wanneer een ID wordt ingevuld
   const handleShowIdSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -56,11 +50,12 @@ const EditShow: React.FC = () => {
 
     try {
       const response = await axios.get(`http://localhost:5097/api/v1/TheatreShows/${theatreShowId}`);
+      console.log('Gegevens van de show:', response.data); // Debugging
       setShow({
-        title: response.data.title,
-        description: response.data.description,
-        price: response.data.price.toString(),
-        venueId: response.data.venue.venueId,
+        title: response.data.title || '',
+        description: response.data.description || '',
+        price: response.data.price?.toString() || '',
+        venueId: response.data.venue?.venueId || 0,
         dateAndTime: response.data.theatreShowDates[0]?.dateAndTime || ''
       });
       setIsShowLoaded(true); 
@@ -74,10 +69,20 @@ const EditShow: React.FC = () => {
         price: '',
         venueId: 0,
         dateAndTime: ''
-      }); // Reset het formulier zodat de gebruiker opnieuw kan proberen
+      });
     }
   };
 
+  // Handelen van wijzigingen in de invoervelden
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = event.target;
+    setShow(prevState => ({
+      ...prevState,
+      [name]: value || ''  // Zorg ervoor dat de waarde altijd een string is
+    }));
+  };
+
+  // Formulier voor het bewerken van de show
   const handleEditShow = async (e: React.FormEvent) => {
     e.preventDefault();
 

@@ -34,3 +34,6 @@ POST /api/v1/TheatreShows was requested but user  is not admin!
 POST /api/v1/TheatreShows was requested but user  is not admin!
 POST /api/v1/TheatreShows was requested but user  is not admin!
 PUT /api/v1/TheatreShows/undefined was requested but user  is not admin!
+PUT /api/v1/TheatreShows/18 was requested but user  is not admin!
+PUT /api/v1/TheatreShows/18 was requested but user  is not admin!
+POST /api/v1/TheatreShows was requested but user  is not admin!
