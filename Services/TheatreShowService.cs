@@ -100,19 +100,61 @@ public class TheatreShowService : ITheatreShowService
         // throw new NotImplementedException();
     }
 
-    public async Task<bool> Update(TheatreShow theatreShow, int theatreShowId)
+    public async Task<bool> Update(TheatreShowCollective theatreShowCollective, int theatreShowId)
     {
-        TheatreShow x = await dbContext.TheatreShow.FirstOrDefaultAsync(x => x.TheatreShowId == theatreShowId);
-        if (x == null) return false;
-        dbContext.Entry(x).CurrentValues["Title"] = theatreShow.Title;
-        dbContext.Entry(x).CurrentValues["Description"] = theatreShow.Description;
-        dbContext.Entry(x).CurrentValues["Price"] = theatreShow.Price;
-        dbContext.Entry(x).CurrentValues["VenueId"] = theatreShow.VenueId;
-        dbContext.Entry(x).CurrentValues["Description"] = theatreShow;
+        // Fetch the existing TheatreShow
+        var existingShow = await dbContext.TheatreShow.FirstOrDefaultAsync(x => x.TheatreShowId == theatreShowId);
 
-        int n = dbContext.SaveChanges();
-        return n>0;
-        throw new NotImplementedException();
+        if (existingShow == null) return false;
+
+        // Update TheatreShow fields
+        existingShow.Title = theatreShowCollective.Title;
+        existingShow.Description = theatreShowCollective.Description;
+        existingShow.Price = theatreShowCollective.Price;
+
+        // Update TheatreShowDates
+        if (theatreShowCollective.TheatreShowDates != null)
+        {
+            // Fetch existing TheatreShowDates
+            var existingDates = await dbContext.TheatreShowDate
+                .Where(d => d.TheatreShowId == theatreShowId)
+                .ToListAsync();
+
+            // Update or add dates
+            foreach (var updatedDate in theatreShowCollective.TheatreShowDates)
+            {
+                var existingDate = existingDates.FirstOrDefault(d => d.TheatreShowDateId == updatedDate.TheatreShowDateId);
+
+                if (existingDate != null)
+                {
+                    // Update existing date
+                    existingDate.DateAndTime = updatedDate.DateAndTime;
+                }
+                else
+                {
+                    // Add new date
+                    dbContext.TheatreShowDate.Add(new TheatreShowDate
+                    {
+                        TheatreShowId = theatreShowId,
+                        DateAndTime = updatedDate.DateAndTime
+                    });
+                }
+            }
+
+            // Remove dates not included in the update
+            var datesToRemove = existingDates
+                .Where(existingDate => !theatreShowCollective.TheatreShowDates
+                    .Any(updatedDate => updatedDate.TheatreShowDateId == existingDate.TheatreShowDateId))
+                .ToList();
+
+            dbContext.TheatreShowDate.RemoveRange(datesToRemove);
+        }
+
+        // Save changes
+        int changes = await dbContext.SaveChangesAsync();
+        return changes > 0;
     }
+
+
 
 }

@@ -84,13 +84,18 @@ const WeeklyShows: React.FC<{ weatherData: WeatherData | null, venues: Venue[] }
   
   useEffect(() => {
     const loadShows = async () => {
-      const shows = await sortAndFilterShows(sortTerm, filterMonth, searchTerm, searchVenue)
-      if (shows != undefined) {
-        setFilteredShows(shows);
+      const shows = await sortAndFilterShows(sortTerm, filterMonth, searchTerm, searchVenue);
+  
+      if (shows) {
+        const currentDate = new Date();
+        const upcomingShows = shows.filter(show =>
+          show.theatreShowDates.some(date => new Date(date.dateAndTime) > currentDate)
+        );
+        setFilteredShows(upcomingShows);
       }
     };
-    loadShows()
-  }, [searchTerm, searchVenue, filterMonth, sortTerm]); // this code reruns when any of these variables change
+    loadShows();
+  }, [searchTerm, searchVenue, filterMonth, sortTerm]);   // this code reruns when any of these variables change
 
 
   return (

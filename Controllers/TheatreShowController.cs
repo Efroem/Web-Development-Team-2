@@ -89,6 +89,7 @@ public class TheatreShowController : Controller {
         return Ok(venues);
     }
 
+    [AdminOnly]
     [HttpPost()]
     public async Task<IActionResult> PostTheatreShow([FromBody] TheatreShowCollective theatreShowCreator) {
         TheatreShow theatreShow = new TheatreShow();
@@ -100,16 +101,26 @@ public class TheatreShowController : Controller {
         return addedToDB == true ? Ok(theatreShow) : BadRequest("Failed to add TheatreShow to DB. Entry already exists");
     }
 
+    [AdminOnly]
     [HttpPut("{theatreShowId}")]
-    public async Task<IActionResult> UpdateTheatreShow([FromBody] TheatreShow theatreShow, int theatreShowId) {
-        // return Ok($"{theatreShowId}");
-        bool updatedTheatreShow = await theatreShowService.Update(theatreShow, theatreShowId);
-        return updatedTheatreShow == true ? Ok($"Successfully updated") : BadRequest("Failed to update TheatreShow");
-    }
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteTheatreShow(int id) {
-        bool removedFromDB = await theatreShowService.Delete(id);
-        return removedFromDB == true ? Ok($"TheatreShow with id {id} was successfully removed from db") : BadRequest("Failed to remove TheatreShow to DB. Entry does not exist");
-    }
+    public async Task<IActionResult> UpdateTheatreShow(int theatreShowId, [FromBody] TheatreShowCollective updatedShow)
+    {
+        if (updatedShow == null)
+        {
+            return BadRequest("The request payload is null or malformed.");
+        }
 
+        if (updatedShow.TheatreShowId != 0 && updatedShow.TheatreShowId != theatreShowId)
+        {
+            return BadRequest($"The TheatreShowId in the payload ({updatedShow.TheatreShowId}) does not match the URL ({theatreShowId}).");
+        }
+
+        updatedShow.TheatreShowId = theatreShowId;
+
+        bool success = await theatreShowService.Update(updatedShow, theatreShowId);
+
+        return success
+            ? Ok("TheatreShow and associated dates updated successfully.")
+            : NotFound($"No TheatreShow found with ID {theatreShowId}.");
+    }
 }

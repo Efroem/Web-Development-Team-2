@@ -8,5 +8,5 @@ public interface ITheatreShowService {
     Task<IEnumerable<TheatreShowCollective>> GetAll ();
     Task<IEnumerable<Venue>> GetAllVenues ();
     Task<bool> Delete (int theatreShowId); 
-    Task<bool> Update (TheatreShow theatreShow, int theatreShowId);
+    Task<bool> Update (TheatreShowCollective theatreShowCollective, int theatreShowId);
 }
