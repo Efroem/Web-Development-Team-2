@@ -1,17 +1,41 @@
 import React, { useState, useEffect } from "react";
 import { useShoppingCart } from "./ShoppingCartContext";
 import styles from "./checkout.module.css";
+import axios from "axios";
 
 interface Show {
   theatreShowId: number;
   title: string;
   theatreShowDates: ShowDate[];
-  price: number; // Added price property
+  price: number;
+  showMood: string;
 }
 
 interface ShowDate {
   theatreShowDateId: number;
   dateAndTime: string;
+}
+
+interface WeatherData {
+  name: string;
+  weather: {
+    main: string;
+    description: string;
+    icon: string;
+  }[];
+  main: {
+    temp: number;
+    feels_like: number;
+    temp_min: number;
+    temp_max: number;
+    pressure: number;
+    humidity: number;
+  };
+  wind: {
+    speed: number;
+    deg: number;
+    gust: number;
+  };
 }
 
 const ReservationForm = () => {
@@ -27,6 +51,8 @@ const ReservationForm = () => {
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [showPopup, setShowPopup] = useState<boolean>(false);
+  const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+  const [discountMood, setDiscountMood] = useState("");
 
   const selectedShow = shows.find(
     (show) => show.theatreShowId === selectedShowId
@@ -36,7 +62,7 @@ const ReservationForm = () => {
     selectedShowId &&
     selectedShow &&
     selectedShow.title.includes("Show of the Day");
-  const discountedPrice = isShowOfTheDay ? ticketPrice * 0.85 : ticketPrice;
+  const discountedPrice = selectedShow?.showMood === discountMood ? ticketPrice * 0.85 : ticketPrice;
   const totalPrice = discountedPrice * ticketCount;
 
   // Fetch all shows and filter them to include only those with future dates
@@ -75,6 +101,37 @@ const ReservationForm = () => {
     }
   }, [selectedShowId]);
 
+  useEffect(() => {
+    const fetchWeather = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5097/api/v1/Weather"
+        );
+        setWeatherData(response.data);
+      } catch (error) {
+        console.error("Error fetching weather data:", error);
+      }
+    };
+
+    fetchWeather();
+  }, []);
+
+  useEffect(() => {
+    const setMood = async () => {
+      if (weatherData) {
+        const weatherCondition = weatherData.weather[0]?.main.toLowerCase();
+
+        if (weatherCondition === "rain" || weatherCondition === "clouds") {
+          setDiscountMood("Sad");
+        }
+        if (weatherCondition === "clear") {
+          setDiscountMood("Happy");
+        }
+      }
+    };
+    setMood();
+  }, [weatherData]);
+
   const handleAddToCart = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -84,7 +141,13 @@ const ReservationForm = () => {
       );
       const ticketPrice = selectedShow ? selectedShow.price : 0;
       const isShowOfTheDay = selectedShow?.title.includes("Show of the Day");
-      const discountedPrice = isShowOfTheDay ? ticketPrice * 0.85 : undefined;
+      if (selectedShow?.showMood !== null) {
+              const discountedPrice =
+              selectedShow?.showMood.trim() === discountMood
+                ? ticketPrice * 0.85
+                : undefined;
+      }
+
 
       addToCart({
         showTitle: selectedShow?.title || "",
@@ -207,6 +270,36 @@ const ReservationForm = () => {
           />
         </div>
 
+        {selectedShow && selectedShowDateId && (
+          <>
+            <label className={styles.label}>Price per Ticket:</label>
+            {selectedShow?.showMood !== null && (
+              <>
+                {selectedShow?.showMood.trim() === discountMood ? (
+                  <p className={styles.cartField}>
+                    <span style={{ textDecoration: 'line-through' }}>
+                      €{ticketPrice.toFixed(2)}
+                    </span>{" "}
+                    (€{discountedPrice.toFixed(2)})
+                  </p>
+                ) : (
+                  <p className={styles.cartField}>
+                    {ticketPrice.toFixed(2)}
+                  </p>
+                )}
+              </>
+            )}
+            {/* <p className={styles.cartField}>
+              €
+              {selectedShow?.showMood === discountMood
+                ? `${ticketPrice.toFixed(
+                    2
+                  )} (15% Off: ${discountedPrice.toFixed(2)})`
+                : ticketPrice.toFixed(2)}
+            </p> */}
+            {/* <p>{weatherData === null ? "nee" : discountMood}</p> */}
+          </>
+        )}
         <button type="submit" className={styles.button}>
           Add to Cart
         </button>
@@ -231,7 +324,6 @@ const ReservationForm = () => {
           </div>
         </div>
       )}
-
     </div>
   );
 };
