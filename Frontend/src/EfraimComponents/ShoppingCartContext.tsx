@@ -15,7 +15,7 @@ interface Reservation {
   lastName: string;
   email: string;
   price: number;
-  discountedPrice?: number;
+  discountedPrice?: number | null;
 }
 
 interface CustomerDetails {
@@ -72,7 +72,11 @@ export const ShoppingCartProvider = ({ children }: { children: ReactNode }) => {
 
     setCartItems([
       ...cartItems,
-      { ...reservation, price: price || 0, discountedPrice },
+      {
+        ...reservation,
+        price: price || 0,
+        discountedPrice: discountedPrice || null,
+      },
     ]);
   };
 

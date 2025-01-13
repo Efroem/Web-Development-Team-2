@@ -64,7 +64,8 @@ const ReservationForm = () => {
     selectedShowId &&
     selectedShow &&
     selectedShow.title.includes("Show of the Day");
-  const discountedPrice = selectedShow?.showMood === discountMood ? ticketPrice * 0.85 : ticketPrice;
+  const discountedPrice =
+    selectedShow?.showMood === discountMood ? ticketPrice * 0.85 : ticketPrice;
   const totalPrice = discountedPrice * ticketCount;
 
   // Fetch all shows and filter them to include only those with future dates
@@ -142,7 +143,6 @@ const ReservationForm = () => {
     }
   }, [searchParams]);
 
-
   const handleAddToCart = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -153,12 +153,11 @@ const ReservationForm = () => {
       const ticketPrice = selectedShow ? selectedShow.price : 0;
       const isShowOfTheDay = selectedShow?.title.includes("Show of the Day");
       if (selectedShow?.showMood !== null) {
-              const discountedPrice =
-              selectedShow?.showMood.trim() === discountMood
-                ? ticketPrice * 0.85
-                : undefined;
+        const discountedPrice =
+          selectedShow?.showMood.trim() === discountMood
+            ? ticketPrice * 0.85
+            : undefined;
       }
-
 
       addToCart({
         showTitle: selectedShow?.title || "",
@@ -283,39 +282,36 @@ const ReservationForm = () => {
 
         {selectedShow && selectedShowDateId && (
           <>
-            <label className={styles.label}>Price per Ticket:</label>
-            {selectedShow?.showMood !== null && (
-              <>
-                {selectedShow?.showMood.trim() === discountMood ? (
-                  <p className={styles.cartField}>
-                    <span style={{ textDecoration: 'line-through' }}>
-                      €{ticketPrice.toFixed(2)}
-                    </span>{" "}
-                    €{discountedPrice.toFixed(2)}<br />
-                    Total Price: €{(discountedPrice * ticketCount).toFixed(2)}
-                  </p>
-                ) : (
-                  <p className={styles.cartField}>
-                    {ticketPrice.toFixed(2)}<br />
-                    Total Price: €{(ticketPrice * ticketCount).toFixed(2)}
-                  </p>
-                )}
-              </>
-            )}
-            {/* <p className={styles.cartField}>
-              €
-              {selectedShow?.showMood === discountMood
-                ? `${ticketPrice.toFixed(
-                    2
-                  )} (15% Off: ${discountedPrice.toFixed(2)})`
-                : ticketPrice.toFixed(2)}
-            </p> */}
-            {/* <p>{weatherData === null ? "nee" : discountMood}</p> */}
+            <label className={styles.label}>
+              Price per Ticket:
+              {selectedShow?.showMood !== null && (
+                <>
+                  {selectedShow?.showMood.trim() === discountMood ? (
+                    <p className={styles.cartField}>
+                      <span style={{ textDecoration: "line-through" }}>
+                        €{ticketPrice.toFixed(2)}
+                      </span>{" "}
+                      €{discountedPrice.toFixed(2)}
+                      <br />
+                      Total Price: €{(discountedPrice * ticketCount).toFixed(2)}
+                    </p>
+                  ) : (
+                    <p className={styles.cartField}>
+                      {ticketPrice.toFixed(2)}
+                      <br />
+                      Total Price: €{(ticketPrice * ticketCount).toFixed(2)}
+                    </p>
+                  )}
+                </>
+              )}
+            </label>
           </>
         )}
-        <button type="submit" className={styles.button}>
-          Add to Cart
-        </button>
+        <div className={styles.cartActions}>
+          <button type="submit" className={styles.cartActions}>
+            Add to Cart
+          </button>
+        </div>
       </form>
 
       {showPopup && (

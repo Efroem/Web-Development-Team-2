@@ -119,7 +119,11 @@ const ShoppingCart = () => {
   const calculateTotalPrice = () => {
     return cartItems
       .reduce(
-        (total, item) => total + (item.price || 0) * (item.ticketCount || 1),
+        (total, item) =>
+          total +
+          (item.discountedPrice ? item.discountedPrice : item.price) *
+            (item.ticketCount || 1),
+
         0
       )
       .toFixed(2);
@@ -208,17 +212,44 @@ const ShoppingCart = () => {
                       )}
                     </label>
                   </div>
+                  <div className={styles.cartItem}>
+                    <label>Show:</label>
+                    <p>{item.showTitle}</p>
+                  </div>
+                  <div className={styles.cartItem}>
+                    <label>Date:</label>
+                    <p>{new Date(item.dateAndTime).toLocaleString()}</p>
+                  </div>
+                  <div className={styles.cartItem}>
+                    <label>Price per Ticket:</label>
+                    <p>
+                      {item.discountedPrice ? (
+                        <>
+                          <span style={{ textDecoration: "line-through" }}>
+                            €{item.price.toFixed(2)}
+                          </span>{" "}
+                          €{item.discountedPrice.toFixed(2)}
+                        </>
+                      ) : (
+                        `€${item.price.toFixed(2)}`
+                      )}
+                    </p>
+                  </div>
+                  <div className={styles.cartItem}>
+                    <label>Total Price:</label>
+                    <p>
+                      €
+                      {(
+                        (item.discountedPrice || item.price || 0) *
+                        (editingItem.ticketCount || 1)
+                      ).toFixed(2)}
+                    </p>
+                  </div>
                   <div className={styles.cartItemActions}>
-                    <button
-                      className={`${styles.smallButton} ${styles.saveBtn}`}
-                      onClick={saveEdit}
-                    >
+                    <button className={styles.smallButton} onClick={saveEdit}>
                       Save
                     </button>
-                    <button
-                      className={`${styles.smallButton} ${styles.cancelBtn}`}
-                      onClick={cancelEdit}
-                    >
+                    <button className={styles.smallButton} onClick={cancelEdit}>
                       Cancel
                     </button>
                   </div>
@@ -245,11 +276,23 @@ const ShoppingCart = () => {
                     <strong>Ticket Count:</strong> {item.ticketCount}
                   </p>
                   <p>
-                    <strong>Price per Ticket:</strong> €{item.price}
+                    <strong>Price per Ticket:</strong>{" "}
+                    {item.discountedPrice ? (
+                      <>
+                        <span style={{ textDecoration: "line-through" }}>
+                          €{item.price.toFixed(2)}
+                        </span>{" "}
+                        €{item.discountedPrice.toFixed(2)}
+                      </>
+                    ) : (
+                      `€${item.price.toFixed(2)}`
+                    )}
                   </p>
                   <p>
                     <strong>Total Price:</strong> €
-                    {(item.price * item.ticketCount).toFixed(2)}
+                    {(
+                      (item.discountedPrice || item.price) * item.ticketCount
+                    ).toFixed(2)}
                   </p>
                   <div className={styles.cartItemActions}>
                     <button
