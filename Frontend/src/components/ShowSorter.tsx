@@ -205,6 +205,7 @@ export const sortAndFilterShows = async (sortTerm: string = "",
     const startDate = new Date(currentYear, filterMonth, 1, 0, 0, 0, 0); // first day of the current month in the current year
     const endDate = new Date(startDate);
     endDate.setMonth(filterMonth + 1); // Get the next month's date
+    endDate.setFullYear(9999)
     let startDateStr = startDate.toISOString();
     let endDateStr = endDate.toISOString();
 
@@ -213,10 +214,10 @@ export const sortAndFilterShows = async (sortTerm: string = "",
     if (filterMonth !== -1) {
       requestStr += `startDate=${startDateStr}&endDate=${endDateStr}&`
     }
-    if (searchTerm != "") {
+    if (searchTerm !== "") {
       requestStr += `title=${searchTerm}&`
     }
-    if (searchVenue != "") {
+    if (searchVenue !== "") {
       requestStr += `location=${searchVenue}&`
     }
     switch (sortTerm) {
