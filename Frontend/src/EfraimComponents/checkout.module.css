@@ -3,24 +3,25 @@
   max-width: 700px;
   margin: 20px auto;
   padding: 25px;
-  border: 1px solid #ddd;
+  border: 1px solid #333; /* Dark border */
   border-radius: 10px;
-  background-color: #fefefe; /* Slightly off-white for warmth */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  background-color: #222; /* Dark background */
+  box-shadow: 0px 4px 6px rgba(255, 255, 255, 0.1);
   font-family: "Roboto", Arial, sans-serif;
+  color: #f5f5f5; /* Light text */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .shoppingCart:hover, .reservationForm:hover {
   transform: scale(1.01);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 16px rgba(255, 255, 255, 0.15);
 }
 
 /* Titles */
 .cartTitle, .reservationTitle {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #222;
+  color: #fff; /* White text for titles */
   text-align: center;
   margin-bottom: 25px;
 }
@@ -28,7 +29,7 @@
 /* Labels and Text */
 .cartField label {
   font-weight: 600;
-  color: #555;
+  color: #ddd; /* Light gray for labels */
   display: block;
   margin-bottom: 8px;
   font-size: 1rem;
@@ -38,7 +39,7 @@
 input,
 select,
 button {
-  color: #333;
+  color: #fff; /* White text for inputs and buttons */
   font-size: 1rem;
   line-height: 1.5;
 }
@@ -49,23 +50,24 @@ select {
   width: 100%;
   padding: 12px;
   margin-bottom: 20px;
-  border: 1px solid #ccc;
+  border: 1px solid #555; /* Dark border for inputs */
   border-radius: 6px;
-  background-color: #f9f9f9;
+  background-color: #333; /* Dark background for fields */
   font-size: 1rem;
+  color: #f5f5f5; /* Light text */
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 input:focus,
 select:focus {
-  border-color: #3498db;
+  border-color: #8e44ad; /* Highlighted border */
   outline: none;
-  box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+  box-shadow: 0 0 5px rgba(142, 68, 173, 0.5);
 }
 
 /* Buttons */
 button {
-  background-color: #3498db;
+  background-color: #8e44ad; /* Purple background */
   color: white;
   border: none;
   padding: 12px 18px;
@@ -75,24 +77,24 @@ button {
 }
 
 button:hover {
-  background-color: #2980b9;
+  background-color: #732d91; /* Darker purple on hover */
   transform: scale(1.05);
 }
 
 .saveBtn {
-  background-color: #2ecc71;
+  background-color: #27ae60; /* Green */
 }
 
 .saveBtn:hover {
-  background-color: #27ae60;
+  background-color: #1e8449; /* Darker green */
 }
 
 .cancelBtn {
-  background-color: #e74c3c;
+  background-color: #e74c3c; /* Red */
 }
 
 .cancelBtn:hover {
-  background-color: #c0392b;
+  background-color: #c0392b; /* Darker red */
 }
 
 .addReservationsBtn,
@@ -103,18 +105,18 @@ button:hover {
 }
 
 .addReservationsBtn {
-  background-color: #ff7675;
+  background-color: #3498db; /* Bright blue */
 }
 
 .addReservationsBtn:hover {
-  background-color: #d63031;
+  background-color: #2980b9; /* Darker blue */
 }
 
 /* Empty Cart Message */
 .emptyCart {
   text-align: center;
   font-size: 1.2rem;
-  color: #777;
+  color: #aaa; /* Medium-light gray */
   margin-top: 30px;
 }
 
@@ -124,17 +126,17 @@ button:hover {
 }
 
 .cartItem {
-  border: 1px solid #ddd;
+  border: 1px solid #444; /* Darker border */
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 20px;
-  background-color: #fafafa;
+  background-color: #333; /* Dark background for items */
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .cartItem:hover {
-  background-color: #f1f1f1;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #3d3d3d; /* Slightly lighter on hover */
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
 }
 
 .cartItem p {
@@ -158,11 +160,11 @@ button:hover {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #fff;
+  background-color: #222; /* Dark background */
   padding: 25px;
-  border: 1px solid #ddd;
+  border: 1px solid #444;
   border-radius: 10px;
-  box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 6px 16px rgba(255, 255, 255, 0.2);
   z-index: 1000;
   animation: fadeIn 0.3s ease;
 }
@@ -173,7 +175,7 @@ button:hover {
 
 .popupContentButton {
   margin: 10px;
-  background-color: #3498db;
+  background-color: #8e44ad;
   color: white;
   border: none;
   padding: 12px 20px;
@@ -182,7 +184,7 @@ button:hover {
 }
 
 .popupContentButton:hover {
-  background-color: #2980b9;
+  background-color: #732d91;
   transform: scale(1.05);
 }
 

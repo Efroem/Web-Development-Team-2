@@ -99,7 +99,7 @@ const ReservationForm = () => {
   return (
     <div className={styles.reservationForm}>
       <form onSubmit={handleAddToCart}>
-        <label>Show:</label>
+        <label className={styles.cartField}>Show:</label>
         <select
           value={selectedShowId || ""}
           onChange={(e) => setSelectedShowId(parseInt(e.target.value))}
@@ -124,7 +124,7 @@ const ReservationForm = () => {
 
         {showDates.length > 0 && (
           <>
-            <label>Date:</label>
+            <label className={styles.cartField}>Date:</label>
             <select
               value={selectedShowDateId || ""}
               onChange={(e) => setSelectedShowDateId(parseInt(e.target.value))}
@@ -143,7 +143,7 @@ const ReservationForm = () => {
           </>
         )}
 
-        <label>Ticket Count:</label>
+        <label className={styles.label}>Ticket Count:</label>
         <input
           type="number"
           min="1"
@@ -152,7 +152,7 @@ const ReservationForm = () => {
           required
         />
 
-        <label>First Name:</label>
+        <label className={styles.label}>First Name:</label>
         <input
           type="text"
           value={firstName}
@@ -160,7 +160,7 @@ const ReservationForm = () => {
           required
         />
 
-        <label>Last Name:</label>
+        <label className={styles.label}>Last Name:</label>
         <input
           type="text"
           value={lastName}
@@ -168,7 +168,7 @@ const ReservationForm = () => {
           required
         />
 
-        <label>Email:</label>
+        <label className={styles.label}>Email:</label>
         <input
           type="email"
           value={email}
