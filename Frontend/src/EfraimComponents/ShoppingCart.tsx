@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useShoppingCart } from "../EfraimComponents/ShoppingCartContext";
 import axios from "axios";
-import "../EfraimComponents/Reservation.css";
 import "./ShoppingCart.css"; // Add a custom CSS file for styling
 
 const ShoppingCart = () => {

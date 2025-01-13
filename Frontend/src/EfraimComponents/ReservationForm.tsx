@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useShoppingCart } from "./ShoppingCartContext";
-import "../EfraimComponents/Reservation.css";
 
 interface Show {
   theatreShowId: number;
