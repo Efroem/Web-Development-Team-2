@@ -184,6 +184,7 @@ export const applySorting = (filteredShows: Show[],
         break;
     }
 
+
     // Apply sorting logic
     updatedShows = sortShows(updatedShows, sortField, sortOrder);
 
@@ -192,23 +193,62 @@ export const applySorting = (filteredShows: Show[],
 }
 
   
-  // Example of how to use it:
-  // let filteredShows = shows.filter((show) =>
-  //   show.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //   show.description.toLowerCase().includes(searchTerm.toLowerCase())
-  // );
+export const sortAndFilterShows = async (sortTerm: string = "", 
+                                  filterMonth: number,
+                                  searchTerm: string = "",
+                                  searchVenue: string = "") => {
+  try {
+      const currentYear = new Date().getFullYear();
+    const startDate = new Date(currentYear, filterMonth, 1, 0, 0, 0, 0); // first day of the current month in the current year
+    const endDate = new Date(startDate);
+    endDate.setMonth(filterMonth + 1); // Get the next month's date
+    let startDateStr = startDate.toISOString();
+    let endDateStr = endDate.toISOString();
+
+    let response: { data: Show[] } | null = null; // Explicitly type the response
+    let requestStr = `http://localhost:5097/api/v1/TheatreShows?`
+    if (filterMonth !== -1) {
+      requestStr += `startDate=${startDateStr}&endDate=${endDateStr}&`
+    }
+    if (searchTerm != "") {
+      requestStr += `title=${searchTerm}&`
+    }
+    if (searchVenue != "") {
+      requestStr += `location=${searchVenue}&`
+    }
+    switch (sortTerm) {
+      case "A-Z":
+        requestStr += `sortBy=title`
+        break
+      case "Z-A":
+        requestStr += `sortBy=title&ascending=false`
+        break
+      case "Price Ascending":
+        requestStr += `sortBy=price`
+        break
+      case "Price Descending":
+        requestStr += `sortBy=price&ascending=false`
+        break
+      case "Date Ascending":
+        requestStr += `sortBy=date`
+        break
+      case "Date Descending":
+        requestStr += `sortBy=date&ascending=false`
+        break
+      default: 
+        break;
+    }
+
+    response = await axios.get(requestStr);
+    console.log(response)
+    if (response != null) {
+      return response.data
+    }
+    return []
+
+  } catch (error) {
+    console.error('Error fetching shows:', error);
+    return []
+  }
   
-  // if (filterTerm !== "") {
-  //   if (filterMonth !== "") {
-  //     filteredShows = filteredShows.filter((show) =>
-  //       show.theatreShowDates.some((date) =>
-  //         new Intl.DateTimeFormat("en-US", { month: "long" }).format(new Date(date.dateAndTime)) === filterMonth
-  //       )
-  //     );
-  //   }
-  
-  //   // Apply sorting based on selected field and order
-  //   const sortField: keyof Show = "title";  // Can be "title", "description", or "price"
-  //   const sortOrder: 'ascending' | 'descending' = "descending";  // Can be "ascending" or "descending"
-    
-  //   filteredShows = sortShows(filteredShows, sortField, sortOrder);
+};

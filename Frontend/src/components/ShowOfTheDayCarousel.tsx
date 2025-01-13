@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './MainPage.module.css';
-import { applySorting, fetchShowsInMonth, sortShows } from './ShowSorter';
+import { sortAndFilterShows} from './ShowSorter';
 
 interface WeatherData {
   name: string;
@@ -69,13 +69,15 @@ const ShowsOfTheDayCarousel: React.FC<{ weatherData: WeatherData | null, venues:
   };
 
   useEffect(() => {
-    const loadShows = async () => {
-      const shows = await fetchShowsInMonth(filterMonth); // Fetch shows
-      setFilteredShows(applySorting(shows, searchTerm, searchVenue, sortTerm, weatherData));
-    };
-    loadShows()
-  }, [searchTerm, searchVenue, filterMonth, sortTerm]); // this code reruns when any of these variables change
-  
+      const loadShows = async () => {
+        const shows = await sortAndFilterShows(sortTerm, filterMonth, searchTerm, searchVenue)
+        if (shows != undefined) {
+          setFilteredShows(shows);
+        }
+      };
+      loadShows()
+    }, [searchTerm, searchVenue, filterMonth, sortTerm]); // this code reruns when any of these variables change
+    
   // useEffect(() => {
   //   if (weatherData) {
   //     const weatherCondition = weatherData.weather[0]?.main.toLowerCase();
@@ -105,7 +107,7 @@ const ShowsOfTheDayCarousel: React.FC<{ weatherData: WeatherData | null, venues:
         />
       </div>
       <select onChange={(e) => setSearchVenue(e.target.value)}>
-        <option value="">Search by Venue</option>
+        <option value="">Zoek op Locatie</option>
         {venues.map((venue) => (
           <option key={venue.venueId} value={venue.name}>
             {venue.name}
@@ -114,29 +116,29 @@ const ShowsOfTheDayCarousel: React.FC<{ weatherData: WeatherData | null, venues:
       </select>
       <div className={styles['filter-month']}>
         <select onChange={(e) => setFilterTerm(e.target.value)}>
-          <option value="">Set Filter</option>
+          <option value="">Selecteer Filter</option>
           <option value="A-Z">A-Z</option>
           <option value="Z-A">Z-A</option>
-          <option value="Price Ascending">Price Ascending</option>
-          <option value="Price Descending">Price Descending</option>
-          <option value="Date Ascending">Date Ascending</option>
-          <option value="Date Descending">Date Descending</option>
+          <option value="Price Ascending">Price Oplopend</option>
+          <option value="Price Descending">Price Aflopend</option>
+          <option value="Date Ascending">Date Oplopend</option>
+          <option value="Date Descending">Date Aflopend</option>
 
         </select>
       </div>
       <div className={styles['filter-month']}>
         <select onChange={(e) => setFilterMonth(Number(e.target.value))}>
-          <option value="-1">Search by Month</option>
-          <option value="0">January</option>
-          <option value="1">February</option>
-          <option value="2">March</option>
+          <option value="-1">Zoek bij Maand</option>
+          <option value="0">Januari</option>
+          <option value="1">Februari</option>
+          <option value="2">Maart</option>
           <option value="3">April</option>
-          <option value="4">May</option>
-          <option value="5">June</option>
-          <option value="6">July</option>
-          <option value="7">August</option>
+          <option value="4">Mei</option>
+          <option value="5">Juni</option>
+          <option value="6">Juli</option>
+          <option value="7">Augustus</option>
           <option value="8">September</option>
-          <option value="9">October</option>
+          <option value="9">Oktober</option>
           <option value="10">November</option>
           <option value="11">December</option>
         </select>
