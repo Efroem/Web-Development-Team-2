@@ -139,13 +139,16 @@ export const applySorting = (filteredShows: Show[],
     if (weatherData != null) {
       const weatherCondition = weatherData.weather[0]?.main.toLowerCase();
       updatedShows = updatedShows.filter((show) => {
-        if (weatherCondition === 'rain') {
-          return show.showMood === 'Sad';
+        if (show.showMood == null) {
+          return false;
+        }
+        if (weatherCondition === 'rain' || weatherCondition === 'clouds') {
+          return show.showMood.trim() === 'Sad';
         }
         if (weatherCondition === 'clear') {
-          return show.showMood === 'Happy';
+          return show.showMood.trim() === 'Happy';
         }
-        return false;
+        return true;
       })
     }
 
@@ -210,10 +213,10 @@ export const sortAndFilterShows = async (sortTerm: string = "",
     if (filterMonth !== -1) {
       requestStr += `startDate=${startDateStr}&endDate=${endDateStr}&`
     }
-    if (searchTerm != "") {
+    if (searchTerm !== "") {
       requestStr += `title=${searchTerm}&`
     }
-    if (searchVenue != "") {
+    if (searchVenue !== "") {
       requestStr += `location=${searchVenue}&`
     }
     switch (sortTerm) {

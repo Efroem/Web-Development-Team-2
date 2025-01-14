@@ -19,6 +19,7 @@ namespace StarterKit.Controllers
         [HttpPost]
         public async Task<IActionResult> MakeReservation([FromBody] ReservationRequest request)
         {
+            var start = DateTime.Now;
             if (string.IsNullOrWhiteSpace(request.Email) || !IsValidEmail(request.Email))
             {
                 return BadRequest(new { Message = "Invalid email address." });
@@ -38,6 +39,10 @@ namespace StarterKit.Controllers
 
             if (response.Success)
             {
+                // Process the reservation request...
+                var duration = DateTime.Now - start;
+                Console.WriteLine($"Reservation processing took {duration.TotalMilliseconds}ms");
+
                 return Ok(new { TotalPrice = response.TotalPrice });
             }
             return BadRequest(new { Message = response.ErrorMessage });

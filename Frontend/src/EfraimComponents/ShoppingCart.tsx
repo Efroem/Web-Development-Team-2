@@ -1,17 +1,26 @@
 import React, { useState } from "react";
 import { useShoppingCart } from "../EfraimComponents/ShoppingCartContext";
 import axios from "axios";
-import "./ShoppingCart.css"; // Add a custom CSS file for styling
+import styles from "./checkout.module.css";
 
 const ShoppingCart = () => {
   const { cartItems, updateCartItem, removeFromCart, clearCart } =
     useShoppingCart();
-  const [editingIndex, setEditingIndex] = useState<number | null>(null); // Track which reservation is being edited
-  const [editingItem, setEditingItem] = useState<any>(null); // Store the current item being edited
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingItem, setEditingItem] = useState<any>(null);
+  const [errorMessages, setErrorMessages] = useState<{ [key: string]: string }>(
+    {}
+  );
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const startEdit = (index: number) => {
     setEditingIndex(index);
-    setEditingItem({ ...cartItems[index] }); // Clone the item for editing
+    setEditingItem({ ...cartItems[index] });
+    setErrorMessages({}); // Clear error messages on edit start
   };
 
   const handleEditChange = (field: string, value: string | number) => {
@@ -25,15 +34,37 @@ const ShoppingCart = () => {
 
   const saveEdit = () => {
     if (editingIndex !== null && editingItem) {
+      const errors: { [key: string]: string } = {};
+
+      if (!editingItem.firstName.trim()) {
+        errors.firstName = "First name is required.";
+      }
+      if (!editingItem.lastName.trim()) {
+        errors.lastName = "Last name is required.";
+      }
+      if (!editingItem.email || !validateEmail(editingItem.email)) {
+        errors.email = "Invalid email format.";
+      }
+      if (editingItem.ticketCount < 1) {
+        errors.ticketCount = "Ticket count cannot be less than 1.";
+      }
+
+      if (Object.keys(errors).length > 0) {
+        setErrorMessages(errors);
+        return;
+      }
+
       updateCartItem(editingIndex, editingItem);
       setEditingIndex(null);
       setEditingItem(null);
+      setErrorMessages({});
     }
   };
 
   const cancelEdit = () => {
     setEditingIndex(null);
     setEditingItem(null);
+    setErrorMessages({}); // Clear error messages on cancel
   };
 
   const handleRemove = (index: number) => {
@@ -42,7 +73,6 @@ const ShoppingCart = () => {
 
   const handleCheckout = async () => {
     try {
-      // Validate that all required fields are filled
       for (const item of cartItems) {
         if (!item.firstName || !item.lastName || !item.email) {
           alert(
@@ -50,18 +80,18 @@ const ShoppingCart = () => {
           );
           return;
         }
+        if (!validateEmail(item.email)) {
+          alert("Invalid email format in one of the reservations.");
+          return;
+        }
       }
 
-      // Extract customer details from the first cart item
       const { firstName, lastName, email } = cartItems[0];
-
-      // Map cart items to reservations
       const reservations = cartItems.map((item) => ({
         showDateId: item.showDateId,
         ticketCount: item.ticketCount,
       }));
 
-      // Build the request body
       const requestBody = {
         firstName,
         lastName,
@@ -69,140 +99,210 @@ const ShoppingCart = () => {
         reservations,
       };
 
-      console.log("Request Body:", requestBody);
-
-      // Send the request
       await axios.post(
         "http://localhost:5097/api/v1/Reservations",
         requestBody
       );
 
       alert("Checkout completed successfully. Redirecting to home page...");
-
-      // Clear the cart after successful checkout
       clearCart();
-
-      // Redirect to home
       window.location.href = "/";
     } catch (error: any) {
       console.error(
         "Error during checkout:",
         error.response?.data || error.message
       );
-      alert(
-        "An error occurred during checkout. Please check the details and try again."
-      );
+      alert("An error occurred during checkout. Please try again.");
     }
   };
 
-  return (
-    <div className="shopping-cart">
-      <h2 className="cart-title">Shopping Cart</h2>
+  const calculateTotalPrice = () => {
+    return cartItems
+      .reduce(
+        (total, item) =>
+          total +
+          (item.discountedPrice ? item.discountedPrice : item.price) *
+            (item.ticketCount || 1),
 
+        0
+      )
+      .toFixed(2);
+  };
+
+  return (
+    <div className={styles.shoppingCart}>
+      <h2 className={styles.cartTitle}>Shopping Cart</h2>
       {cartItems.length === 0 ? (
-        <p className="empty-cart">Your cart is empty.</p>
+        <p>Your cart is empty.</p>
       ) : (
-        <div className="cart-details">
+        <div className={styles.cartDetails}>
           {cartItems.map((item, index) => (
-            <div key={index} className="cart-item card">
+            <div key={index} className={`${styles.cartItem} ${styles.card}`}>
               {editingIndex === index ? (
                 <>
-                  <div className="cart-field">
-                    <label>First Name:</label>
-                    <input
-                      type="text"
-                      value={editingItem.firstName}
-                      onChange={(e) =>
-                        handleEditChange("firstName", e.target.value)
-                      }
-                    />
+                  <div className={styles.cartField}>
+                    <label>
+                      <strong>First Name:</strong>
+                      <input
+                        type="text"
+                        value={editingItem.firstName}
+                        onChange={(e) =>
+                          handleEditChange("firstName", e.target.value)
+                        }
+                      />
+                      {errorMessages.firstName && (
+                        <span className={styles.errorMessage}>
+                          {errorMessages.firstName}
+                        </span>
+                      )}
+                    </label>
                   </div>
-                  <div className="cart-field">
-                    <label>Last Name:</label>
-                    <input
-                      type="text"
-                      value={editingItem.lastName}
-                      onChange={(e) =>
-                        handleEditChange("lastName", e.target.value)
-                      }
-                    />
+                  <div className={styles.cartField}>
+                    <label>
+                      <strong>Last Name:</strong>
+                      <input
+                        type="text"
+                        value={editingItem.lastName}
+                        onChange={(e) =>
+                          handleEditChange("lastName", e.target.value)
+                        }
+                      />
+                      {errorMessages.lastName && (
+                        <span className={styles.errorMessage}>
+                          {errorMessages.lastName}
+                        </span>
+                      )}
+                    </label>
                   </div>
-                  <div className="cart-field">
-                    <label>Email:</label>
-                    <input
-                      type="email"
-                      value={editingItem.email}
-                      onChange={(e) =>
-                        handleEditChange("email", e.target.value)
-                      }
-                    />
+                  <div className={styles.cartField}>
+                    <label>
+                      <strong>Email:</strong>
+                      <input
+                        type="email"
+                        value={editingItem.email}
+                        onChange={(e) =>
+                          handleEditChange("email", e.target.value)
+                        }
+                      />
+                      {errorMessages.email && (
+                        <span className={styles.errorMessage}>
+                          {errorMessages.email}
+                        </span>
+                      )}
+                    </label>
                   </div>
-                  <div className="cart-field">
+                  <div className={styles.cartField}>
+                    <label>
+                      <strong>Ticket Count:</strong>
+                      <input
+                        type="number"
+                        min="1"
+                        value={editingItem.ticketCount}
+                        onChange={(e) =>
+                          handleEditChange(
+                            "ticketCount",
+                            parseInt(e.target.value)
+                          )
+                        }
+                      />
+                      {errorMessages.ticketCount && (
+                        <span className={styles.errorMessage}>
+                          {errorMessages.ticketCount}
+                        </span>
+                      )}
+                    </label>
+                  </div>
+                  <div className={styles.cartItem}>
                     <label>Show:</label>
                     <p>{item.showTitle}</p>
                   </div>
-                  <div className="cart-field">
+                  <div className={styles.cartItem}>
                     <label>Date:</label>
                     <p>{new Date(item.dateAndTime).toLocaleString()}</p>
                   </div>
-                  <div className="cart-field">
-                    <label>Ticket Count:</label>
-                    <input
-                      type="number"
-                      min="1"
-                      value={editingItem.ticketCount}
-                      onChange={(e) =>
-                        handleEditChange(
-                          "ticketCount",
-                          parseInt(e.target.value)
-                        )
-                      }
-                    />
+                  <div className={styles.cartItem}>
+                    <label>Price per Ticket:</label>
+                    <p>
+                      {item.discountedPrice ? (
+                        <>
+                          <span style={{ textDecoration: "line-through" }}>
+                            €{item.price.toFixed(2)}
+                          </span>{" "}
+                          €{item.discountedPrice.toFixed(2)}
+                        </>
+                      ) : (
+                        `€${item.price.toFixed(2)}`
+                      )}
+                    </p>
                   </div>
-                  <div className="cart-actions">
-                    <button className="btn save-btn" onClick={saveEdit}>
+                  <div className={styles.cartItem}>
+                    <label>Total Price:</label>
+                    <p>
+                      €
+                      {(
+                        (item.discountedPrice || item.price || 0) *
+                        (editingItem.ticketCount || 1)
+                      ).toFixed(2)}
+                    </p>
+                  </div>
+                  <div className={styles.cartItemActions}>
+                    <button className={styles.smallButton} onClick={saveEdit}>
                       Save
                     </button>
-                    <button className="btn cancel-btn" onClick={cancelEdit}>
+                    <button className={styles.smallButton} onClick={cancelEdit}>
                       Cancel
                     </button>
                   </div>
                 </>
               ) : (
                 <>
-                  <div className="cart-field">
-                    <label>First Name:</label>
-                    <p>{item.firstName}</p>
-                  </div>
-                  <div className="cart-field">
-                    <label>Last Name:</label>
-                    <p>{item.lastName}</p>
-                  </div>
-                  <div className="cart-field">
-                    <label>Email:</label>
-                    <p>{item.email}</p>
-                  </div>
-                  <div className="cart-field">
-                    <label>Show:</label>
-                    <p>{item.showTitle}</p>
-                  </div>
-                  <div className="cart-field">
-                    <label>Date:</label>
-                    <p>{new Date(item.dateAndTime).toLocaleString()}</p>
-                  </div>
-                  <div className="cart-field">
-                    <label>Ticket Count:</label>
-                    <p>{item.ticketCount}</p>
-                  </div>
-                  <div className="cart-actions">
+                  <p>
+                    <strong>First Name:</strong> {item.firstName}
+                  </p>
+                  <p>
+                    <strong>Last Name:</strong> {item.lastName}
+                  </p>
+                  <p>
+                    <strong>Email:</strong> {item.email}
+                  </p>
+                  <p>
+                    <strong>Show:</strong> {item.showTitle}
+                  </p>
+                  <p>
+                    <strong>Date:</strong>{" "}
+                    {new Date(item.dateAndTime).toLocaleString()}
+                  </p>
+                  <p>
+                    <strong>Ticket Count:</strong> {item.ticketCount}
+                  </p>
+                  <p>
+                    <strong>Price per Ticket:</strong>{" "}
+                    {item.discountedPrice ? (
+                      <>
+                        <span style={{ textDecoration: "line-through" }}>
+                          €{item.price.toFixed(2)}
+                        </span>{" "}
+                        €{item.discountedPrice.toFixed(2)}
+                      </>
+                    ) : (
+                      `€${item.price.toFixed(2)}`
+                    )}
+                  </p>
+                  <p>
+                    <strong>Total Price:</strong> €
+                    {(
+                      (item.discountedPrice || item.price) * item.ticketCount
+                    ).toFixed(2)}
+                  </p>
+                  <div className={styles.cartItemActions}>
                     <button
-                      className="btn edit-btn"
+                      className={`${styles.smallButton}`}
                       onClick={() => startEdit(index)}
                     >
                       Edit
                     </button>
                     <button
-                      className="btn remove-btn"
+                      className={`${styles.smallButton}`}
                       onClick={() => handleRemove(index)}
                     >
                       Remove
@@ -212,21 +312,28 @@ const ShoppingCart = () => {
               )}
             </div>
           ))}
+          <div className={styles.cartTotal}>
+            <p>
+              <strong>Total Price:</strong> €{calculateTotalPrice()}
+            </p>
+          </div>
         </div>
       )}
-      <div className="cart-footer-actions">
+      <div className={styles.cartActions}>
         <button
-          className="btn add-reservations-btn"
+          className={`${styles.button} ${styles.addReservationsBtn}`}
           onClick={() => (window.location.href = "/ReservationForm")}
         >
           Add More Reservations
         </button>
-        <button className="btn checkout-btn" onClick={handleCheckout}>
+        <button
+          className={`${styles.button} ${styles.checkoutBtn}`}
+          onClick={handleCheckout}
+        >
           Checkout
         </button>
       </div>
     </div>
   );
 };
-
 export default ShoppingCart;
