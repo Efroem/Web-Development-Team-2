@@ -137,7 +137,7 @@ const EditShow: React.FC = () => {
             value={theatreShowId}
             onChange={(e) => setTheatreShowId(e.target.value)}
             placeholder="Enter Theatre Show ID"
-            className={styles.formInput}
+            className={`${styles.formInput} ${styles.inputText}`}
             required
           />
           <button type="submit" className={styles.addButton}>Haal Voorstelling Op</button>
@@ -158,7 +158,7 @@ const EditShow: React.FC = () => {
               placeholder="Titel"
               value={show.title}
               onChange={handleInputChange}
-              className={styles.formInput}
+              className={`${styles.formInput} ${styles.inputText}`}
               required
             />
             <textarea
@@ -175,7 +175,7 @@ const EditShow: React.FC = () => {
               placeholder="Prijs"
               value={show.price}
               onChange={handleInputChange}
-              className={styles.formInput}
+              className={`${styles.formInput} ${styles.inputText}`}
               required
             />
             <select

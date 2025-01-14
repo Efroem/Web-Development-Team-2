@@ -65,9 +65,15 @@ input[type="datetime-local"] {
   text-align: center;
 }
 
-input[type="text"] {
+.inputText {
   background-color: #f9f9f9;
 }
+
+/* je vergeet de scope kut vincent */
+form .inputText {
+  background-color: #f9f9f9;
+}
+
 
 button[type="submit"]:disabled {
   background-color: #ccc;
