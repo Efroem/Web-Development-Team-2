@@ -90,7 +90,7 @@ namespace StarterKit.Services
             {
                 var showDate = await _dbContext.TheatreShowDate
                     .FirstOrDefaultAsync(sd => sd.TheatreShowDateId == reservationItem.ShowDateId);
-                
+
                 var theatreShow = await _dbContext.TheatreShow
                     .FirstOrDefaultAsync(ts => ts.TheatreShowId == showDate.TheatreShowId);
 

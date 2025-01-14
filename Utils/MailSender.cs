@@ -11,7 +11,7 @@ namespace EmailExample
         public async Task SendEmailAsync(string toEmail, string customerName, string showTitle, string venueName, DateTime showDate, decimal totalPrice)
         {
             var email = new MimeMessage();
-            email.From.Add(new MailboxAddress("Altijd Volle Bak Theater", "altijdvollebak@shithosting.net"));
+            email.From.Add(new MailboxAddress("Altijd Volle Bak Theater", "altijdvollebak@boendermaker.com"));
             email.To.Add(new MailboxAddress(customerName, toEmail));
             email.Subject = $"Reserveringsbevestiging voor {showTitle}";
 
@@ -36,8 +36,8 @@ namespace EmailExample
             {
                 try
                 {
-                    await smtp.ConnectAsync("shithosting.net", 465, SecureSocketOptions.SslOnConnect);
-                    await smtp.AuthenticateAsync("altijdvollebak@shithosting.net", "5Y3r72r&v");
+                    await smtp.ConnectAsync("boendermaker.com", 465, SecureSocketOptions.SslOnConnect);
+                    await smtp.AuthenticateAsync("altijdvollebak@boendermaker.com", "3Vpi69%i7");
                     await smtp.SendAsync(email);
                     Console.WriteLine("Email sent successfully!");
                 }
