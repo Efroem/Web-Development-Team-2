@@ -70,6 +70,45 @@ namespace StarterKit.Controllers
             return Ok(result);
         }
 
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllReservations()
+        {
+            // Fetch all reservations
+            var reservations = await _dbContext.Reservation
+                .Include(r => r.Customer) // Include customer details
+                .ToListAsync();
+
+            var result = new List<object>();
+
+            foreach (var reservation in reservations)
+            {
+                // Fetch the associated show date using TheatreShowDateId
+                var showDate = await _dbContext.TheatreShowDate
+                    .FirstOrDefaultAsync(sd => sd.TheatreShowDateId == reservation.TheatreShowDateId);
+
+                if (showDate == null) continue;
+
+                // Fetch the associated theatre show using TheatreShowId
+                var theatreShow = await _dbContext.TheatreShow
+                    .FirstOrDefaultAsync(ts => ts.TheatreShowId == showDate.TheatreShowId);
+
+                if (theatreShow == null) continue;
+
+                // Add the formatted result
+                result.Add(new
+                {
+                    reservation.ReservationId,
+                    reservation.AmountOfTickets,
+                    reservation.Used,
+                    ShowTitle = theatreShow.Title,
+                    Date = showDate.DateAndTime,
+                    CustomerName = $"{reservation.Customer?.FirstName} {reservation.Customer?.LastName}",
+                    CustomerEmail = reservation.Customer?.Email
+                });
+            }
+
+            return Ok(result);
+        }
 
         // PATCH endpoint to mark a reservation as used
         [HttpPatch("{reservationId}/mark-as-used")]

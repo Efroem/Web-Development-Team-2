@@ -98,7 +98,7 @@ Content-Type: application/json
   "email": "altijdwerkers@gmail.com",
   "reservations": [
     {
-      "showDateId": 23,
+      "showDateId": 119,
       "ticketCount": 3
     }
   ]
@@ -120,6 +120,10 @@ Content-Type: application/json
     }
   ]
 }
+###
+
+GET http://localhost:5097/api/v1/Reservations 
+Content-Type: application/json
 ###
 
 # Invalid date
@@ -200,6 +204,8 @@ Content-Type: application/json
 
 
 # Filter
+GET http://localhost:5097/api/v1/ReservationManagement/all
+###
 GET http://localhost:5097/api/v1/ReservationManagement?showId=3&date=2024-12-01&email=john.doe@example.com&reservationId=4
 ###
 GET http://localhost:5097/api/v1/ReservationManagement?showId=1&dateTime=2024-12-01T19:30:00

@@ -26,6 +26,10 @@ const AdminDashboard: React.FC = () => {
     navigate("/overview");
   };
 
+  const handleManageReservationsClick = () => {
+    navigate("/manage-reservations");
+  };
+  
   return (
     <div className={styles.container}>
       <div className={styles["white-box"]}>
@@ -47,10 +51,13 @@ const AdminDashboard: React.FC = () => {
           Lijst van Shows
         </button>
 
+        <button className={styles.createShowButton} onClick={handleManageReservationsClick}>
+        Reserveringen Beheren
+        </button>
+
         <button className={styles.logoutButton} onClick={handleLogout}>
           Logout
         </button>
-
       </div>
     </div>
   );

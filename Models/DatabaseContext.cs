@@ -36,7 +36,6 @@ namespace StarterKit.Models
         {
             modelBuilder.Entity<Admin>()
                 .HasIndex(p => p.UserName).IsUnique();
-
             modelBuilder.Entity<Admin>()
                 .HasData(new Admin { AdminId = 1, Email = "admin1@example.com", UserName = "admin1", Password = EncryptionHelper.EncryptPassword("password") });
             modelBuilder.Entity<Admin>()

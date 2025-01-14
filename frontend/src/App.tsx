@@ -19,6 +19,7 @@ import axios from "axios";
 import ProtectedRoute from "./VincentComponents/ProtectedRoute"; // Import ProtectedRoute
 import AddShow from "./VincentComponents/AddShows";
 import EditShow from "./VincentComponents/EditShow";
+import ReservationManagement from "./VincentComponents/ReservationManagement";
 
 interface WeatherData {
   name: string;
@@ -81,6 +82,14 @@ const App: React.FC = () => {
           <Route path="/ReservationForm" element={<ReservationForm />} />
           <Route path="/ShoppingCart" element={<ShoppingCart />} />
           <Route path="/show/:showId" element={<ShowPage />} />
+          <Route
+            path="manage-reservations"
+            element={
+              <ProtectedRoute>
+                <ReservationManagement/>
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/dashboard"
             element={
