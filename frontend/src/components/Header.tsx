@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import scatteredCloudsImg from "./../scatteredclouds.png";
-import eyeOfRahImg from "./../eye-of-rah.png";
 import hotdayImg from "./../hotday.png";
 import rainImg from "./../rain.png";
+import snowImg from "./../snow.png"
 import styles from "./MainPage.module.css";
 import shopping_cart from "./../shopping-cart.png";
 
@@ -46,7 +46,10 @@ const Header: React.FC<HeaderProps> = ({ weatherData }) => {
       weatherImage = scatteredCloudsImg;
     } else if (weatherType === "rain") {
       weatherImage = rainImg;
+    } else if (weatherType === "snow") {
+      weatherImage = snowImg;
     }
+    
   }
 
   return (

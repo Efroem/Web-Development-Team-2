@@ -90,7 +90,7 @@ const ShowsOfTheDayCarousel: React.FC<{venues: Venue[]} > = ({ venues }) => {
         const weatherCondition = loadedWeatherData.weather[0]?.main.toLowerCase();
         if (weatherCondition === "rain" || weatherCondition === "clouds") {
           setDiscountMood("Sad");
-        } else if (weatherCondition === "clear") {
+        } else if (weatherCondition === "clear" || weatherCondition === "snow") {
           setDiscountMood("Happy");
         }
       }

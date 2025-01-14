@@ -73,7 +73,7 @@ const WeeklyShows: React.FC<{ weatherData: WeatherData | null, venues: Venue[] }
         if (weatherCondition === 'rain' || weatherCondition === 'clouds') {
           setDiscountMood('Sad');
         }
-        if (weatherCondition === 'clear') {
+        if (weatherCondition === 'clear' || weatherCondition === 'snow') {
           setDiscountMood('Happy');
         }
       }

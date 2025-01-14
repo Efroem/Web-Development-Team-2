@@ -127,7 +127,7 @@ const ReservationForm = () => {
         if (weatherCondition === "rain" || weatherCondition === "clouds") {
           setDiscountMood("Sad");
         }
-        if (weatherCondition === "clear") {
+        if (weatherCondition === "clear" || weatherCondition === "snow") {
           setDiscountMood("Happy");
         }
       }
