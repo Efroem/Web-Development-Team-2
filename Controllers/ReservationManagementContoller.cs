@@ -61,6 +61,7 @@ namespace StarterKit.Controllers
                     reservation.ReservationId,
                     reservation.AmountOfTickets,
                     reservation.Used,
+                    ShowId = theatreShow.TheatreShowId,
                     theatreShow.Title,
                     Date = showDate.DateAndTime,
                     reservation.Customer.Email
@@ -100,6 +101,7 @@ namespace StarterKit.Controllers
                     reservation.ReservationId,
                     reservation.AmountOfTickets,
                     reservation.Used,
+                    ShowId = theatreShow.TheatreShowId,
                     ShowTitle = theatreShow.Title,
                     Date = showDate.DateAndTime,
                     CustomerName = $"{reservation.Customer?.FirstName} {reservation.Customer?.LastName}",

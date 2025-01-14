@@ -1,65 +1,85 @@
 .container {
-    padding: 20px;
-    max-width: 1200px;
-    margin: auto;
-  }
-  
-  .header {
-    font-size: 2rem;
-    margin-bottom: 20px;
-  }
-  
-  .filters {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 20px;
-  }
-  
-  .input, .select {
-    padding: 10px;
-    font-size: 1rem;
-  }
-  
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .table th, .table td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
-  }
-  
-  .table th {
-    background-color: #f4f4f4;
-  }
-  
-  .button {
-    padding: 8px 12px;
-    margin-right: 5px;
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  
-  .button:hover {
-    background-color: #45a049;
-  }
-  
-  .deleteButton {
-    background-color: #f44336;
-  }
-  
-  .deleteButton:hover {
-    background-color: #e53935;
-  }
-  
-  .error {
-    color: red;
-    font-size: 1rem;
-    margin-bottom: 20px;
-  }
-  
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
+  background-color: #2b2b2b; /* Modern dark gray background */
+  color: #e0e0e0; /* Light gray text for contrast */
+  border-radius: 8px; /* Rounded edges for modern feel */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+.header {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #ffffff; /* White header text */
+}
+
+.filters {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.input, .select {
+  padding: 10px;
+  font-size: 1rem;
+  background-color: #3b3b3b; /* Slightly lighter gray for inputs */
+  color: #ffffff; /* Ensure text color is white */
+  border: 1px solid #555; /* Border to define input edges */
+  border-radius: 4px; /* Rounded input edges */
+}
+
+.input:focus, .select:focus {
+  outline: none;
+  border-color: #4caf50; /* Highlight border on focus */
+  background-color: #3b3b3b; /* Ensure background remains gray */
+  color: #ffffff; /* Ensure text color remains white */
+}
+
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #3b3b3b; /* Slightly lighter gray for the table */
+  color: #e0e0e0; /* Light gray text */
+}
+
+.table th, .table td {
+  border: 1px solid #555; /* Dark gray borders */
+  padding: 10px;
+  text-align: left;
+}
+
+.table th {
+  background-color: #4a4a4a; /* Medium gray for table headers */
+  color: #ffffff; /* White text for headers */
+}
+
+.button {
+  padding: 8px 12px;
+  margin-right: 5px;
+  background-color: #4caf50; /* Green button */
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.button:hover {
+  background-color: #45a049; /* Slightly darker green on hover */
+}
+
+.deleteButton {
+  background-color: #f44336; /* Red for delete button */
+}
+
+.deleteButton:hover {
+  background-color: #e53935; /* Darker red on hover */
+}
+
+.error {
+  color: #ff5252; /* Bright red for error messages */
+  font-size: 1rem;
+  margin-bottom: 20px;
+}

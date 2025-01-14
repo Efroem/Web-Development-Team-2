@@ -6,47 +6,92 @@ interface Reservation {
   reservationId: number;
   amountOfTickets: number;
   used: boolean;
+  title?: string; // Show Title
+  date?: string; // Show Date
+  customerEmail?: string; // Email
+  email?: string; // Email from API response
+  showId?: number; // Show ID
+}
+
+interface Show {
+  id: number;
   title: string;
-  date: string;
-  customerEmail: string;
 }
 
 const ReservationManagement: React.FC = () => {
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterShow, setFilterShow] = useState("");
+  const [filterShow, setFilterShow] = useState<number | "">("");
   const [filterDate, setFilterDate] = useState("");
-  const [shows, setShows] = useState<string[]>([]);
+  const [shows, setShows] = useState<Show[]>([]);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchReservations = async () => {
-      try {
-        const response = await axios.get<Reservation[]>(
-          "http://localhost:5097/api/v1/ReservationManagement/all"
-        );
-        setReservations(response.data);
+  // Fetch reservations dynamically based on filters
+  const fetchReservations = async () => {
+    try {
+      let query = `http://localhost:5097/api/v1/ReservationManagement`;
 
-        // Extract unique show titles for the filter dropdown
-        const uniqueShows = Array.from(
-          new Set(response.data.map((r) => r.title))
-        );
-        setShows(uniqueShows);
-      } catch (error) {
-        console.error("Failed to fetch reservations:", error);
-        setError("Failed to load reservations.");
+      const params = new URLSearchParams();
+
+      if (searchTerm.trim()) {
+        params.append("email", searchTerm.trim());
       }
-    };
 
+      if (filterShow) {
+        params.append("showId", filterShow.toString());
+      }
+
+      if (filterDate) {
+        params.append("dateTime", filterDate);
+      }
+
+      if (params.toString()) {
+        query += `?${params.toString()}`;
+      }
+
+      const response = await axios.get<Reservation[]>(query);
+
+      const sanitizedData = response.data.map((r) => ({
+        reservationId: r.reservationId,
+        amountOfTickets: r.amountOfTickets,
+        used: r.used,
+        title: r.title || "Unknown Show",
+        date: r.date || "Unknown Date",
+        customerEmail: r.email || "Unknown Email",
+        showId: r.showId, // Include showId from API response
+      }));
+
+      setReservations(sanitizedData);
+
+      // Extract unique show titles and IDs for the filter dropdown
+      if (!filterShow && !filterDate) {
+        const uniqueShows = Array.from(
+          new Map(
+            sanitizedData
+              .filter((r) => r.showId !== undefined)
+              .map((r) => [r.showId, r.title])
+          ).entries()
+        ).map(([id, title]) => ({ id: id as number, title: title as string }));
+        setShows(uniqueShows);
+      }
+
+      setError(""); // Clear previous errors
+    } catch (err) {
+      console.error("Error fetching reservations:", err);
+      setError("Failed to load reservations. Please try again.");
+    }
+  };
+
+  useEffect(() => {
     fetchReservations();
-  }, []);
+  }, [searchTerm, filterShow, filterDate]); // Trigger fetch when filters change
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value.toLowerCase());
+    setSearchTerm(e.target.value);
   };
 
   const handleShowFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setFilterShow(e.target.value);
+    setFilterShow(e.target.value === "" ? "" : parseInt(e.target.value));
   };
 
   const handleDateFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,15 +131,6 @@ const ReservationManagement: React.FC = () => {
     }
   };
 
-  const filteredReservations = reservations.filter((r) => {
-    const matchesSearch =
-      r.customerEmail.toLowerCase().includes(searchTerm) ||
-      r.reservationId.toString().includes(searchTerm);
-    const matchesShow = !filterShow || r.title === filterShow;
-    const matchesDate = !filterDate || r.date.startsWith(filterDate);
-    return matchesSearch && matchesShow && matchesDate;
-  });
-
   return (
     <div className={styles.container}>
       <h1 className={styles.header}>Manage Reservations</h1>
@@ -103,7 +139,7 @@ const ReservationManagement: React.FC = () => {
       <div className={styles.filters}>
         <input
           type="text"
-          placeholder="Search by email or reservation ID"
+          placeholder="Search by email"
           value={searchTerm}
           onChange={handleSearchChange}
           className={styles.input}
@@ -114,14 +150,14 @@ const ReservationManagement: React.FC = () => {
           className={styles.select}
         >
           <option value="">All Shows</option>
-          {shows.map((show, index) => (
-            <option key={index} value={show}>
-              {show}
+          {shows.map((show) => (
+            <option key={show.id} value={show.id}>
+              {show.title}
             </option>
           ))}
         </select>
         <input
-          type="date"
+          type="datetime-local"
           value={filterDate}
           onChange={handleDateFilterChange}
           className={styles.input}
@@ -141,12 +177,12 @@ const ReservationManagement: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredReservations.map((r) => (
+          {reservations.map((r) => (
             <tr key={r.reservationId}>
               <td>{r.reservationId}</td>
               <td>{r.customerEmail}</td>
               <td>{r.title}</td>
-              <td>{new Date(r.date).toLocaleString()}</td>
+              <td>{new Date(r.date || "").toLocaleString()}</td>
               <td>{r.amountOfTickets}</td>
               <td>{r.used ? "Used" : "Not Used"}</td>
               <td>
