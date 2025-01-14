@@ -104,7 +104,7 @@ const WeeklyShows: React.FC<{ weatherData: WeatherData | null, venues: Venue[] }
       <div className={styles['search-bar']}>
         <input
           type="text"
-          placeholder="Search shows..."
+          placeholder="Zoek shows..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />

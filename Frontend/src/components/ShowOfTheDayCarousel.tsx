@@ -136,11 +136,11 @@ const ShowsOfTheDayCarousel: React.FC<{venues: Venue[]} > = ({ venues }) => {
 
   return (
     <section className={styles['weekly-shows']}>
-      <h2>Shows van de Dag</h2>
+      <h2>Uitgelichte Shows</h2>
       <div className={styles['search-bar']}>
         <input
           type="text"
-          placeholder="Search shows..."
+          placeholder="Zoek shows..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
