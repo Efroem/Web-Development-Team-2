@@ -133,13 +133,13 @@ const ReservationManagement: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.header}>Manage Reservations</h1>
+      <h1 className={styles.header}>Reserveringen Beheren</h1>
       {error && <p className={styles.error}>{error}</p>}
 
       <div className={styles.filters}>
         <input
           type="text"
-          placeholder="Search by email"
+          placeholder="Zoek email..."
           value={searchTerm}
           onChange={handleSearchChange}
           className={styles.input}
@@ -149,7 +149,7 @@ const ReservationManagement: React.FC = () => {
           onChange={handleShowFilterChange}
           className={styles.select}
         >
-          <option value="">All Shows</option>
+          <option value="">Alle Shows</option>
           {shows.map((show) => (
             <option key={show.id} value={show.id}>
               {show.title}
@@ -170,10 +170,10 @@ const ReservationManagement: React.FC = () => {
             <th>ID</th>
             <th>Email</th>
             <th>Show</th>
-            <th>Date</th>
+            <th>Datum</th>
             <th>Tickets</th>
             <th>Status</th>
-            <th>Actions</th>
+            <th>Acties</th>
           </tr>
         </thead>
         <tbody>
@@ -184,14 +184,14 @@ const ReservationManagement: React.FC = () => {
               <td>{r.title}</td>
               <td>{new Date(r.date || "").toLocaleString()}</td>
               <td>{r.amountOfTickets}</td>
-              <td>{r.used ? "Used" : "Not Used"}</td>
+              <td>{r.used ? "Used" : "Niet Used"}</td>
               <td>
                 <button
                   className={styles.button}
                   onClick={() => handleMarkUsed(r.reservationId)}
                   disabled={r.used}
                 >
-                  Mark as Used
+                  Markeren als Used
                 </button>
                 <button
                   className={`${styles.button} ${styles.deleteButton}`}
