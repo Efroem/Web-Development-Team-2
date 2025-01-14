@@ -1,0 +1,208 @@
+/* Scoped Container Styles */
+.shoppingCart,
+.reservationForm {
+  max-width: 700px;
+  margin: 20px auto;
+  padding: 25px;
+  border: 1px solid #333;
+  border-radius: 10px;
+  background-color: #222;
+  box-shadow: 0px 4px 6px rgba(255, 255, 255, 0.1);
+  font-family: "Roboto", Arial, sans-serif;
+  color: #f5f5f5;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.shoppingCart:hover,
+.reservationForm:hover {
+  transform: scale(1.01);
+  box-shadow: 0 8px 16px rgba(255, 255, 255, 0.15);
+}
+
+/* Titles */
+.cartTitle,
+.reservationTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+/* Labels and Fields */
+.cartField label,
+.reservationField label {
+  font-weight: 600;
+  color: #ddd;
+  display: block;
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+
+.cartField input,
+.cartField select,
+.cartField p,
+.reservationField input,
+.reservationField select,
+.reservationField p {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #555;
+  border-radius: 6px;
+  background-color: #333;
+  font-size: 1rem;
+  color: #f5f5f5;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cartField input:focus,
+.cartField select:focus,
+.reservationField input:focus,
+.reservationField select:focus {
+  border-color: #8e44ad;
+  outline: none;
+  box-shadow: 0 0 5px rgba(142, 68, 173, 0.5);
+}
+
+/* Buttons */
+.cartActions button,
+.cartFooterActions button,
+.reservationActions button {
+  background-color: #8e44ad;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.cartActions button:hover,
+.cartFooterActions button:hover,
+.reservationActions button:hover {
+  background-color: #732d91;
+  transform: scale(1.05);
+}
+
+/* Save and Cancel Buttons */
+.saveBtn {
+  background-color: #27ae60;
+}
+
+.saveBtn:hover {
+  background-color: #1e8449;
+}
+
+.cancelBtn {
+  background-color: #e74c3c;
+}
+
+.cancelBtn:hover {
+  background-color: #c0392b;
+}
+
+/* Add Reservations and Checkout Buttons */
+.addReservationsBtn,
+.checkoutBtn {
+  width: 48%;
+  margin: 15px 1%;
+  font-size: 1rem;
+}
+
+.addReservationsBtn {
+  background-color: #3498db;
+}
+
+.addReservationsBtn:hover {
+  background-color: #2980b9;
+}
+
+/* Popup Styling */
+.popup {
+  position: fixed; /* Keeps it in the same place relative to the viewport */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #222;
+  padding: 25px;
+  border: 1px solid #444;
+  border-radius: 10px;
+  box-shadow: 0px 6px 16px rgba(255, 255, 255, 0.2);
+  z-index: 1000; /* Ensures it is on top of other elements */
+  animation: fadeIn 0.3s ease-out;
+}
+
+.popupContent {
+  text-align: center;
+}
+
+.popupContentButton {
+  margin: 10px;
+  background-color: #8e44ad;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.popupContentButton:hover {
+  background-color: #732d91;
+}
+
+/* Smooth popup appearance */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -55%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+
+.cartDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.cartItem {
+  padding: 10px;
+  background-color: #333;
+  border: 1px solid #444;
+  border-radius: 10px;
+  color: #f5f5f5;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.cartItem p {
+  margin: 8px 0;
+  font-size: 1rem;
+}
+
+.cartItemActions {
+  margin-top: 15px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cartItemActions .smallButton {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cartItemActions .smallButton:hover {
+  background-color: #c0392b;
+}
+
