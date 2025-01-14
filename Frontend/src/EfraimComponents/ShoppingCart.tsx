@@ -223,7 +223,8 @@ const ShoppingCart = () => {
                   <div className={styles.cartItem}>
                     <label>Price per Ticket:</label>
                     <p>
-                      {item.discountedPrice ? (
+                      {item.discountedPrice &&
+                      item.discountedPrice < item.price ? (
                         <>
                           <span style={{ textDecoration: "line-through" }}>
                             €{item.price.toFixed(2)}
@@ -277,7 +278,8 @@ const ShoppingCart = () => {
                   </p>
                   <p>
                     <strong>Price per Ticket:</strong>{" "}
-                    {item.discountedPrice ? (
+                    {item.discountedPrice &&
+                    item.discountedPrice < item.price ? (
                       <>
                         <span style={{ textDecoration: "line-through" }}>
                           €{item.price.toFixed(2)}
