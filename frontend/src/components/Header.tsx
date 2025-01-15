@@ -61,7 +61,7 @@ const Header: React.FC<HeaderProps> = ({ weatherData }) => {
       weatherImage = hotdayImg;
     } else if (weatherType === "clouds") {
       weatherImage = scatteredCloudsImg;
-    } else if (weatherType === "rain") {
+    } else if (weatherType === "rain" || weatherType === "fog" || weatherType === "mist") {
       weatherImage = rainImg;
     }
   }
