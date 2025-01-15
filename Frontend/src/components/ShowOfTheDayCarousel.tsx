@@ -88,7 +88,7 @@ const ShowsOfTheDayCarousel: React.FC<{venues: Venue[]} > = ({ venues }) => {
       const loadedWeatherData = await fetchWeather();
       if (loadedWeatherData) {
         const weatherCondition = loadedWeatherData.weather[0]?.main.toLowerCase();
-        if (weatherCondition === "rain" || weatherCondition === "clouds") {
+        if (weatherCondition === "rain" || weatherCondition === "clouds" || weatherCondition === "fog" || weatherCondition === "mist") {
           setDiscountMood("Sad");
         } else if (weatherCondition === "clear") {
           setDiscountMood("Happy");
@@ -191,8 +191,6 @@ const ShowsOfTheDayCarousel: React.FC<{venues: Venue[]} > = ({ venues }) => {
             <Link to={`/show/${show.theatreShowId}`} key={show.theatreShowId}>
               <div className={styles['show-card']}>
                 <h3>{show.title}</h3>
-                <p>{show.showMood}</p>
-                <p>{discountMood}</p>
                 {show.showMood.trim() === discountMood && (
                   <p className={styles.cartField}>
                   <span style={{ textDecoration: 'line-through' }}>
