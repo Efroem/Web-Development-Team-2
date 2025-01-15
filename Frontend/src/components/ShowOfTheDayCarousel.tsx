@@ -201,9 +201,17 @@ const ShowsOfTheDayCarousel: React.FC<{venues: Venue[]} > = ({ venues }) => {
                     €{(show.price * 0.85).toFixed(2)}
                 </p>
                 )}
-
-                {show.theatreShowDates.length > 0 && (
-                  <p>{new Date(show.theatreShowDates[0].dateAndTime).toLocaleString()}</p> // Changes the Date string to a properly formatted one
+                
+                {show.theatreShowDates.length > 0 && ( // Code to Show the first date in the future
+                  <p>
+                    {show.theatreShowDates
+                      .map((date) => new Date(date.dateAndTime)) // Convert all dates to Date objects
+                      .filter((date) => date.getTime() > Date.now()) // Keep only dates in the future
+                      .sort((a, b) => a.getTime() - b.getTime()) // Sort dates by their timestamp
+                      .slice(0, 1) // Take the first date
+                      .map((date) => date.toLocaleString()) // Format the date as a string
+                    }
+                  </p>
                 )}
               </div>
             </Link>
