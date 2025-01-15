@@ -50,7 +50,6 @@ const EditShow: React.FC = () => {
 
     try {
       const response = await axios.get(`http://localhost:5097/api/v1/TheatreShows/${theatreShowId}`);
-      console.log('Gegevens van de show:', response.data); // Debugging
       setShow({
         title: response.data.title || '',
         description: response.data.description || '',

@@ -1,84 +1,76 @@
-/* Basic Reset */
 :global(*) {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Full-Screen Centering Container */
 .container {
-  height: 100vh; /* Full height of the viewport */
+  height: 100vh; 
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(to bottom right, #ff9800, #ffc107); /* Orange gradient */
+  background: linear-gradient(to bottom right, #ff9800, #ffc107); 
   padding: 20px;
 }
 
-/* White Box Styling */
 .white-box {
-  background-color: #ffffff; /* White background */
+  background-color: #ffffff; 
   padding: 40px;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
   width: 100%;
-  max-width: 500px; /* Max width to keep it compact */
+  max-width: 500px; 
   text-align: center;
   box-sizing: border-box;
 }
 
-/* Title Styling */
 .heading {
   margin-bottom: 30px;
-  color: #ff9800; /* Dark orange for the title */
+  color: #ff9800;
   font-size: 36px;
   font-family: 'Arial', sans-serif;
   text-align: center;
   font-weight: bold;
 }
 
-/* Button Styling */
 .createShowButton {
   width: 250px;
   padding: 12px;
-  background-color: #ff9800; /* Lighter dark orange */
+  background-color: #ff9800; 
   color: white;
   border: none;
   border-radius: 5px;
   font-size: 18px;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease; /* Smooth transition for background color */
-  margin: 10px 0; /* Vertical spacing between buttons */
-  box-shadow: 0 4px 8px rgba(255, 152, 0, 0.1); /* Light shadow for depth */
+  transition: background-color 0.3s ease; 
+  margin: 10px 0; 
+  box-shadow: 0 4px 8px rgba(255, 152, 0, 0.1); 
 }
 
-/* Button Hover Styling */
 .createShowButton:hover {
-  background-color: #fb8c00; /* Slightly darker orange on hover */
-  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.2); /* Stronger shadow on hover */
+  background-color: #fb8c00; 
+  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.2); 
 }
 
-/* Button Active (clicked) effect */
 .createShowButton:active {
-  background-color: #f57c00; /* Darker orange when clicked */
+  background-color: #f57c00; 
   transform: translateY(1px);
 }
 
-/* Voeg stijl toe voor de logout-knop */
 .logoutButton {
-  background-color: #ff4d4d; /* Rood voor de logout knop */
+  background-color: #ff4d4d; 
   color: white;
   padding: 12px 20px;
   border: none;
   cursor: pointer;
   font-size: 16px;
-  margin-top: 20px; /* Plaatst wat ruimte boven de knop */
+  margin-top: 20px; 
   transition: background-color 0.3s ease;
-  width: 250px; /* Zorg ervoor dat de logout-knop dezelfde breedte heeft als de andere knoppen */
+  width: 250px; 
 }
 
 .logoutButton:hover {
-  background-color: #ff3333; /* Donkerder rood als hover effect */
+  background-color: #ff3333; 
 }
