@@ -33,8 +33,13 @@ const ReservationManagement: React.FC = () => {
 
       const params = new URLSearchParams();
 
+      // Check if the searchTerm is numeric for reservationId filtering
       if (searchTerm.trim()) {
-        params.append("email", searchTerm.trim());
+        if (!isNaN(Number(searchTerm))) {
+          params.append("reservationId", searchTerm.trim());
+        } else {
+          params.append("email", searchTerm.trim());
+        }
       }
 
       if (filterShow) {
@@ -139,7 +144,7 @@ const ReservationManagement: React.FC = () => {
       <div className={styles.filters}>
         <input
           type="text"
-          placeholder="Zoek email..."
+          placeholder="Zoek email of ID..."
           value={searchTerm}
           onChange={handleSearchChange}
           className={styles.input}
